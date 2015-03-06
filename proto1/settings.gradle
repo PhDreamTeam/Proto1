@@ -1,0 +1,3 @@
+include ':DirectoryService', ':MasterService', ':WorkerService', ':CommonLibApp3', ':WorkerService2', ':Client', ':AndroidTests'
+
+

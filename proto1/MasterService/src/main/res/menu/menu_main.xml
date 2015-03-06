@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/show_files"
+          android:title="@string/show_files"
+          android:orderInCategory="1"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/save_state"
+          android:title="@string/save_state"
+          android:orderInCategory="2"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/load_state"
+          android:title="@string/load_state"
+          android:orderInCategory="3"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/clear_persistent_state"
+          android:title="@string/clear_persistent_state"
+          android:orderInCategory="4"
+          android:showAsAction="never"/>
+</menu>

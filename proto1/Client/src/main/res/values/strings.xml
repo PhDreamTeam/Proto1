@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Client</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="create_DDInt">Create DDInt</string>
+    <string name="create_DDObject">Create DDObject</string>
+    <string name="open_DDObject">Open DDObject</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidTests/AndroidTests.iml" filepath="$PROJECT_DIR$/AndroidTests/AndroidTests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" filepath="$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DirectoryService/DirectoryService.iml" filepath="$PROJECT_DIR$/DirectoryService/DirectoryService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MasterService/MasterService.iml" filepath="$PROJECT_DIR$/MasterService/MasterService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WorkerService/WorkerService.iml" filepath="$PROJECT_DIR$/WorkerService/WorkerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WorkerService2/WorkerService2.iml" filepath="$PROJECT_DIR$/WorkerService2/WorkerService2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/proto1.iml" filepath="$PROJECT_DIR$/proto1.iml" />
+    </modules>
+  </component>
+</project>
