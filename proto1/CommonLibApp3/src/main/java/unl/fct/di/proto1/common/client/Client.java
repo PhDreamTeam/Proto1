@@ -272,12 +272,14 @@ public class Client {
         t.start();
     }
 
+    // ------------------------------------------------------------
+    // work with existing Internal Photos
     // DEBUG verificar....
     public void workWithImageTest() {
         System.out.println("Vou começar o teste");
         console.println("Vou começar o teste");
-        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/proto1Photos/kk1.jpg");
-        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/proto1Photos/kk2.jpg");
+        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/proto1Photos/kk1.jpg");
+        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/proto1Photos/kk2.jpg");
         System.out.println("Foto carregada");
         console.println("Foto carregada");
         JFrame jf = new JFrame();
@@ -295,6 +297,7 @@ public class Client {
             ImageIcon t2 = new ImageIcon();
             t2.setImage(pw.getThumbnail());
             jf.add(new JLabel(t2));
+            console.println("Thumbnail adicionado");
 
             // thumbnail 3
             ImageIcon t3 = new ImageIcon();
@@ -306,7 +309,7 @@ public class Client {
             ImageIcon t4 = new ImageIcon();
             t4.setImage(pw2.getThumbnail());
             jf.add(new JLabel(t4));
-
+            console.println("Thumbnail adicionado");
 
             // original image
             ImageIcon i = new ImageIcon();
