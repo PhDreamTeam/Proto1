@@ -60,18 +60,10 @@ public class PhotoWorker implements Serializable {
         // testar se é portrait ou landscape
         int width = photo.getWidth();
         int height = photo.getHeight();
-        if (width < height) {
-            float extraSize = height - 100;
-            float percentHeight = (extraSize / height) * 100;
-            int percentWidth = (new Float(width - ((width / 100) * percentHeight))).intValue();
-            thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, percentWidth, 100, Scalr.OP_ANTIALIAS);
-            // check if it's better to use simple .getScaledInstance(100, 100, Image.SCALE_FAST)
-        } else {
-            float extraSize = width - 100;
-            float percentWidth = (extraSize / width) * 100;
-            int percentHeight = (new Float(height - ((height / 100) * percentWidth))).intValue();
-            thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, 100, percentHeight, Scalr.OP_ANTIALIAS);
-        }
+
+        int newWidth = width < height ? (width * 100) / height : 100;
+        int newHeight = width < height ? 100 :  (height * 100) / width ;
+        thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, newWidth, newHeight, Scalr.OP_ANTIALIAS);
         return thumbnail;
     }
 

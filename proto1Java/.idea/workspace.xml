@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" line="65" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea67d6d9-0f1c-4d22-84e3-86497f2baacd" name="Default" comment="test V0.11a">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" />
+    <list default="true" id="ea67d6d9-0f1c-4d22-84e3-86497f2baacd" name="Default" comment="test V0.11c">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/../proto1/build/intermediates/model_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" afterPath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proto1Java.iml" afterPath="$PROJECT_DIR$/proto1Java.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../proto1/.idea/workspace.xml" />
     </list>
@@ -54,8 +49,8 @@
       <file leaf-file-name="PhotoWorker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5620438" vertical-offset="826" max-vertical-offset="1728">
-              <caret line="67" column="46" selection-start-line="67" selection-start-column="46" selection-end-line="67" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.39664805" vertical-offset="1226" max-vertical-offset="1584">
+              <caret line="80" column="17" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -951,7 +946,7 @@
       <workItem from="1425927763681" duration="13685000" />
       <workItem from="1426006570199" duration="2530000" />
       <workItem from="1426013008797" duration="1885000" />
-      <workItem from="1426015045460" duration="1183000" />
+      <workItem from="1426015045460" duration="2805000" />
     </task>
     <task id="LOCAL-00001" summary="test V0.11a">
       <created>1426014334861</created>
@@ -959,11 +954,17 @@
       <option name="project" value="LOCAL" />
       <updated>1426014334861</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="test V0.11b">
+      <created>1426016258528</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1426016258528</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104901000" />
+    <option name="totallyTimeSpent" value="106523000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -972,7 +973,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32367972" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32367972" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -983,7 +984,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24361159" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32764506" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24320242" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16163142" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1016,11 +1017,13 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="test V0.11a" />
-    <option name="LAST_COMMIT_MESSAGE" value="test V0.11a" />
+    <MESSAGE value="test V0.11b" />
+    <MESSAGE value="test V0.11c" />
+    <option name="LAST_COMMIT_MESSAGE" value="test V0.11c" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="15" />
+      <option name="time" value="16" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1512,8 +1515,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5620438" vertical-offset="826" max-vertical-offset="1728">
-          <caret line="67" column="46" selection-start-line="67" selection-start-column="46" selection-end-line="67" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.39664805" vertical-offset="1226" max-vertical-offset="1584">
+          <caret line="80" column="17" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -53,18 +53,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5bf955af-cdb3-4021-805f-4f96279508bb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/build/intermediates/model_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" afterPath="$PROJECT_DIR$/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" afterPath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/proto1Java.iml" afterPath="$PROJECT_DIR$/../proto1Java/proto1Java.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="proto1.iws" />
     <ignored path=".idea/workspace.xml" />
