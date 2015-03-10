@@ -1,5 +1,7 @@
 package pt.unl.fct.di.proto1.services.photos;
 
+import org.imgscalr.Scalr;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,15 +38,41 @@ public class PhotoWorker implements Serializable {
         return pathFileName;
     }
 
-    public BufferedImage getThumbnail() {
+    public BufferedImage getThumbnail() throws IOException {
        if(thumbnail == null)
            thumbnail = generateThumbnail();
         return thumbnail;
     }
 
-    private BufferedImage generateThumbnail() {
-        // TODO generate thumbnail
-        return null;
+    private BufferedImage generateThumbnail() throws IOException {
+        if (thumbnail != null)
+            return thumbnail;
+
+        if (photoClient != null){
+            BufferedImage thumb = photoClient.getThumbnail();
+            if (thumb != null)
+                return thumb;
+        }
+
+        if (photo == null) {
+            photo = getPhoto();
+        }
+        // testar se é portrait ou landscape
+        int width = photo.getWidth();
+        int height = photo.getHeight();
+        if (width < height) {
+            float extraSize = height - 100;
+            float percentHeight = (extraSize / height) * 100;
+            int percentWidth = (new Float(width - ((width / 100) * percentHeight))).intValue();
+            thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, percentWidth, 100, Scalr.OP_ANTIALIAS);
+        } else {
+            float extraSize = width - 100;
+            float percentWidth = (extraSize / width) * 100;
+            int percentHeight = (new Float(height - ((height / 100) * percentWidth))).intValue();
+            thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, 100, percentHeight, Scalr.OP_ANTIALIAS);
+            photoClient.setThumbnail(thumbnail);
+        }
+        return thumbnail;
     }
 
     private void loadPhoto() throws IOException {
@@ -58,7 +86,7 @@ public class PhotoWorker implements Serializable {
         return photo;
     }
 
-    public Photo getPhotoObject(){
+    public Photo getPhotoObject() throws IOException {
         if(photoClient == null)
             photoClient = new Photo(getPathFileName(), getThumbnail());
         return photoClient;

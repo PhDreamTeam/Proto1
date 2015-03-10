@@ -23,6 +23,10 @@ public class Photo implements IPhoto {
         return uuid;
     }
 
+    public void setThumbnail(BufferedImage thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     @Override
     public BufferedImage getThumbnail() {
         return thumbnail;

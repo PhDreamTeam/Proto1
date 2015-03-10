@@ -2,7 +2,6 @@ package unl.fct.di.proto1.common.client;
 
 import akka.actor.*;
 import akka.japi.Creator;
-import pt.unl.fct.di.proto1.services.photos.Photo;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -21,6 +20,7 @@ import unl.fct.di.proto1.common.lib.protocol.MsgRegister;
 import unl.fct.di.proto1.common.lib.protocol.MsgRegisterReply;
 import unl.fct.di.proto1.common.remoteActions.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -266,6 +266,58 @@ public class Client {
             }
         });
         t.start();
+    }
+
+    // DEBUG
+    public void workWithImageTest() {
+        System.out.println("Vou começar o teste");
+        console.println("Vou começar o teste");
+        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/proto1Photos/kk1.jpg");
+        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/proto1Photos/kk2.jpg");
+        System.out.println("Foto carregada");
+        console.println("Foto carregada");
+        JFrame jf = new JFrame();
+        jf.setLayout(new FlowLayout());
+
+
+        try {
+            // thumnail
+            ImageIcon t = new ImageIcon();
+            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+            jf.add(new JLabel(t));
+            console.println("Thumbnail adicionado");
+
+            // thumnail 2
+            ImageIcon t2 = new ImageIcon();
+            t2.setImage(pw.getThumbnail());
+            jf.add(new JLabel(t2));
+
+            // thumnail 3
+            ImageIcon t3 = new ImageIcon();
+            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+            jf.add(new JLabel(t3));
+            console.println("Thumbnail adicionado");
+
+            // thumnail 4
+            ImageIcon t4 = new ImageIcon();
+            t4.setImage(pw2.getThumbnail());
+            jf.add(new JLabel(t4));
+
+
+            // original image
+            ImageIcon i = new ImageIcon();
+            i.setImage(pw.getPhoto());
+            jf.add(new JLabel(i));
+            console.println("Imagem adicionada");
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("EXCEÇÃOOOO: " + e.getMessage());
+        }
+        jf.pack();
+        jf.setVisible(true);
+        console.println("ImageTest terminado...");
     }
 
     // ------------------------------------------------------------

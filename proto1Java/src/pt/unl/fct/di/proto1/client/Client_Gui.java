@@ -77,6 +77,7 @@ public class Client_Gui extends JFrame implements IClientGui {
         JButton openDDObjectButton = new JButton("Open DDObject");
         JButton photosButton = new JButton("INTERNAL PHOTOS");
         JButton printlnButton = new JButton("Println");
+        JButton imageTestButton = new JButton("imageTest"); // DEBUG
 
         JPanel panelControl = new JPanel();
         panelControl.setBorder(BorderFactory.createTitledBorder("Control"));
@@ -84,6 +85,7 @@ public class Client_Gui extends JFrame implements IClientGui {
         panelControl.add(createDDObjectButton);
         panelControl.add(openDDObjectButton);
         panelControl.add(printlnButton);
+        panelControl.add(imageTestButton);
         textFieldUUID = new JTextField(30);
         panelControl.add(textFieldUUID);
         panelViewer.add(panelControl);
@@ -135,6 +137,13 @@ public class Client_Gui extends JFrame implements IClientGui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 client.workWithPhotos();
+            }
+        });
+
+        imageTestButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.workWithImageTest();
             }
         });
 
