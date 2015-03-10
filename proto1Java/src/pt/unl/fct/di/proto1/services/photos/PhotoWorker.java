@@ -57,12 +57,12 @@ public class PhotoWorker implements Serializable {
         if (photo == null) {
             photo = getPhoto();
         }
-        // testar se é portrait ou landscape
+
         int width = photo.getWidth();
         int height = photo.getHeight();
 
         int newWidth = width < height ? (width * 100) / height : 100;
-        int newHeight = width < height ? 100 :  (height * 100) / width ;
+        int newHeight = width < height ? 100 :  (height * 100) / width;
         thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, newWidth, newHeight, Scalr.OP_ANTIALIAS);
         return thumbnail;
     }
@@ -78,7 +78,7 @@ public class PhotoWorker implements Serializable {
         return photo;
     }
 
-    public Photo getPhotoObject() throws IOException {
+    public Photo  getPhotoObject() throws IOException {
         if(photoClient == null)
             photoClient = new Photo(getPathFileName(), getThumbnail());
         return photoClient;
