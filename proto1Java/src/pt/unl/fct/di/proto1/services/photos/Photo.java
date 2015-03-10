@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
  * Class that describes a photo to be used in client
  *
  */
+
+// DEBUG DR Esta classe deveria passar para os commons?!?!?
 public class Photo implements IPhoto {
     String uuid;
     BufferedImage thumbnail;
