@@ -2,6 +2,8 @@ package unl.fct.di.proto1.common.client;
 
 import akka.actor.*;
 import akka.japi.Creator;
+import pt.unl.fct.di.proto1.services.photos.Photo;
+import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -20,6 +22,8 @@ import unl.fct.di.proto1.common.lib.protocol.MsgRegister;
 import unl.fct.di.proto1.common.lib.protocol.MsgRegisterReply;
 import unl.fct.di.proto1.common.remoteActions.*;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
@@ -268,7 +272,7 @@ public class Client {
         t.start();
     }
 
-    // DEBUG
+    // DEBUG verificar....
     public void workWithImageTest() {
         System.out.println("Vou começar o teste");
         console.println("Vou começar o teste");
@@ -281,24 +285,24 @@ public class Client {
 
 
         try {
-            // thumnail
+            // thumbnail
             ImageIcon t = new ImageIcon();
             t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
             jf.add(new JLabel(t));
             console.println("Thumbnail adicionado");
 
-            // thumnail 2
+            // thumbnail 2
             ImageIcon t2 = new ImageIcon();
             t2.setImage(pw.getThumbnail());
             jf.add(new JLabel(t2));
 
-            // thumnail 3
+            // thumbnail 3
             ImageIcon t3 = new ImageIcon();
             t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
             jf.add(new JLabel(t3));
             console.println("Thumbnail adicionado");
 
-            // thumnail 4
+            // thumbnail 4
             ImageIcon t4 = new ImageIcon();
             t4.setImage(pw2.getThumbnail());
             jf.add(new JLabel(t4));
@@ -313,7 +317,7 @@ public class Client {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("EXCEÇÃOOOO: " + e.getMessage());
+            System.out.println("EXCEÇÃO: " + e.getMessage());
         }
         jf.pack();
         jf.setVisible(true);
