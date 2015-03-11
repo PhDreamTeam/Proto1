@@ -2,9 +2,11 @@
   <library name="org.imgscalr:imgscalr-lib:4.2" type="repository">
     <properties maven-id="org.imgscalr:imgscalr-lib:4.2" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libs/imgscalr-lib-4.2.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../libs/imgscalr-lib-4.2-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

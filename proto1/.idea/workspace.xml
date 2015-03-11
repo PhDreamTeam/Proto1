@@ -53,10 +53,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5bf955af-cdb3-4021-805f-4f96279508bb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/build/intermediates/model_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/Photo.java" afterPath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/Photo.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="proto1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -132,7 +129,26 @@
             <state vertical-scroll-proportion="0.0" vertical-offset="720" max-vertical-offset="10296">
               <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
               <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2742#2743#0" expanded="false" />
+                <element signature="e#2789#2790#0" expanded="false" />
                 <element signature="docComment;method#addOrUpdateActorNode#1;class#MasterService#0" expanded="false" />
+                <element signature="e#6495#6496#0" expanded="false" />
+                <element signature="e#6550#6551#0" expanded="false" />
+                <element signature="e#6612#6613#0" expanded="false" />
+                <element signature="e#6667#6668#0" expanded="false" />
+                <element signature="e#6926#6927#0" expanded="false" />
+                <element signature="e#6955#6956#0" expanded="false" />
+                <element signature="e#6996#6997#0" expanded="false" />
+                <element signature="e#7033#7034#0" expanded="false" />
+                <element signature="e#7072#7073#0" expanded="false" />
+                <element signature="e#7117#7118#0" expanded="false" />
+                <element signature="e#7157#7158#0" expanded="false" />
+                <element signature="e#7202#7203#0" expanded="false" />
+                <element signature="e#7239#7240#0" expanded="false" />
+                <element signature="e#7281#7282#0" expanded="false" />
+                <element signature="e#7322#7323#0" expanded="false" />
+                <element signature="e#7368#7369#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -5948,12 +5964,12 @@
       <workItem from="1426010336336" duration="1010000" />
       <workItem from="1426013056535" duration="1577000" />
       <workItem from="1426015047237" duration="685000" />
-      <workItem from="1426070911928" duration="1894000" />
+      <workItem from="1426070911928" duration="2395000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="498282000" />
+    <option name="totallyTimeSpent" value="498783000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -5977,7 +5993,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5536627" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -6363,7 +6379,26 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="484" max-vertical-offset="9954">
           <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2742#2743#0" expanded="false" />
+            <element signature="e#2789#2790#0" expanded="false" />
             <element signature="docComment;method#addOrUpdateActorNode#1;class#MasterService#0" expanded="false" />
+            <element signature="e#6495#6496#0" expanded="false" />
+            <element signature="e#6550#6551#0" expanded="false" />
+            <element signature="e#6612#6613#0" expanded="false" />
+            <element signature="e#6667#6668#0" expanded="false" />
+            <element signature="e#6926#6927#0" expanded="false" />
+            <element signature="e#6955#6956#0" expanded="false" />
+            <element signature="e#6996#6997#0" expanded="false" />
+            <element signature="e#7033#7034#0" expanded="false" />
+            <element signature="e#7072#7073#0" expanded="false" />
+            <element signature="e#7117#7118#0" expanded="false" />
+            <element signature="e#7157#7158#0" expanded="false" />
+            <element signature="e#7202#7203#0" expanded="false" />
+            <element signature="e#7239#7240#0" expanded="false" />
+            <element signature="e#7281#7282#0" expanded="false" />
+            <element signature="e#7322#7323#0" expanded="false" />
+            <element signature="e#7368#7369#0" expanded="false" />
           </folding>
         </state>
       </provider>
