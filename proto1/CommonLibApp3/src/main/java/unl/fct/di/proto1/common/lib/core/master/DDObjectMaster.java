@@ -60,6 +60,32 @@ public class DDObjectMaster extends DDMaster {
         copyPartitions(parentDD);
     }
 
+    // register internal services DD
+    public DDObjectMaster(String newDDUI) {
+        // super data
+        super(newDDUI, 0, null, null);
+
+        this.data = null;
+
+        GlManager.getConsole().println("Creating DDObjectMaster: " + DDUI + " from Worker internal service DD");
+
+        // keep DDInt in the DDInt manager
+        GlManager.getDDManager().putDD(this);
+    }
+
+    public void addWorkerInternalPartition(ActorNode an){
+        for (DDPartitionDescriptor pd : partitionsDescriptors) {
+            if(pd.getWorkerNode().equals(an))
+                return; // already exists, no need to add a new one
+        }
+
+        // create new partition descriptor
+        DDPartitionDescriptor partDesc = new DDPartitionDescriptor(DDUI, partitionsDescriptors.size(), an);
+        // add partition to partitionsDescriptors collection
+        partitionsDescriptors.add(partDesc);
+
+    }
+
 
     private void buildPartitions(Object[] data, ActorNode[] workers, MasterRequest req) {
         int nPartitions = workers.length;
@@ -81,7 +107,6 @@ public class DDObjectMaster extends DDMaster {
             startIdx += nElems;
         }
     }
-
 
     private void sendDataToWorker(Object[] data, DDPartitionDescriptor pDescriptor, MasterRequest req) {
         // set state of partition

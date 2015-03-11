@@ -1,0 +1,5 @@
+C:/PhD/code/proto1/photos/f1.jpg    08a122a6-268e-415b-be42-91d0b5d57dc0
+C:/PhD/code/proto1/photos/f2.jpg    876fb9a4-2f70-42eb-881e-6f782dfff893
+C:/PhD/code/proto1/photos/cr1.jpg   83ab537b-22e7-4954-b686-b95e7904f9f4
+C:/PhD/code/proto1/photos/cr2.jpg   4bb564da-a84d-4785-81c8-20ea78d776db
+C:/PhD/code/proto1/photos/kk1.jpg   fb2871c4-a474-4c84-bc43-399c244688a6

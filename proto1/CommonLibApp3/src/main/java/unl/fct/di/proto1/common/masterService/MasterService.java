@@ -7,11 +7,9 @@ import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
 import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.master.*;
+import unl.fct.di.proto1.common.lib.protocol.*;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
-import unl.fct.di.proto1.common.lib.protocol.Msg;
-import unl.fct.di.proto1.common.lib.protocol.MsgRegister;
-import unl.fct.di.proto1.common.lib.protocol.MsgRegisterReply;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,7 +31,7 @@ public class MasterService {
 
     List<ActorNode> workers, clients;
     List<MasterRequest> requests;
-    List<DDMaster> data;
+   // List<DDMaster> data;
 
     IMasterGui masterGui;
     IConsole console;
@@ -53,7 +51,7 @@ public class MasterService {
         workers = masterGui.getWorkers();
         clients = masterGui.getClients();
         requests = masterGui.getRequests();
-        data = masterGui.getData();
+       // data = masterGui.getData();
 
 
         system = masterGui.createSystem(MASTER_SYSTEM_NAME);
@@ -365,16 +363,7 @@ public class MasterService {
 
             // DDObject  ========================================================
 
-            if (message instanceof MsgOpenDDObject) {
-                MsgOpenDDObject msg = (MsgOpenDDObject) message;
-                // check if DD exists in DDManager
-                DDMaster dd = GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // open DD
-                DDMaster.OpenDDMaster(dd, clientActorNode, getSelf(), msg, DDObjectMaster.class);
-            } //
-
-            else if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
+            if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
                 MsgPartitionApplyFilterDDObjectReply msg = (MsgPartitionApplyFilterDDObjectReply) message;
                 DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
                 if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
@@ -444,6 +433,15 @@ public class MasterService {
                 ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
                 // get data
                 dd.getData(msg.getRequestId(), clientActorNode, msg);
+            } //
+
+            else if (message instanceof MsgOpenDDObject) {
+                MsgOpenDDObject msg = (MsgOpenDDObject) message;
+                // check if DD exists in DDManager
+                DDMaster dd = GlManager.getDDManager().getDD(msg.getDDUI());
+                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+                // open DD
+                DDMaster.OpenDDMaster(dd, clientActorNode, getSelf(), msg, DDObjectMaster.class);
             } //
 
             else if (message instanceof MsgPartitionCreateDDObjectReply) {
@@ -581,7 +579,17 @@ public class MasterService {
                     // watch actor system messages
                     this.getContext().watch(sender());
 
-                    Msg msgOut = new MsgRegisterReply(msg.getRequestId(), true, null);
+
+                    Msg msgOut;
+
+                    if (msg.getType().equals(ActorType.Worker)){
+                        // register worker internal services
+                        ms.registerWorkerInternalServices(an, ((MsgRegisterWorker)msg).getInternalDDUIs());
+                        // reply...
+                        msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), true, null);
+                    }else
+                        msgOut = new MsgRegisterReply(msg.getRequestId(), true, null);
+
                     getSender().tell(msgOut, getSelf());
                     console.println("Sent: " + msgOut + " to " + getSender().path().name());
 
@@ -604,6 +612,33 @@ public class MasterService {
                 //unhandled(message);
                 console.println("Unhandled message: " + message);
             }
+        }
+    }
+
+    /**
+     * Register  worker internal internalDDUIs
+     * @param an Actor node of the registering worker
+     * @param internalDDUIs
+     */
+    private void registerWorkerInternalServices(ActorNode an, List<String> internalDDUIs) {
+        for (int i = 0; i < internalDDUIs.size(); i++) {
+            String ddui = internalDDUIs.get(i);
+            // check if DD exists - create if not
+            DDMaster dd = GlManager.getDDManager().getDD(ddui);
+            if(dd == null){
+                // add new internal service DD
+                dd = new DDObjectMaster(ddui);
+                // add to gui
+                addData(dd);
+            } else {
+                if(!(dd instanceof DDObjectMaster))
+                    throw new RuntimeException("Internal worker service DD (" + ddui +
+                            ") should be a DDOBjectMaster, found -> " + dd.getClass().getSimpleName());
+            }
+            DDObjectMaster ddo = (DDObjectMaster)dd;
+            // add this worker as a worker with a partition in that dd
+            ddo.addWorkerInternalPartition(an);
+
         }
     }
 }

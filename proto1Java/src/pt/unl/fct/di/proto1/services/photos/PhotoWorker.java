@@ -1,9 +1,11 @@
 package pt.unl.fct.di.proto1.services.photos;
 
+
 import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,7 +18,7 @@ public class PhotoWorker implements Serializable {
     String pathFileName;
 
     // photo thumbnail
-    BufferedImage thumbnail = null;
+    byte[] thumbnail = null;
 
     // photo itself
     BufferedImage photo = null;  // only present after getPhoto
@@ -38,32 +40,21 @@ public class PhotoWorker implements Serializable {
         return pathFileName;
     }
 
-    public BufferedImage getThumbnail() throws IOException {
-       if(thumbnail == null)
-           thumbnail = generateThumbnail();
-        return thumbnail;
-    }
-
-    private BufferedImage generateThumbnail() throws IOException {
+    public byte[] getThumbnail() throws IOException {
         if (thumbnail != null)
             return thumbnail;
-
-        if (photoClient != null){
-            BufferedImage thumb = photoClient.getThumbnail();
-            if (thumb != null)
-                return thumb;
-        }
-
-        if (photo == null) {
-            photo = getPhoto();
-        }
 
         int width = photo.getWidth();
         int height = photo.getHeight();
 
         int newWidth = width < height ? (width * 100) / height : 100;
         int newHeight = width < height ? 100 :  (height * 100) / width;
-        thumbnail = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, newWidth, newHeight, Scalr.OP_ANTIALIAS);
+        BufferedImage bi = Scalr.resize(photo, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, newWidth, newHeight, Scalr.OP_ANTIALIAS);
+        // generate byte[]
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bi, "jpg", baos );
+        thumbnail = baos.toByteArray();
+
         return thumbnail;
     }
 

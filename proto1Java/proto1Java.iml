@@ -14,6 +14,6 @@
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.typesafe.akka:akka-remote_2.11:2.3.8" level="project" />
-    <orderEntry type="library" name="org.imgscalr:imgscalr-lib:4.2" level="application" />
+    <orderEntry type="library" name="org.imgscalr:imgscalr-lib:4.2" level="project" />
   </component>
 </module>

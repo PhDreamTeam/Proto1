@@ -18,9 +18,6 @@ public interface IWorkerGui extends IConsole{
 
 
 
-
-
-
     // Interface methods
     List<ActorNode> getServices();
 

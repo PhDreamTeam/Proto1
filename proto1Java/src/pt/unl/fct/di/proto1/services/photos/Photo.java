@@ -11,10 +11,10 @@ import java.awt.image.BufferedImage;
 
 public class Photo implements IPhoto {
     String uuid;
-    BufferedImage thumbnail;
-    BufferedImage photo = null;  // only present after getPhoto
+    byte[] thumbnail;
+    transient BufferedImage photo = null;  // only present after client call getPhoto to worker
 
-    public Photo(String uuid, BufferedImage thumbnail) {
+    public Photo(String uuid, byte[] thumbnail) {
         this.uuid = uuid;
         this.thumbnail = thumbnail;
     }
@@ -24,18 +24,19 @@ public class Photo implements IPhoto {
         return uuid;
     }
 
-    public void setThumbnail(BufferedImage thumbnail) {
+    public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
     }
 
     @Override
-    public BufferedImage getThumbnail() {
+    public byte[] getThumbnail() {
         return thumbnail;
     }
 
     @Override
     public BufferedImage getPhoto() {
-        return null;
+        throw new RuntimeException("To be implemented");
+        //return null;
     }
 
     @Override

@@ -12,6 +12,7 @@ import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartition;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartitionInt;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartitionObject;
+import unl.fct.di.proto1.common.lib.core.worker.DDPartitionPhotoInternal;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.*;
@@ -49,9 +50,10 @@ public class WorkerService {
         // add photo service to service manager
         // TODO review where we should add the service
         serviceManager.addService("photo");
+        serviceManager.addInternalDDUI("photoDD1");
 
         // create PhotoManager
-        String photoMangerPathName = "data" + File.pathSeparator + workerServiceActorName;
+        String photoMangerPathName = "data/" + workerServiceActorName;
         console.println("Creating PhotoManager in pathName -> " + photoMangerPathName);
         photoManager = new PhotoManager(photoMangerPathName);
         photoManager.addActivePhotoGroup("DD1");
@@ -165,6 +167,13 @@ public class WorkerService {
     }
 
     public DDPartition getPartition(String DDUI, int partID) {
+        // if internal DD
+        if(serviceManager.getInternalDDUIs().contains(DDUI)) {
+            DDPartitionPhotoInternal dd = new DDPartitionPhotoInternal(DDUI, this);
+            return dd;
+        }
+
+        // other DD
         List<DDPartition> ddparts = getArrayDDPartitions();
 
         for (int i = 0, size = ddparts.size(); i < size; i++) {
@@ -173,6 +182,14 @@ public class WorkerService {
                 return p;
         }
         return null;
+    }
+
+    public IWorkerGui getWorkerGui() {
+        return wg;
+    }
+
+    public PhotoManager getPhotoManager() {
+        return photoManager;
     }
 
     public static class WorkerActor extends UntypedActor {
@@ -255,7 +272,6 @@ public class WorkerService {
             else if (message instanceof MsgPartitionGetDataDDObject) {
                 MsgPartitionGetDataDDObject msg = (MsgPartitionGetDataDDObject) message;
                 DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
-                // TODO getPartition
 
                 MsgPartitionGetDataDDObjectReply msgOut;
                 if (p != null) {
@@ -273,6 +289,8 @@ public class WorkerService {
             else if (message instanceof MsgPartitionCreateDDObject) {
                 MsgPartitionCreateDDObject msgPartition = (MsgPartitionCreateDDObject) message;
 
+                // TODO if DDUI is from a internal service, throw error
+
                 DDPartitionObject partition = new DDPartitionObject(msgPartition.getDDUI(),
                         msgPartition.getPartId(), msgPartition.getData());
                 // show in screen
@@ -289,7 +307,6 @@ public class WorkerService {
 
 
             // DDInt =====================================
-
 
             else if (message instanceof MsgPartitionApplyFilterDDInt) {
                 MsgPartitionApplyFilterDDInt msg = (MsgPartitionApplyFilterDDInt) message;
@@ -368,6 +385,14 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
+
+            // SETUP =====================================
+
+            else if (message instanceof MsgRegisterWorkerReply){
+                // receive register confirmation - nothing to do.
+                // we cannot remove this, because it will run MsgRegisterReply by default
+            } //
+
             else if (message instanceof MsgGetMasterReply) {
                 // receive this from Directory service
                 ActorNode masterActorNode = ((MsgGetMasterReply) message).getActorNode();
@@ -383,7 +408,8 @@ public class WorkerService {
                     ws.console.println("");
 
                     // register in master - just to be nice
-                    Msg msgOut = new MsgRegister(UUID.randomUUID().toString(), ActorType.Worker);
+                    Msg msgOut = new MsgRegisterWorker(UUID.randomUUID().toString(),
+                            ws.serviceManager.getInternalDDUIs());
                     masterActorRef.tell(msgOut, getSelf());
                     ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
                 } catch (Exception e) {
@@ -392,16 +418,11 @@ public class WorkerService {
             } //
 
             else if (message instanceof MsgRegisterReply) {
-                if (getSender().equals(ws.getDirectoryServiceActorRef())) {
-                    // Directory service answers register from worker
-                    // get master node from Directory service
-                    Msg msgOut = new MsgGetMaster(UUID.randomUUID().toString());
-                    sender().tell(msgOut, getSelf());
-                    ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                } else {
-                    // master answers register from worker - nothing to do
-                    ws.console.println("");
-                }
+                // Directory service answers register from worker
+                // get master node from Directory service
+                Msg msgOut = new MsgGetMaster(UUID.randomUUID().toString());
+                sender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
             } //
 
             // TODO watch for terminations

@@ -114,6 +114,7 @@ public class DDMaster implements Serializable {
             msgOut =  msg.getFailureReplyMessage("DDUI not found or doesn't have the required type");
         }
         actorNodeRequester.getActorRef().tell(msgOut, masterActorRef);
+        GlManager.getConsole().println("Sent: " + msgOut);
     }
 
     public DDMASTERSTATE getState() {

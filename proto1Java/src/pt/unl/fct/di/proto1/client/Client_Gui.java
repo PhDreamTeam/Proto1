@@ -84,6 +84,7 @@ public class Client_Gui extends JFrame implements IClientGui {
         panelControl.add(createDDIntButton);
         panelControl.add(createDDObjectButton);
         panelControl.add(openDDObjectButton);
+        panelControl.add(photosButton);
         panelControl.add(printlnButton);
         panelControl.add(imageTestButton);
         textFieldUUID = new JTextField(30);

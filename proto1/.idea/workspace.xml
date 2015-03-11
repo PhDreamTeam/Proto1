@@ -53,7 +53,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5bf955af-cdb3-4021-805f-4f96279508bb" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/com_typesafe_akka_akka_remote_2_11_2_3_8.xml" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1Java\lib\imgscalr-lib-4.2-javadoc.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1Java\lib\imgscalr-lib-4.2.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\akka_actor_2_11_2_3_8.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\akka_remote_2_11_2_3_8.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\config_1_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\multidex_1_0_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\netty_3_8_0_Final.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\protobuf_java_2_5_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\scala_library_2_11_4.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\PhD\code\Proto1\proto1\.idea\libraries\uncommons_maths_1_2_2a.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" afterPath="$PROJECT_DIR$/../proto1Java/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/PhotoWorker.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidTests/AndroidTests.iml" afterPath="$PROJECT_DIR$/AndroidTests/AndroidTests.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/Client.iml" afterPath="$PROJECT_DIR$/Client/Client.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" afterPath="$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DirectoryService/DirectoryService.iml" afterPath="$PROJECT_DIR$/DirectoryService/DirectoryService.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MasterService/MasterService.iml" afterPath="$PROJECT_DIR$/MasterService/MasterService.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" afterPath="$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WorkerService/WorkerService.iml" afterPath="$PROJECT_DIR$/WorkerService/WorkerService.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WorkerService2/WorkerService2.iml" afterPath="$PROJECT_DIR$/WorkerService2/WorkerService2.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/proto1Java.iml" afterPath="$PROJECT_DIR$/../proto1Java/proto1Java.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../proto1Java/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="proto1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -157,8 +186,8 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.580292" vertical-offset="3852" max-vertical-offset="8838">
-              <caret line="341" column="7" selection-start-line="341" selection-start-column="7" selection-end-line="341" selection-end-column="7" />
+            <state vertical-scroll-proportion="-0.16423358" vertical-offset="3330" max-vertical-offset="8910">
+              <caret line="191" column="0" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -249,29 +278,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="594" max-vertical-offset="2988">
               <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2844#2845#0" expanded="false" />
-                <element signature="e#2905#2906#0" expanded="false" />
-                <element signature="e#2959#2960#0" expanded="false" />
-                <element signature="e#3020#3021#0" expanded="false" />
-                <element signature="e#3236#3237#0" expanded="false" />
-                <element signature="e#3301#3302#0" expanded="false" />
-                <element signature="e#3359#3360#0" expanded="false" />
-                <element signature="e#3428#3429#0" expanded="false" />
-                <element signature="e#3769#3770#0" expanded="false" />
-                <element signature="e#3830#3831#0" expanded="false" />
-                <element signature="e#3884#3885#0" expanded="false" />
-                <element signature="e#3945#3946#0" expanded="false" />
-                <element signature="e#4252#4253#0" expanded="false" />
-                <element signature="e#4322#4323#0" expanded="false" />
-                <element signature="e#4859#4860#0" expanded="false" />
-                <element signature="e#4903#4904#0" expanded="false" />
-                <element signature="e#4954#4955#0" expanded="false" />
-                <element signature="e#4995#4996#0" expanded="false" />
-                <element signature="e#5382#5383#0" expanded="false" />
-                <element signature="e#5409#5410#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -4750,7 +4757,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -5196,6 +5202,90 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Request" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CommonLibApp3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ClientActor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CommonLibApp3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -5253,6 +5343,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -5265,7 +5356,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.23564954" />
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteToolWindowManager.WIDTH" value="185" />
@@ -5291,7 +5382,7 @@
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="dynamic.classpath" value="false" />
-    <property name="Downloaded.Files.Path" value="C:\PhD\code\proto1Libs" />
+    <property name="Downloaded.Files.Path" value="C:\PhD\code\Proto1\libs" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -5964,12 +6055,16 @@
       <workItem from="1426010336336" duration="1010000" />
       <workItem from="1426013056535" duration="1577000" />
       <workItem from="1426015047237" duration="685000" />
-      <workItem from="1426070911928" duration="2395000" />
+      <workItem from="1426070911928" duration="2424000" />
+      <workItem from="1426075960218" duration="249000" />
+      <workItem from="1426076484971" duration="149000" />
+      <workItem from="1426076685572" duration="273000" />
+      <workItem from="1426076992104" duration="72000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="498783000" />
+    <option name="totallyTimeSpent" value="499555000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -5993,7 +6088,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5536627" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -6009,7 +6104,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42105263" sideWeight="0.6805136" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2854985" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2854985" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -6280,23 +6375,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DirectoryService/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.5714285" vertical-offset="1080" max-vertical-offset="1998">
           <caret line="64" column="45" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="45" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.785714" vertical-offset="1350" max-vertical-offset="1998">
           <caret line="84" column="51" selection-start-line="84" selection-start-column="51" selection-end-line="84" selection-end-column="51" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/main/java/unl/fct/di/proto1/client/MainActivity.java">
@@ -6307,13 +6402,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MasterService/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.13375796" vertical-offset="2729" max-vertical-offset="3043">
           <caret line="163" column="37" selection-start-line="163" selection-start-column="37" selection-end-line="163" selection-end-column="45" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../proto1Java/src/pt/unl/fct/di/proto1/common/ProportionalLayout.java">
@@ -6338,23 +6433,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WorkerService2/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.714286" vertical-offset="0" max-vertical-offset="2538">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="70" selection-end-column="21" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WorkerService/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WorkerService/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.8236398" vertical-offset="0" max-vertical-offset="2538">
           <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/directoryService/IDirectoryGui.java">
@@ -6562,36 +6657,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="430" max-vertical-offset="2737">
           <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2844#2845#0" expanded="false" />
-            <element signature="e#2905#2906#0" expanded="false" />
-            <element signature="e#2959#2960#0" expanded="false" />
-            <element signature="e#3020#3021#0" expanded="false" />
-            <element signature="e#3236#3237#0" expanded="false" />
-            <element signature="e#3301#3302#0" expanded="false" />
-            <element signature="e#3359#3360#0" expanded="false" />
-            <element signature="e#3428#3429#0" expanded="false" />
-            <element signature="e#3769#3770#0" expanded="false" />
-            <element signature="e#3830#3831#0" expanded="false" />
-            <element signature="e#3884#3885#0" expanded="false" />
-            <element signature="e#3945#3946#0" expanded="false" />
-            <element signature="e#4252#4253#0" expanded="false" />
-            <element signature="e#4322#4323#0" expanded="false" />
-            <element signature="e#4859#4860#0" expanded="false" />
-            <element signature="e#4903#4904#0" expanded="false" />
-            <element signature="e#4954#4955#0" expanded="false" />
-            <element signature="e#4995#4996#0" expanded="false" />
-            <element signature="e#5382#5383#0" expanded="false" />
-            <element signature="e#5409#5410#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.580292" vertical-offset="3852" max-vertical-offset="8838">
-          <caret line="341" column="7" selection-start-line="341" selection-start-column="7" selection-end-line="341" selection-end-column="7" />
+        <state vertical-scroll-proportion="-0.16423358" vertical-offset="3330" max-vertical-offset="8910">
+          <caret line="191" column="0" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -6627,7 +6700,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>com.typesafe.akka:akka-remote_2.11:2.3.8</last-edited>
+          <last-edited>scala-compiler</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -6651,7 +6724,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>WorkerService2</last-edited>
+          <last-edited>Client</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -6663,7 +6736,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>akka-actor_2.11-2.3.8</last-edited>
+          <last-edited>com.typesafe.akka:akka-remote_2.11:2.3.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

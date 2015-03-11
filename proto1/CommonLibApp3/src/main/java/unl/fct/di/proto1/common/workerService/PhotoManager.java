@@ -52,7 +52,7 @@ public class PhotoManager {
     public ArrayList<String> loadPhotoNamesFromDisk(String photoDD) {
         ArrayList<String> photoUuids = new ArrayList<>();
         try {
-            Scanner scan = new Scanner(new File(pathNameDDs + File.pathSeparator +  photoDD + ".txt"));
+            Scanner scan = new Scanner(new File(pathNameDDs + "/" +  photoDD + ".txt"));
             while(scan.hasNextLine()) {
                 Scanner lineScan = new Scanner(scan.nextLine());
                 String photoPathName = lineScan.next();
@@ -74,7 +74,7 @@ public class PhotoManager {
         // read photoDD file, get photofilenames and uuids
         ArrayList<String> photoUuids = loadPhotoNamesFromDisk(photoDD);
         // create array
-        PhotoWorker[] photoWorkers = new PhotoWorker[allInternalPhotoPathName.size()];
+        PhotoWorker[] photoWorkers = new PhotoWorker[photoUuids.size()];
         // create photoWorkers to array
         for (int i = 0, size = photoUuids.size(); i < size; ++i)
             photoWorkers[i] = getPhotoWorker(photoUuids.get(i));
