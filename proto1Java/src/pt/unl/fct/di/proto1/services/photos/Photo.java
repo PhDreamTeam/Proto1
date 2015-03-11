@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
  *
  */
 
-// DEBUG DR Esta classe deveria passar para os commons?!?!?
 public class Photo implements IPhoto {
     String uuid;
     BufferedImage thumbnail;
