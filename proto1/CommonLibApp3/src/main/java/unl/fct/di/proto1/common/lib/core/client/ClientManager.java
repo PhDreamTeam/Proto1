@@ -2,6 +2,8 @@ package unl.fct.di.proto1.common.lib.core.client;
 
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import pt.unl.fct.di.proto1.services.photos.Photo;
 import unl.fct.di.proto1.common.IConsole;
 
 import java.util.HashMap;
@@ -13,8 +15,19 @@ public class ClientManager {
     static ActorRef clientActor = null;
     static IConsole console = null;
     static ActorRef masterActor = null;
+    static ActorSystem clientSystem = null;
 
     static HashMap<String, DD> DDMap =  new HashMap<>();
+
+    static HashMap<String, Photo> photoMap = new HashMap<>();
+
+    public static void putPhotoInPhotoMap(Photo p){
+        photoMap.put(p.getPhotoUuid(), p);
+    }
+
+    public static Photo getPhotoInPhotoMap(String photoUuid){
+        return photoMap.get(photoUuid);
+    }
 
     public static ActorRef getClientActor() {
         return clientActor;
@@ -52,5 +65,11 @@ public class ClientManager {
         return DDMap.remove(DDUI);
     }
 
+    public static ActorSystem getClientSystem() {
+        return clientSystem;
+    }
 
+    public static void setClientSystem(ActorSystem clientSystem) {
+        ClientManager.clientSystem = clientSystem;
+    }
 }

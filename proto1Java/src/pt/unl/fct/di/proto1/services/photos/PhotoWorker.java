@@ -2,6 +2,7 @@ package pt.unl.fct.di.proto1.services.photos;
 
 
 import org.imgscalr.Scalr;
+import unl.fct.di.proto1.common.lib.ActorNode;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -26,10 +27,13 @@ public class PhotoWorker implements Serializable {
      // object that represents the photo to be sent to the client
     Photo photoClient = null;
 
+    ActorNode workerActorNode;
 
-    public PhotoWorker(String uuid, String pathFileName) {
+
+    public PhotoWorker(String uuid, String pathFileName, ActorNode workerActorNode) {
         this.uuid = uuid;
         this.pathFileName = pathFileName;
+        this.workerActorNode = workerActorNode;
     }
 
     public String getUuid() {
@@ -70,9 +74,15 @@ public class PhotoWorker implements Serializable {
         return photo;
     }
 
+    public byte[] getPhotoInBytes()throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(getPhoto(), "jpg", baos );
+        return baos.toByteArray();
+    }
+
     public Photo  getPhotoObject() throws IOException {
         if(photoClient == null)
-            photoClient = new Photo(getPathFileName(), getThumbnail());
+            photoClient = new Photo(getPathFileName(), getThumbnail(), workerActorNode);
         return photoClient;
     }
 }

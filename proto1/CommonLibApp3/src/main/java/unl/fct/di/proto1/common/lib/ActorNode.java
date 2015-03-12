@@ -131,7 +131,7 @@ public class ActorNode implements Serializable {
 
        // Log.d("GenerateActorRef", "toString actorRef -> " + getPath());
         ActorSelection mstActor = arf.actorSelection(getPath());
-        // TODO blocking code SOLVE THIS IN A ASSYNCHRONOUS MODE
+        // TODO blocking code SOLVE THIS IN A ASYNCHRONOUS MODE
         try {
             Future<ActorRef> f = mstActor.resolveOne(new FiniteDuration(10, TimeUnit.SECONDS));
             actorRef = Await.result(f, Duration.Inf());

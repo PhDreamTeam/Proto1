@@ -3,6 +3,7 @@ package unl.fct.di.proto1.common.client;
 import akka.actor.*;
 import akka.japi.Creator;
 import pt.unl.fct.di.proto1.services.photos.Photo;
+import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -19,10 +20,12 @@ import unl.fct.di.proto1.common.lib.protocol.MsgGetMaster;
 import unl.fct.di.proto1.common.lib.protocol.MsgGetMasterReply;
 import unl.fct.di.proto1.common.lib.protocol.MsgRegister;
 import unl.fct.di.proto1.common.lib.protocol.MsgRegisterReply;
+import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoReply;
 import unl.fct.di.proto1.common.remoteActions.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -41,7 +44,6 @@ public class Client {
 
     ActorRef directoryServiceActorRef = null;
 
-
     public Client(IClientGui clientGui, String clientActorName) throws Exception {
         // keep args
         this.console = clientGui;
@@ -52,6 +54,7 @@ public class Client {
         system = clientGui.createSystem(CLIENT_SYSTEM_NAME);
         console.println(CLIENT_SYSTEM_NAME + " created...");
 
+        ClientManager.setClientSystem(system);
 
         // Connect to DirectoryService
         ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730", "ds", ActorType.Directory);
@@ -81,7 +84,6 @@ public class Client {
     public void setCurrentMaster(ActorNode currentMaster) {
         this.currentMaster = currentMaster;
     }
-
 
     // ------------------------------------------------------------
     public void workWithInts() {
@@ -265,6 +267,8 @@ public class Client {
                     // display thumbnails
                     displayThumbnails(photos);
 
+                    // display photos
+                    displayPhotos(photos);
 
                 } catch (Exception e) {
                     console.printException(e);
@@ -275,13 +279,49 @@ public class Client {
     }
 
     private void displayThumbnails(Object[] photos) {
+        // TODO this code should run in swing EDT
+
         JFrame jf = new JFrame();
-        jf.setLayout(new FlowLayout());
         jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        
+
+        JPanel jp = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(jp);
+        jf.add(scrollPane);
+
         for (int i = 0; i < photos.length; i++) {
             ImageIcon t = new ImageIcon(((Photo)photos[i]).getThumbnail());
-            jf.add(new JLabel(t));
+            jp.add(new JLabel(t));
+        }
+        jf.setSize(300, 400);
+        jf.setLocationRelativeTo(null);
+
+        jf.setVisible(true);
+    }
+
+
+
+    private void displayPhotos(Object[] photos) {
+        // TODO this code should run in swing EDT
+
+        JFrame jf = new JFrame();
+        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+
+        JPanel jp = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(jp);
+        jf.add(scrollPane);
+
+
+        for (int i = 0; i < photos.length; i++) {
+            Photo p = ((Photo)photos[i]);
+            console.println("Loading photo: " + p.getPhotoUuid());
+            ImageIcon t = null;
+            try {
+                t = new ImageIcon(p.getPhoto());
+                jp.add(new JLabel(t));
+            } catch (Exception e) {
+               console.println("Error loading photo " + p.getPhotoUuid());
+            }
         }
         jf.pack();
         jf.setLocationRelativeTo(null);
@@ -289,58 +329,64 @@ public class Client {
         jf.setVisible(true);
     }
 
+
     // ------------------------------------------------------------
     // work with existing Internal Photos
     // DEBUG verificar....
     public void workWithImageTest() {
-//        System.out.println("Vou começar o teste");
-//        console.println("Vou começar o teste");
-//        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/photos/kk1.jpg");
-//        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/photos/kk2.jpg");
-//        System.out.println("Foto carregada");
-//        console.println("Foto carregada");
-//        JFrame jf = new JFrame();
-//        jf.setLayout(new FlowLayout());
-//
-//
-//        try {
-//            // thumbnail
-//            ImageIcon t = new ImageIcon();
-//            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-//            jf.add(new JLabel(t));
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 2
-//            ImageIcon t2 = new ImageIcon(pw.getThumbnail());
-//            jf.add(new JLabel(t2));
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 3
-//            ImageIcon t3 = new ImageIcon();
-//            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-//            jf.add(new JLabel(t3));
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 4
-//            ImageIcon t4 = new ImageIcon(pw2.getThumbnail());
-//            jf.add(new JLabel(t4));
-//            console.println("Thumbnail adicionado");
-//
-//            // original image
-//            ImageIcon i = new ImageIcon();
-//            i.setImage(pw.getPhoto());
-//            jf.add(new JLabel(i));
-//            console.println("Imagem adicionada");
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("EXCEÇÃO: " + e.getMessage());
-//        }
-//        jf.pack();
-//        jf.setVisible(true);
-//        console.println("ImageTest terminado...");
+        System.out.println("Vou começar o teste");
+        console.println("Vou começar o teste");
+        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/photos/kk1.jpg", null);
+        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/photos/kk2.jpg", null);
+        System.out.println("Foto carregada");
+        console.println("Foto carregada");
+        JFrame jf = new JFrame();
+
+        JPanel jp = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(jp);
+        jf.add(scrollPane);
+
+        try {
+            // thumbnail
+            ImageIcon t = new ImageIcon();
+            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+            JLabel l1 = new JLabel(t);
+            jp.add(l1);
+            console.println("Thumbnail adicionado");
+
+            // thumbnail 2
+            ImageIcon t2 = new ImageIcon(pw.getThumbnail());
+            jp.add(new JLabel(t2));
+            console.println("Thumbnail adicionado");
+
+            // thumbnail 3
+            ImageIcon t3 = new ImageIcon();
+            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+            jp.add(new JLabel(t3));
+            console.println("Thumbnail adicionado");
+
+            // thumbnail 4
+            ImageIcon t4 = new ImageIcon(pw2.getThumbnail());
+            jp.add(new JLabel(t4));
+            console.println("Thumbnail adicionado");
+
+            // original image
+            ImageIcon i = new ImageIcon();
+            i.setImage(pw.getPhoto());
+            jp.add(new JLabel(i));
+            console.println("Imagem adicionada");
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("EXCEÇÃO: " + e.getMessage());
+        }
+        jf.setSize(400, 600);
+        jf.setVisible(true);
+        console.println("ImageTest terminado...");
     }
+
+
 
     // ------------------------------------------------------------
     public ActorNode getActorNode(ActorRef actorRef) {
@@ -394,9 +440,16 @@ public class Client {
         public void onReceive(Object message) {
             console.println("Received: " + message);
 
+            // Services ==================================
+            if (message instanceof MsgServicePhotoGetPhotoReply) {
+                MsgServicePhotoGetPhotoReply msg = (MsgServicePhotoGetPhotoReply) message;
+                Photo photo = ClientManager.getPhotoInPhotoMap(msg.getPhotoUuid());
+                photo.fireMsgServicePhotoGetPhotoReply(msg);
+            } //
+
             // DDObject ==================================
 
-            if (message instanceof MsgOpenDDObjectReply) {
+            else if (message instanceof MsgOpenDDObjectReply) {
                 MsgOpenDDObjectReply msg = (MsgOpenDDObjectReply) message;
                 DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
                 dd.fireMsgOpenDDObjectReply(msg);

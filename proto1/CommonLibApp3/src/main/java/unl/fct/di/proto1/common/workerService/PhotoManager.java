@@ -13,6 +13,7 @@ import java.util.Scanner;
  */
 public class PhotoManager {
 
+    WorkerService ws;
     // UUIDs and its photoWorkers
     HashMap<String, PhotoWorker> allInternalPhotos = new HashMap<>();
 
@@ -25,15 +26,16 @@ public class PhotoManager {
     ArrayList<String> activePhotoGroups = new ArrayList<>();
 
 
-    public PhotoManager(String path) {
+    public PhotoManager(String path, WorkerService ws) {
         pathNameDDs = path;
+        this.ws = ws;
     }
 
     public PhotoWorker getPhotoWorker(String photoUUID) {
         PhotoWorker pw =  allInternalPhotos.get(photoUUID);
         if(pw == null) {
             // build object
-            pw = new PhotoWorker(photoUUID, allInternalPhotoPathName.get(photoUUID));
+            pw = new PhotoWorker(photoUUID, allInternalPhotoPathName.get(photoUUID), ws.getWorkerActorNode());
             // add it to map of photos
             allInternalPhotos.put(photoUUID, pw);
         }

@@ -584,7 +584,7 @@ public class MasterService {
                         // register worker internal services
                         int[] partIds = ms.registerWorkerInternalServices(an, ((MsgRegisterWorker)msg).getInternalDDUIs());
                         // reply...
-                        msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), partIds, true, null);
+                        msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), partIds, an, true, null);
                     }else
                         msgOut = new MsgRegisterReply(msg.getRequestId(), true, null);
 

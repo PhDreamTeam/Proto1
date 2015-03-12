@@ -5,6 +5,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.japi.Creator;
+import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -16,6 +17,8 @@ import unl.fct.di.proto1.common.lib.core.worker.DDPartitionPhotoInternal;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.*;
+import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhoto;
+import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoReply;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.UUID;
 
 public class WorkerService {
 
-    final String WORKER_SYSTEM_NAME = "WorkerServiceSystem";
+    final public static String WORKER_SYSTEM_NAME = "WorkerServiceSystem";
     final String PARTITIONSFILENAME = "partitions.dat";
 
     IWorkerGui wg;
@@ -38,6 +41,8 @@ public class WorkerService {
 
     // photo manager
     PhotoManager photoManager;
+
+    private ActorNode workerActorNode;
 
 
     public WorkerService(IWorkerGui wg, String workerServiceActorName) throws Exception {
@@ -55,7 +60,7 @@ public class WorkerService {
         // create PhotoManager
         String photoMangerPathName = "data/" + workerServiceActorName;
         console.println("Creating PhotoManager in pathName -> " + photoMangerPathName);
-        photoManager = new PhotoManager(photoMangerPathName);
+        photoManager = new PhotoManager(photoMangerPathName, this);
         photoManager.addActivePhotoGroup("DD1");
 
 
@@ -63,7 +68,7 @@ public class WorkerService {
         ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730", "ds", ActorType.Directory);
         console.println("Trying to connect to Directory actorNode -> " + dsActorNode.getPath());
         directoryServiceActorRef = dsActorNode.generateActorRef(system);
-        if(directoryServiceActorRef != null)
+        if (directoryServiceActorRef != null)
             console.println("Directory actor found -> " + directoryServiceActorRef.path());
         else
             console.println("Directory actor not found -> " + dsActorNode.toShortString());
@@ -168,7 +173,7 @@ public class WorkerService {
 
     public DDPartition getPartition(String DDUI, int partID) {
         // if internal DD
-        if(serviceManager.getInternalDDUIs().contains(DDUI)) {
+        if (serviceManager.getInternalDDUIs().contains(DDUI)) {
             DDPartitionPhotoInternal dd = new DDPartitionPhotoInternal(DDUI, partID, this);
             return dd;
         }
@@ -196,6 +201,13 @@ public class WorkerService {
         return serviceManager;
     }
 
+    public void setWorkerActorNode(ActorNode workerActorNode) {
+        this.workerActorNode = workerActorNode;
+    }
+
+    public ActorNode getWorkerActorNode() {
+        return workerActorNode;
+    }
 
     /**
      * Worker actor
@@ -232,9 +244,39 @@ public class WorkerService {
 
             // TODO In each request, check if the request is already processed, if so just reply success
 
+
+            // Service ======================================
+
+            if (message instanceof MsgServicePhotoGetPhoto) {
+                MsgServicePhotoGetPhoto msg = (MsgServicePhotoGetPhoto) message;
+                PhotoWorker pw = ws.getPhotoManager().getPhotoWorker(msg.getPhotoUuid());
+
+                // get photo bytes
+                byte[] photoBytes = null;
+                if (pw != null) {
+                    try {
+                        photoBytes = pw.getPhotoInBytes();
+                    } catch (IOException e) {
+                        ws.console.printException(e);
+                    }
+                }
+                // build message
+                MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
+                        msg.getDDUI(), msg.getRequestId(), photoBytes, photoBytes != null,
+                        photoBytes == null ? null : "Error on photo loading");
+
+                // send msg to client and show it on console
+                getSender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                ws.console.println("");
+            } //
+
+
             // DDObject =====================================
 
-            if (message instanceof MsgPartitionApplyFilterDDObject) {
+            else if (message instanceof MsgPartitionApplyFilterDDObject)
+
+            {
                 MsgPartitionApplyFilterDDObject msg = (MsgPartitionApplyFilterDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
                         msg.getPartId());
@@ -256,7 +298,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDObject) {
+            else if (message instanceof MsgPartitionApplyFunctionDDObject)
+
+            {
                 MsgPartitionApplyFunctionDDObject msg = (MsgPartitionApplyFunctionDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
                         msg.getPartId());
@@ -277,7 +321,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionGetDataDDObject) {
+            else if (message instanceof MsgPartitionGetDataDDObject)
+
+            {
                 MsgPartitionGetDataDDObject msg = (MsgPartitionGetDataDDObject) message;
                 DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -294,7 +340,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionCreateDDObject) {
+            else if (message instanceof MsgPartitionCreateDDObject)
+
+            {
                 MsgPartitionCreateDDObject msgPartition = (MsgPartitionCreateDDObject) message;
 
                 // TODO if DDUI is from a internal service, throw error
@@ -316,7 +364,9 @@ public class WorkerService {
 
             // DDInt =====================================
 
-            else if (message instanceof MsgPartitionApplyFilterDDInt) {
+            else if (message instanceof MsgPartitionApplyFilterDDInt)
+
+            {
                 MsgPartitionApplyFilterDDInt msg = (MsgPartitionApplyFilterDDInt) message;
                 DDPartitionInt parentDDPartition = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -337,7 +387,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDInt) {
+            else if (message instanceof MsgPartitionApplyFunctionDDInt)
+
+            {
                 MsgPartitionApplyFunctionDDInt msg = (MsgPartitionApplyFunctionDDInt) message;
                 DDPartitionInt parentDDPartition = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -357,7 +409,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionGetDataDDInt) {
+            else if (message instanceof MsgPartitionGetDataDDInt)
+
+            {
                 MsgPartitionGetDataDDInt msg = (MsgPartitionGetDataDDInt) message;
                 DDPartitionInt p = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -374,7 +428,9 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionCreateDDInt) {
+            else if (message instanceof MsgPartitionCreateDDInt)
+
+            {
                 MsgPartitionCreateDDInt msgPartition = (MsgPartitionCreateDDInt) message;
                 ActorNode masterActorNode = new ActorNode(getSender(), ActorState.ACTIVE, ActorType.Master);
 
@@ -396,12 +452,18 @@ public class WorkerService {
 
             // SETUP =====================================
 
-            else if (message instanceof MsgRegisterWorkerReply) {
+            else if (message instanceof MsgRegisterWorkerReply)
+
+            {
+                MsgRegisterWorkerReply msg = (MsgRegisterWorkerReply) message;
+                ws.setWorkerActorNode(msg.getAn());
                 // receive register confirmation - save partition IDs for the registered internal DDs
-                ws.getServiceManager().addInternalDDUIPartitionID(((MsgRegisterWorkerReply) message).getPartitionIds());
+                ws.getServiceManager().addInternalDDUIPartitionID(msg.getPartitionIds());
             } //
 
-            else if (message instanceof MsgGetMasterReply) {
+            else if (message instanceof MsgGetMasterReply)
+
+            {
                 // receive this from Directory service
                 ActorNode masterActorNode = ((MsgGetMasterReply) message).getActorNode();
                 ws.setCurrentMaster(masterActorNode);
@@ -425,7 +487,9 @@ public class WorkerService {
                 }
             } //
 
-            else if (message instanceof MsgRegisterReply) {
+            else if (message instanceof MsgRegisterReply)
+
+            {
                 // Directory service answers register from worker
                 // get master node from Directory service
                 Msg msgOut = new MsgGetMaster(UUID.randomUUID().toString());
@@ -435,7 +499,9 @@ public class WorkerService {
 
             // TODO watch for terminations
 
-            else {
+            else
+
+            {
                 ws.console.println("Unhandled message: " + message);
                 //unhandled(message);
             }
