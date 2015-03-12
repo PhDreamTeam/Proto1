@@ -33,7 +33,7 @@ public class WorkerService {
     ActorNode currentMaster = null;
     ActorRef directoryServiceActorRef = null;
 
-    // service Manager - keep the existing services TODO
+    // service Manager - keep the existing services
     ServiceManager serviceManager = new ServiceManager();
 
     // photo manager
@@ -169,15 +169,15 @@ public class WorkerService {
     public DDPartition getPartition(String DDUI, int partID) {
         // if internal DD
         if(serviceManager.getInternalDDUIs().contains(DDUI)) {
-            DDPartitionPhotoInternal dd = new DDPartitionPhotoInternal(DDUI, this);
+            DDPartitionPhotoInternal dd = new DDPartitionPhotoInternal(DDUI, partID, this);
             return dd;
         }
 
         // other DD
-        List<DDPartition> ddparts = getArrayDDPartitions();
+        List<DDPartition> ddParts = getArrayDDPartitions();
 
-        for (int i = 0, size = ddparts.size(); i < size; i++) {
-            DDPartition p = ddparts.get(i);
+        for (int i = 0, size = ddParts.size(); i < size; i++) {
+            DDPartition p = ddParts.get(i);
             if (p.getDDUI().equals(DDUI) && p.getPartId() == partID)
                 return p;
         }
@@ -192,6 +192,14 @@ public class WorkerService {
         return photoManager;
     }
 
+    public ServiceManager getServiceManager() {
+        return serviceManager;
+    }
+
+
+    /**
+     * Worker actor
+     */
     public static class WorkerActor extends UntypedActor {
 
         static final ActorType type = ActorType.Worker;
@@ -388,9 +396,9 @@ public class WorkerService {
 
             // SETUP =====================================
 
-            else if (message instanceof MsgRegisterWorkerReply){
-                // receive register confirmation - nothing to do.
-                // we cannot remove this, because it will run MsgRegisterReply by default
+            else if (message instanceof MsgRegisterWorkerReply) {
+                // receive register confirmation - save partition IDs for the registered internal DDs
+                ws.getServiceManager().addInternalDDUIPartitionID(((MsgRegisterWorkerReply) message).getPartitionIds());
             } //
 
             else if (message instanceof MsgGetMasterReply) {

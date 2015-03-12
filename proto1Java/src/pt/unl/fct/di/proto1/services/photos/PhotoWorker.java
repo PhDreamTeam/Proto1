@@ -44,6 +44,7 @@ public class PhotoWorker implements Serializable {
         if (thumbnail != null)
             return thumbnail;
 
+        photo = getPhoto();
         int width = photo.getWidth();
         int height = photo.getHeight();
 

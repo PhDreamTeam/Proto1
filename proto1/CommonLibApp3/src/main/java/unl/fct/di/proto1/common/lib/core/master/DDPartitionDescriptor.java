@@ -5,12 +5,17 @@ import unl.fct.di.proto1.common.lib.ActorNode;
 
 import java.io.Serializable;
 
+/* CHECK if partitionIdx causes any future trouble - replace them with WorkerName.
+ * It can be removed and replaced by workerName (only 1 partition per worker)
+ * Replications must handled separate from main partitions
+ */
+
 public class DDPartitionDescriptor implements Serializable {
     String DDUI;
     int partitionIdx;
     ActorNode workerNode;
 
-    enum PartitionState {INIT, WAITING_WORKER_CREATE_REPLY, DEPLOYED, DEPLOYED_FAILED};
+    enum PartitionState {INIT, WAITING_WORKER_CREATE_REPLY, DEPLOYED, DEPLOYED_FAILED}
 
     PartitionState state = PartitionState.INIT;
 

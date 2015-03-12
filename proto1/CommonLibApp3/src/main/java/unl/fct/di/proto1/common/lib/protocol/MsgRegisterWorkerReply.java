@@ -5,7 +5,14 @@ import java.io.Serializable;
 
 public class MsgRegisterWorkerReply extends MsgRegisterReply implements Serializable {
 
-    public MsgRegisterWorkerReply(String requestId, boolean success, String failureReason) {
+    int[] partitionIds;
+
+    public MsgRegisterWorkerReply(String requestId, int[] partitionIds, boolean success, String failureReason) {
         super(requestId, success, failureReason);
+        this.partitionIds = partitionIds;
+    }
+
+    public int[] getPartitionIds() {
+        return partitionIds;
     }
 }

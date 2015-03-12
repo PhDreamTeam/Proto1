@@ -73,17 +73,25 @@ public class DDObjectMaster extends DDMaster {
         GlManager.getDDManager().putDD(this);
     }
 
-    public void addWorkerInternalPartition(ActorNode an){
+    /**
+     *
+     * @param an
+     * @return the partition ID for the worker
+     */
+    public int addWorkerInternalPartition(ActorNode an){
         for (DDPartitionDescriptor pd : partitionsDescriptors) {
-            if(pd.getWorkerNode().equals(an))
-                return; // already exists, no need to add a new one
+            if(pd.getWorkerNode().equals(an)) {
+                // already exists, return the partition ID
+                return pd.getPartitionId();
+            }
         }
 
         // create new partition descriptor
         DDPartitionDescriptor partDesc = new DDPartitionDescriptor(DDUI, partitionsDescriptors.size(), an);
         // add partition to partitionsDescriptors collection
         partitionsDescriptors.add(partDesc);
-
+        // return partition ID for the new partition
+        return partDesc.getPartitionId();
     }
 
 
@@ -260,6 +268,10 @@ public class DDObjectMaster extends DDMaster {
         // add answer to request
         req.addAnswer(msg);
 
+        // add nelems to nElemsReceived in case of success
+        if(msg.isSuccess())
+            req.addElemsReceived(msg.getData().length);
+
         // check if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
@@ -284,8 +296,9 @@ public class DDObjectMaster extends DDMaster {
     }
 
     private Object[] getDataInternal(MasterRequest req) {
+        // TODO Work with partial request replies, consider that some responses may not come and the idx logic will not work.
         // reserve space to data
-        Object[] dataReply = new Object[getNDataElems()];
+        Object[] dataReply = new Object[req.getNElemsReceived()];
 
         // get all data
         for (int i = 0, idx = 0, size = partitionsDescriptors.size(); i < size; i++) {

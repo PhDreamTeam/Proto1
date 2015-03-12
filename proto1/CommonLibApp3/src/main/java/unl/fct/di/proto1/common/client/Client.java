@@ -258,7 +258,7 @@ public class Client {
 
                     // GET IPHOTO DD1 data
                     console.println("Getting data from IPHOTOS DDUI: " + DDUI);
-                    Photo[] photos = (Photo[])d1.getData();
+                    Object[] photos = d1.getData();
                     console.println("Received photos:" + Arrays.toString(photos));
                     console.println();
 
@@ -274,16 +274,18 @@ public class Client {
         t.start();
     }
 
-    private void displayThumbnails(Photo[] photos) {
+    private void displayThumbnails(Object[] photos) {
         JFrame jf = new JFrame();
         jf.setLayout(new FlowLayout());
-
+        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        
         for (int i = 0; i < photos.length; i++) {
-            ImageIcon t = new ImageIcon(photos[i].getThumbnail());
+            ImageIcon t = new ImageIcon(((Photo)photos[i]).getThumbnail());
             jf.add(new JLabel(t));
         }
         jf.pack();
-        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        jf.setLocationRelativeTo(null);
+
         jf.setVisible(true);
     }
 

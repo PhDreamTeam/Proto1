@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 // PS: only when we don't need it for sure
 
 public class MasterRequest implements Serializable {
-    enum REQUEST_STATE {WAITING, FAILED, SUCCESS};
+    enum REQUEST_STATE {WAITING, FAILED, SUCCESS}
 
     HashMap<Integer, MsgPartitionReply> answers = new HashMap<>();
     ArrayList<SentMsgRequestTracker> pendingRequests = new ArrayList<>();
@@ -38,6 +38,9 @@ public class MasterRequest implements Serializable {
     Msg msgRequest;
 
     String failureReason = "";
+
+    // to count the number the received elements in getdata
+    int nElemsReceived = 0;
 
 
     /*
@@ -72,6 +75,13 @@ public class MasterRequest implements Serializable {
 
     public Msg getMsgRequest() {
         return msgRequest;
+    }
+
+    public int getNElemsReceived() {
+        return nElemsReceived;
+    }
+    public void addElemsReceived(int nElems) {
+        nElemsReceived += nElems;
     }
 
     public void addAnswer(MsgPartitionReply msgReply) {

@@ -14,8 +14,8 @@ import java.util.Arrays;
 public class DDPartitionPhotoInternal extends DDPartitionObject {
     WorkerService ws;
 
-    public DDPartitionPhotoInternal(String DDUI, WorkerService ws) {
-        super(DDUI, 0, null);
+    public DDPartitionPhotoInternal(String DDUI, int partID, WorkerService ws) {
+        super(DDUI, partID, null);
         this.ws = ws;
     }
 

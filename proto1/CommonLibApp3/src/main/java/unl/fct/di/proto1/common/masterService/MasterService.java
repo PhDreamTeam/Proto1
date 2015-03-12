@@ -579,14 +579,12 @@ public class MasterService {
                     // watch actor system messages
                     this.getContext().watch(sender());
 
-
                     Msg msgOut;
-
-                    if (msg.getType().equals(ActorType.Worker)){
+                    if (msg.getType().equals(ActorType.Worker)) {
                         // register worker internal services
-                        ms.registerWorkerInternalServices(an, ((MsgRegisterWorker)msg).getInternalDDUIs());
+                        int[] partIds = ms.registerWorkerInternalServices(an, ((MsgRegisterWorker)msg).getInternalDDUIs());
                         // reply...
-                        msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), true, null);
+                        msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), partIds, true, null);
                     }else
                         msgOut = new MsgRegisterReply(msg.getRequestId(), true, null);
 
@@ -617,11 +615,15 @@ public class MasterService {
 
     /**
      * Register  worker internal internalDDUIs
+     *
      * @param an Actor node of the registering worker
      * @param internalDDUIs
+     * @return partition ID for this worker
      */
-    private void registerWorkerInternalServices(ActorNode an, List<String> internalDDUIs) {
-        for (int i = 0; i < internalDDUIs.size(); i++) {
+    private int[] registerWorkerInternalServices(ActorNode an, List<String> internalDDUIs) {
+        int[] partitionsIds = new int[internalDDUIs.size()];
+
+        for (int i = 0, size = internalDDUIs.size(); i < size; i++) {
             String ddui = internalDDUIs.get(i);
             // check if DD exists - create if not
             DDMaster dd = GlManager.getDDManager().getDD(ddui);
@@ -637,8 +639,8 @@ public class MasterService {
             }
             DDObjectMaster ddo = (DDObjectMaster)dd;
             // add this worker as a worker with a partition in that dd
-            ddo.addWorkerInternalPartition(an);
-
+            partitionsIds[i] = ddo.addWorkerInternalPartition(an);
         }
+        return partitionsIds;
     }
 }

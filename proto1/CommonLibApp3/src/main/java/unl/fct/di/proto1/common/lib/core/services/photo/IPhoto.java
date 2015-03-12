@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public interface IPhoto extends Serializable {
 
-    String getUuid();
+    String getPhotoUuid();
 
     Object getThumbnail();
 
