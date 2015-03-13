@@ -9,8 +9,8 @@ import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoRep
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -61,11 +61,11 @@ public class Photo implements IPhoto {
 
     @Override
     public BufferedImage getPhoto() throws Exception {
-        if(photo != null)
+        if (photo != null)
             return photo;
 
         // build worker actor ref
-        if(workerActorNode.getActorRef() == null)
+        if (workerActorNode.getActorRef() == null)
             workerActorNode.generateActorRef(ClientManager.getClientSystem());
 
         // send MsgGetPhoto to worker
@@ -76,7 +76,7 @@ public class Photo implements IPhoto {
         ClientManager.putPhotoInPhotoMap(this);
 
         // send request to worker and show it in console
-        workerActorNode.getActorRef().tell( msgOut, ClientManager.getClientActor());
+        workerActorNode.getActorRef().tell(msgOut, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msgOut + " to " + workerActorNode);
 
         // wait for data of DDInt
@@ -95,30 +95,74 @@ public class Photo implements IPhoto {
         return photo;
     }
 
+    HashMap<Integer, MsgServicePhotoGetPhotoReply> getPhotoReplyMsgs = new HashMap<>();
+    int numberPhotoBytesReceived = 0;
+
     @Override
     public void fireMsgServicePhotoGetPhotoReply(MsgServicePhotoGetPhotoReply msg) {
         if (msg.isSuccess()) {
-            // build photo from byte array
-            InputStream in = new ByteArrayInputStream(msg.getPhoto());
-            try {
-                photo = ImageIO.read(in);
-                in.close();
-                lastOperationError = null;
-            } catch (IOException e) {
-                ClientManager.getConsole().printException(e);
-                photo = null;
-                lastOperationError = "Error in getPhotoReply: " + e.getMessage();
+
+            getPhotoReplyMsgs.put(msg.getMsgPartNumber(), msg);
+
+            if ((numberPhotoBytesReceived += msg.getPhoto().length) == msg.getPhotoNumBytes()) {
+                try {
+                    photo = getBufferedImageFromMsgs();
+                } catch (Exception e) {
+                    ClientManager.getConsole().printException(e);
+                    photo = null;
+                    lastOperationError = "Error in getPhotoReply: " + e.getMessage();
+                }
+                // clean up memory structures
+                getPhotoReplyMsgs.clear();
+                numberPhotoBytesReceived = 0;
+
+                // wake up client thread that asked to create DDInt
+                synchronized (this) {
+                    this.notify();
+                }
             }
         } else {
             // no data
             photo = null;
             lastOperationError = "Error in getPhotoReply: " + msg.getFailureReason();
+
+            // wake up client thread that asked to create DDInt
+            synchronized (this) {
+                this.notify();
+            }
+        }
+    }
+
+    private BufferedImage getBufferedImageFromMsgs() throws Exception {
+
+        int photoSize = getPhotoReplyMsgs.get(0).getPhotoNumBytes();
+
+        // build photoBytes
+        byte[] photobytes = new byte[photoSize];
+
+        BufferedImage p = null;
+
+        // copy bytes from Msgs to this photobytes
+        int currentIdx = 0;
+        for (int i = 0, size = getPhotoReplyMsgs.size(); i < size; i++) {
+            MsgServicePhotoGetPhotoReply msgAux = getPhotoReplyMsgs.get(i);
+            System.arraycopy(msgAux.getPhoto(), 0, photobytes, currentIdx, msgAux.getPhoto().length);
+            currentIdx += msgAux.getPhoto().length;
         }
 
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
+        if (currentIdx == photoSize) {
+            ClientManager.getConsole().println("photo successfully received with " + currentIdx + " bytes");
+
+            // build photo from byte array
+            InputStream in = new ByteArrayInputStream(photobytes);
+            p = ImageIO.read(in);
+            in.close();
+
+            lastOperationError = null;
+        } else throw new RuntimeException("Error Photo of unexpected size received, received: " + currentIdx +
+                ", expected: " + photoSize + " bytes");
+
+        return p;
     }
 
     @Override

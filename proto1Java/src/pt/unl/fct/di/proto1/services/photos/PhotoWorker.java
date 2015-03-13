@@ -82,7 +82,7 @@ public class PhotoWorker implements Serializable {
 
     public Photo  getPhotoObject() throws IOException {
         if(photoClient == null)
-            photoClient = new Photo(getPathFileName(), getThumbnail(), workerActorNode);
+            photoClient = new Photo(uuid, getThumbnail(), workerActorNode);
         return photoClient;
     }
 }

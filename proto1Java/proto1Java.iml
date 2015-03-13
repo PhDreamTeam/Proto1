@@ -5,6 +5,7 @@
     <output-test url="file://$MODULE_DIR$/out/test/proto1Java" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../libs" />
+    <content url="file://$MODULE_DIR$/../photos" />
     <content url="file://$MODULE_DIR$/../proto1/CommonLibApp3/src/main/java">
       <sourceFolder url="file://$MODULE_DIR$/../proto1/CommonLibApp3/src/main/java" isTestSource="false" />
     </content>

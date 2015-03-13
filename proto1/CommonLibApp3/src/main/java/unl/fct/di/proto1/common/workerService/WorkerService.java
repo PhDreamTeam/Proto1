@@ -22,6 +22,7 @@ import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoRep
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -260,14 +261,16 @@ public class WorkerService {
                         ws.console.printException(e);
                     }
                 }
-                // build message
-                MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
-                        msg.getDDUI(), msg.getRequestId(), photoBytes, photoBytes != null,
-                        photoBytes == null ? null : "Error on photo loading");
-
-                // send msg to client and show it on console
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                if(photoBytes == null) {
+                    // build message
+                    MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
+                            msg.getDDUI(), msg.getRequestId(), 0, 0, null, false, "Error on photo loading");
+                    // send msg to client and show it on console
+                    getSender().tell(msgOut, getSelf());
+                    ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                } else {
+                    sendMsgServicePhotoGetPhotoMultiparts(msg.getDDUI(), msg.getRequestId(), photoBytes, getSender());
+                }
                 ws.console.println("");
             } //
 
@@ -504,6 +507,26 @@ public class WorkerService {
             {
                 ws.console.println("Unhandled message: " + message);
                 //unhandled(message);
+            }
+        }
+
+        final static int MAXPAYLOADSIZE = 100 * 1024; // 128K akka max
+
+        /*
+         * Send the photo in multiparts, because of message size limitations
+         */
+        private void sendMsgServicePhotoGetPhotoMultiparts(String ddui, String requestId, byte[] photoBytes, ActorRef sender) {
+            // for number of msgs
+            for (int i = 0, nMsgs = (photoBytes.length  - 1)/ MAXPAYLOADSIZE + 1; i < nMsgs; i++) {
+                // build msg
+                MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
+                        ddui, requestId, i, photoBytes.length,
+                        Arrays.copyOfRange(photoBytes, MAXPAYLOADSIZE * i,
+                            Math.min(MAXPAYLOADSIZE * (i + 1), photoBytes.length)), true, null);
+
+                // send msg to client and show it on console
+                sender.tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + sender.path().name());
             }
         }
     }

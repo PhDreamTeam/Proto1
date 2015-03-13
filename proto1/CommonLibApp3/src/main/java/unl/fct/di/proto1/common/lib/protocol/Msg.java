@@ -26,8 +26,6 @@ public class Msg implements Serializable {
     }
 
 
-
-
     public Msg getFailureReplyMessage(String failureReason) {
         return null;
     }
