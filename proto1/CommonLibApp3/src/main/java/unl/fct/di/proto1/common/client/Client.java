@@ -3,7 +3,6 @@ package unl.fct.di.proto1.common.client;
 import akka.actor.*;
 import akka.japi.Creator;
 import pt.unl.fct.di.proto1.services.photos.Photo;
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -24,8 +23,6 @@ import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoRep
 import unl.fct.di.proto1.common.remoteActions.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -265,10 +262,50 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(photos);
+                  //  displayThumbnails(photos);
 
                     // display photos
-                    displayPhotos(photos);
+                  //  displayPhotos(photos);
+
+                    // APPLY FUNCTION to photo dd
+                    console.println("Applying Function to IPHOTO DD -> DD2");
+                    DDObject d2 = d1.forEach(new DDObjectFunctionPhotoToSize_1());
+                    console.println("End of Function to IPHOTO DD -> DD2.");
+                    console.println();
+
+                    // Get data from DD2
+                    console.println("Getting data from DD2...");
+                    Object[] result2 = d2.getData();
+                    console.println("DD2 received:" + Arrays.toString(result2));
+                    console.println();
+
+                    // APPLY FILTER TEST to photo INTERNAL dd
+                    console.println("Applying filter to IPHOTO DD -> DD3");
+                    DDObject d3 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(100_000));
+                    console.println("End of Function to IPHOTO DD -> DD3.");
+                    console.println();
+
+                    // Get data from DD3
+                    console.println("Getting data from DD3 (Photo)...");
+                    Object[] result3 = d3.getData();
+                    console.println("DD3 received:" + Arrays.toString(result3));
+                    console.println();
+
+                    // display thumbnails
+                    displayThumbnails(result3);
+
+                    // APPLY FILTER TEST to dd
+                    console.println("Applying filter to DD2 (Integer) -> DD4 (Integer)");
+                    DDObject d4 = d2.filter(new DDObjectFilterIntegerBiggerThen_1(100_000));
+                    console.println("End of Function to DD2 (Integer) -> DD4 (Integer).");
+                    console.println();
+
+                    // Get data from DD4
+                    console.println("Getting data from DD4 (Integer)...");
+                    Object[] result4 = d4.getData();
+                    console.println("DD4 received:" + Arrays.toString(result4));
+                    console.println();
+
 
                 } catch (Exception e) {
                     console.printException(e);
@@ -334,55 +371,55 @@ public class Client {
     // work with existing Internal Photos
     // DEBUG verificar....
     public void workWithImageTest() {
-        System.out.println("Vou começar o teste");
-        console.println("Vou começar o teste");
-        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/photos/kk1.jpg", null);
-        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/photos/kk2.jpg", null);
-        System.out.println("Foto carregada");
-        console.println("Foto carregada");
-        JFrame jf = new JFrame();
-
-        JPanel jp = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(jp);
-        jf.add(scrollPane);
-
-        try {
-            // thumbnail
-            ImageIcon t = new ImageIcon();
-            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-            JLabel l1 = new JLabel(t);
-            jp.add(l1);
-            console.println("Thumbnail adicionado");
-
-            // thumbnail 2
-            ImageIcon t2 = new ImageIcon(pw.getThumbnail());
-            jp.add(new JLabel(t2));
-            console.println("Thumbnail adicionado");
-
-            // thumbnail 3
-            ImageIcon t3 = new ImageIcon();
-            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-            jp.add(new JLabel(t3));
-            console.println("Thumbnail adicionado");
-
-            // thumbnail 4
-            ImageIcon t4 = new ImageIcon(pw2.getThumbnail());
-            jp.add(new JLabel(t4));
-            console.println("Thumbnail adicionado");
-
-            // original image
-            ImageIcon i = new ImageIcon();
-            i.setImage(pw.getPhoto());
-            jp.add(new JLabel(i));
-            console.println("Imagem adicionada");
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("EXCEÇÃO: " + e.getMessage());
-        }
-        jf.setSize(400, 600);
-        jf.setVisible(true);
+//        System.out.println("Vou começar o teste");
+//        console.println("Vou começar o teste");
+//        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/photos/kk1.jpg", null);
+//        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/photos/kk2.jpg", null);
+//        System.out.println("Foto carregada");
+//        console.println("Foto carregada");
+//        JFrame jf = new JFrame();
+//
+//        JPanel jp = new JPanel();
+//        JScrollPane scrollPane = new JScrollPane(jp);
+//        jf.add(scrollPane);
+//
+//        try {
+//            // thumbnail
+//            ImageIcon t = new ImageIcon();
+//            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+//            JLabel l1 = new JLabel(t);
+//            jp.add(l1);
+//            console.println("Thumbnail adicionado");
+//
+//            // thumbnail 2
+//            ImageIcon t2 = new ImageIcon(pw.getThumbnail());
+//            jp.add(new JLabel(t2));
+//            console.println("Thumbnail adicionado");
+//
+//            // thumbnail 3
+//            ImageIcon t3 = new ImageIcon();
+//            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
+//            jp.add(new JLabel(t3));
+//            console.println("Thumbnail adicionado");
+//
+//            // thumbnail 4
+//            ImageIcon t4 = new ImageIcon(pw2.getThumbnail());
+//            jp.add(new JLabel(t4));
+//            console.println("Thumbnail adicionado");
+//
+//            // original image
+//            ImageIcon i = new ImageIcon();
+//            i.setImage(pw.getPhoto());
+//            jp.add(new JLabel(i));
+//            console.println("Imagem adicionada");
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("EXCEÇÃO: " + e.getMessage());
+//        }
+//        jf.setSize(400, 600);
+//        jf.setVisible(true);
         console.println("ImageTest terminado...");
     }
 

@@ -333,7 +333,7 @@ public class WorkerService {
                 MsgPartitionGetDataDDObjectReply msgOut;
                 if (p != null) {
                     msgOut = new MsgPartitionGetDataDDObjectReply(
-                            p.getDDUI(), msg.getRequestId(), p.getPartId(), p.getData(), true, null);
+                            p.getDDUI(), msg.getRequestId(), p.getPartId(), p.getDataToClient(), true, null); // check DR getData() => getDataToClient()
                 } else {
                     msgOut = msg.getFailureReplyMessage("partition not found");
                 }

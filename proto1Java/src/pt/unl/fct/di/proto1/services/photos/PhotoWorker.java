@@ -22,7 +22,7 @@ public class PhotoWorker implements Serializable {
     byte[] thumbnail = null;
 
     // photo itself
-    BufferedImage photo = null;  // only present after getPhoto
+    transient BufferedImage photo = null;  // only present after getPhoto
 
      // object that represents the photo to be sent to the client
     Photo photoClient = null;

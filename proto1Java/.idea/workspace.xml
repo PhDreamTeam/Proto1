@@ -5,16 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea67d6d9-0f1c-4d22-84e3-86497f2baacd" name="Default" comment="V0.13 GetPhoto directly from worker to client- done">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/cr1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/cr2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/cr3.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/f1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/f2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/f3.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/kk1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/kk2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../photos/p1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/ateofilo.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterIntegerBiggerThen_1.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterPhotoBiggerThen_1.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFunctionPhotoToSize_1.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhoto.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$1.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$2.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$3.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$4.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$ClientActor.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client$Request.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/client/Client.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/masterService/MasterService$MasterActor.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/masterService/MasterService$MasterActor.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/lib/protocol/Msg.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/lib/protocol/Msg.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/pt/unl/fct/di/proto1/services/photos/Photo.class" />
@@ -23,12 +26,11 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService$WorkerActor$1.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService$WorkerActor$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService$WorkerActor.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService$WorkerActor.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService.class" afterPath="$PROJECT_DIR$/out/production/proto1Java/unl/fct/di/proto1/common/workerService/WorkerService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/Msg.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/Msg.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java" afterPath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" afterPath="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java" afterPath="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proto1Java.iml" afterPath="$PROJECT_DIR$/proto1Java.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="proto1Java.iws" />
@@ -60,145 +62,7 @@
     <favorites_list name="proto1Java" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.923077" vertical-offset="7164" max-vertical-offset="9594">
-              <caret line="446" column="34" selection-start-line="446" selection-start-column="34" selection-end-line="446" selection-end-column="34" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#ClientActor#0;class#ClientActor#0;class#Client#0" expanded="false" />
-                <element signature="method#newActor#0;class#ClientActor#0;class#Client#0" expanded="false" />
-                <element signature="class#Request#0;class#Client#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DDObject.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDObject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4359" max-vertical-offset="5508">
-              <caret line="269" column="9" selection-start-line="256" selection-start-column="8" selection-end-line="269" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#6823#6824#0" expanded="false" />
-                <element signature="e#6876#6877#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WorkerService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="8736" max-vertical-offset="9288">
-              <caret line="518" column="20" selection-start-line="518" selection-start-column="20" selection-end-line="518" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PhotoWorker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="928" max-vertical-offset="1476">
-              <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Photo.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.11313868" vertical-offset="1702" max-vertical-offset="3132">
-              <caret line="104" column="23" selection-start-line="104" selection-start-column="23" selection-end-line="104" selection-end-column="23" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#5498#5499#0" expanded="true" />
-                <element signature="e#5543#5544#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MsgServicePhotoGetPhotoReply.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="810">
-              <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-              <folding>
-                <element signature="e#840#841#0" expanded="true" />
-                <element signature="e#876#877#0" expanded="true" />
-                <element signature="e#913#914#0" expanded="true" />
-                <element signature="e#949#950#0" expanded="true" />
-                <element signature="e#1004#1005#0" expanded="true" />
-                <element signature="e#1092#1093#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MsgGetMasterReply.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/MsgGetMasterReply.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="504">
-              <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#377#378#0" expanded="false" />
-                <element signature="e#402#403#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PhotoManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/PhotoManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="369" max-vertical-offset="1476">
-              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MsgRegisterWorkerReply.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/MsgRegisterWorkerReply.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1" max-vertical-offset="450">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#534#535#0" expanded="false" />
-                <element signature="e#559#560#0" expanded="false" />
-                <element signature="e#597#598#0" expanded="false" />
-                <element signature="e#632#633#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServiceManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/ServiceManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="702">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding>
-                <element signature="e#582#583#0" expanded="true" />
-                <element signature="e#623#624#0" expanded="true" />
-                <element signature="e#997#998#0" expanded="true" />
-                <element signature="e#1055#1056#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
@@ -207,8 +71,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/ConsoleUtils.java" />
-        <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/client/Client.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/Request.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerRequest.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/directoryService/IDirectoryGui.java" />
@@ -220,7 +82,6 @@
         <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/master/Master_Gui.java" />
         <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/directory/Directory_Gui.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDInt.java" />
-        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDObject.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/services/photo/PhotoWorker.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/services/photo/Photo.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/CommunicationHelper.java" />
@@ -235,7 +96,6 @@
         <option value="$PROJECT_DIR$/files/data/ws2/photosDD1.txt" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/master/MasterRequest.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/master/DDObjectMaster.java" />
-        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/master/DDIntMaster.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/master/DDPartitionDescriptor.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/ServiceManager.java" />
@@ -246,12 +106,22 @@
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/ClientManager.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/services/photo/IPhoto.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/ActorNode.java" />
-        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" />
-        <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/Msg.java" />
-        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java" />
         <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java" />
         <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFunctionPhotoTransform_1.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFunctionPhotoToSize_1.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/tools/BaseActions/Predicate.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/DDObject/MsgApplyFilterDDObject.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDObject.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterPhotoBiggerThen_1.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterIntegerBiggerThen_1.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java" />
+        <option value="$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhoto.java" />
+        <option value="$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java" />
       </list>
     </option>
   </component>
@@ -308,6 +178,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -325,11 +197,459 @@
               <option name="myItemId" value="proto1Java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="worker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="photos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ws1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="workerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="remoteActions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="masterService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BaseActions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="protocol" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="protocol" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DDObject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="worker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="proto1Java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -393,14 +713,14 @@
       <recent name="unl.fct.di.proto1.common.lib.core.services.photo" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="unl.fct.di.proto1.common.remoteActions" />
       <recent name="unl.fct.di.proto1.common.lib.protocol.services" />
       <recent name="unl.fct.di.proto1.common.lib.protocol" />
       <recent name="pt.unl.fct.di.proto1.worker" />
       <recent name="pt.unl.fct.di.proto1.master" />
-      <recent name="pt.unl.fct.di.proto1.directory" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Worker 2">
+  <component name="RunManager" selected="Application.Client 1">
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -789,7 +1109,13 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="proto1Java" />
       <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
@@ -839,6 +1165,9 @@
       <workItem from="1426076995720" duration="20964000" />
       <workItem from="1426157825092" duration="25601000" />
       <workItem from="1426244247877" duration="8197000" />
+      <workItem from="1426268506100" duration="229000" />
+      <workItem from="1426525022211" duration="13480000" />
+      <workItem from="1426611111147" duration="10355000" />
     </task>
     <task id="LOCAL-00001" summary="test V0.11a">
       <created>1426014334861</created>
@@ -898,7 +1227,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="165734000" />
+    <option name="totallyTimeSpent" value="189798000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -927,26 +1256,26 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12606473" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.73935264" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12776831" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38566554" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12131148" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42783505" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32930514" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.548552" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56558776" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48122868" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270869" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21374622" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25528702" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32930514" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22487223" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22354949" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.63202727" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42783505" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -983,16 +1312,16 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/PhotoManager.java</url>
-          <line>34</line>
+          <url>file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java</url>
+          <line>307</line>
           <properties />
-          <option name="timeStamp" value="39" />
+          <option name="timeStamp" value="45" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="40" />
+      <option name="time" value="47" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1001,99 +1330,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/masterService/IMasterGui.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7267857" vertical-offset="392" max-vertical-offset="969">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/IConsole.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-actor_2.11/2.3.8/akka-actor_2.11-2.3.8.jar!/akka/actor/ActorRef.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34799236" vertical-offset="322" max-vertical-offset="1548">
-          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/SentMsgRequestTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="558">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/directory/Directory_Gui.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2413" max-vertical-offset="2970">
-          <caret line="171" column="84" selection-start-line="171" selection-start-column="84" selection-end-line="171" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="1116">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDInt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="666" max-vertical-offset="5094">
-          <caret line="64" column="27" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/master/Master_Gui.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4762" max-vertical-offset="5688">
-          <caret line="332" column="13" selection-start-line="332" selection-start-column="13" selection-end-line="332" selection-end-column="13" />
-          <folding>
-            <element signature="e#4957#5125#0" expanded="false" />
-            <element signature="e#5124#5125#0" expanded="false" />
-            <element signature="e#5304#5472#0" expanded="false" />
-            <element signature="e#5471#5472#0" expanded="false" />
-            <element signature="e#5651#5819#0" expanded="false" />
-            <element signature="e#5818#5819#0" expanded="false" />
-            <element signature="e#6032#6211#0" expanded="false" />
-            <element signature="e#6210#6211#0" expanded="false" />
-            <element signature="e#6380#6512#0" expanded="false" />
-            <element signature="e#6511#6512#0" expanded="false" />
-            <element signature="e#6994#6995#0" expanded="false" />
-            <element signature="e#7054#7055#0" expanded="false" />
-            <element signature="e#7382#7383#0" expanded="false" />
-            <element signature="e#7442#7443#0" expanded="false" />
-            <element signature="e#7777#7778#0" expanded="false" />
-            <element signature="e#7838#7839#0" expanded="false" />
-            <element signature="e#8154#8155#0" expanded="false" />
-            <element signature="e#8211#8212#0" expanded="false" />
-            <element signature="method#println#0;class#Master_Gui#0" expanded="false" />
-            <element signature="method#println#1;class#Master_Gui#0" expanded="false" />
-            <element signature="method#printException#0;class#Master_Gui#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionInt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="807" max-vertical-offset="1530">
-          <caret line="70" column="13" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/CommunicationHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="788" max-vertical-offset="1440">
-          <caret line="76" column="37" selection-start-line="76" selection-start-column="37" selection-end-line="76" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerRequest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
@@ -1105,18 +1341,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
           <caret line="9" column="55" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="55" />
-          <folding>
-            <element signature="e#365#366#0" expanded="false" />
-            <element signature="e#392#393#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/ArrayList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3321492" vertical-offset="7355" max-vertical-offset="25110">
-          <caret line="456" column="19" selection-start-line="456" selection-start-column="19" selection-end-line="456" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1124,27 +1348,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="486">
           <caret line="7" column="29" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="30" />
-          <folding>
-            <element signature="e#474#475#0" expanded="false" />
-            <element signature="e#510#511#0" expanded="false" />
-            <element signature="e#556#557#0" expanded="false" />
-            <element signature="e#622#623#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
-          <caret line="21" column="15" selection-start-line="21" selection-start-column="15" selection-end-line="21" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/awt/image/BufferedImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="335" max-vertical-offset="27828">
-          <caret line="71" column="26" selection-start-line="71" selection-start-column="13" selection-end-line="71" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1159,30 +1362,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1133" max-vertical-offset="3132">
           <caret line="77" column="28" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#3695#3857#0" expanded="false" />
-            <element signature="e#3856#3857#0" expanded="false" />
-            <element signature="e#3905#4069#0" expanded="false" />
-            <element signature="e#4068#4069#0" expanded="false" />
-            <element signature="e#4120#4287#0" expanded="false" />
-            <element signature="e#4286#4287#0" expanded="false" />
-            <element signature="e#4336#4534#0" expanded="false" />
-            <element signature="e#4533#4534#0" expanded="false" />
-            <element signature="e#4789#4958#0" expanded="false" />
-            <element signature="e#4957#4958#0" expanded="false" />
-            <element signature="e#5272#5404#0" expanded="false" />
-            <element signature="e#5403#5404#0" expanded="false" />
-            <element signature="e#5667#5668#0" expanded="false" />
-            <element signature="e#5728#5729#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/files/data/ws1/photoDD1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="198">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1190,7 +1369,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="463" max-vertical-offset="1026">
           <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1201,21 +1379,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/worker/Worker_Gui.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3531" max-vertical-offset="4590">
-          <caret line="246" column="11" selection-start-line="246" selection-start-column="11" selection-end-line="246" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/DDObject/MsgPartitionGetDataDDObjectReply.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="183" max-vertical-offset="504">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <element signature="e#637#638#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1251,9 +1418,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1368">
           <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1261,7 +1425,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="432">
           <caret line="16" column="5" selection-start-line="14" selection-start-column="3" selection-end-line="16" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1269,12 +1432,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="702">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <element signature="e#582#583#0" expanded="true" />
-            <element signature="e#623#624#0" expanded="true" />
-            <element signature="e#997#998#0" expanded="true" />
-            <element signature="e#1055#1056#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1289,25 +1446,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="535" max-vertical-offset="1368">
           <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1854#1855#0" expanded="false" />
-            <element signature="e#1886#1887#0" expanded="false" />
-            <element signature="e#1933#1934#0" expanded="false" />
-            <element signature="e#1967#1968#0" expanded="false" />
-            <element signature="e#2030#2031#0" expanded="false" />
-            <element signature="e#2081#2082#0" expanded="false" />
-            <element signature="e#2124#2125#0" expanded="false" />
-            <element signature="e#2154#2155#0" expanded="false" />
-            <element signature="e#2209#2210#0" expanded="false" />
-            <element signature="e#2252#2253#0" expanded="false" />
-            <element signature="e#2325#2326#0" expanded="false" />
-            <element signature="e#2381#2382#0" expanded="false" />
-            <element signature="e#2435#2436#0" expanded="false" />
-            <element signature="e#2471#2472#0" expanded="false" />
-            <element signature="e#2537#2538#0" expanded="false" />
-            <element signature="e#2579#2580#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1315,20 +1453,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1" max-vertical-offset="450">
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#534#535#0" expanded="false" />
-            <element signature="e#559#560#0" expanded="false" />
-            <element signature="e#597#598#0" expanded="false" />
-            <element signature="e#632#633#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/masterService/MasterService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="9481" max-vertical-offset="10980">
-          <caret line="586" column="59" selection-start-line="586" selection-start-column="37" selection-end-line="586" selection-end-column="59" />
           <folding />
         </state>
       </provider>
@@ -1369,19 +1493,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="468">
           <caret line="18" column="83" selection-start-line="18" selection-start-column="83" selection-end-line="18" selection-end-column="83" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4359" max-vertical-offset="5508">
-          <caret line="269" column="9" selection-start-line="256" selection-start-column="8" selection-end-line="269" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#6823#6824#0" expanded="false" />
-            <element signature="e#6876#6877#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1389,11 +1500,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="504">
           <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#377#378#0" expanded="false" />
-            <element signature="e#402#403#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1401,15 +1507,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1234" max-vertical-offset="2412">
           <caret line="95" column="88" selection-start-line="95" selection-start-column="85" selection-end-line="95" selection-end-column="88" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1196#1197#0" expanded="false" />
-            <element signature="e#1231#1232#0" expanded="false" />
-            <element signature="e#2437#2694#0" expanded="false" />
-            <element signature="e#2693#2694#0" expanded="false" />
-            <element signature="e#4903#4904#0" expanded="false" />
-            <element signature="e#4939#4940#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1421,81 +1518,193 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/HashMap.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/MsgReply.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="9058" max-vertical-offset="41652">
-          <caret line="553" column="13" selection-start-line="553" selection-start-column="13" selection-end-line="553" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="630">
+          <caret line="26" column="54" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="663">
+          <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFunctionAddLenght_1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1566">
-          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
+          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDIntFilterGreaterThen_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="288" max-vertical-offset="2924">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="e#646#647#0" expanded="true" />
-            <element signature="e#673#674#0" expanded="true" />
+            <element signature="e#1530#1531#0" expanded="false" />
+            <element signature="e#1562#1563#0" expanded="false" />
+            <element signature="e#1612#1613#0" expanded="false" />
+            <element signature="e#1654#1655#0" expanded="false" />
+            <element signature="e#1704#1705#0" expanded="false" />
+            <element signature="e#1736#1737#0" expanded="false" />
+            <element signature="e#5498#5499#0" expanded="false" />
+            <element signature="e#5543#5544#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="713" max-vertical-offset="1206">
-          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/PhotoManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="369" max-vertical-offset="1476">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="928" max-vertical-offset="1476">
-          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/Msg.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="111" max-vertical-offset="540">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="544">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="e#351#352#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/MsgPartitionRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <element signature="e#369#370#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/DDObject/MsgPartitionApplyFunctionDDObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
+          <folding>
+            <element signature="e#702#703#0" expanded="false" />
+            <element signature="e#732#733#0" expanded="false" />
+            <element signature="e#783#784#0" expanded="false" />
+            <element signature="e#812#813#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFunctionPhotoToSize_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="35" max-vertical-offset="595">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDIntFilterEvenNumbers_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+          <caret line="10" column="31" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/MsgReply.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/tools/BaseActions/Function.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="630">
-          <caret line="26" column="54" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/tools/BaseActions/Predicate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8736" max-vertical-offset="9288">
-          <caret line="518" column="20" selection-start-line="518" selection-start-column="20" selection-end-line="518" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterContainsString_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25449103" vertical-offset="0" max-vertical-offset="334">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/files/data/ws1/photoDD1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/masterService/MasterService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5618" max-vertical-offset="10370">
+          <caret line="384" column="91" selection-start-line="384" selection-start-column="91" selection-end-line="384" selection-end-column="91" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/DDObject/MsgApplyFilterDDObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="35" />
+          <folding>
+            <element signature="e#679#680#0" expanded="true" />
+            <element signature="e#708#709#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterPhotoBiggerThen_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="69" max-vertical-offset="629">
+          <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#488#489#0" expanded="true" />
+            <element signature="e#522#523#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/remoteActions/DDObjectFilterIntegerBiggerThen_1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
+          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+          <folding>
+            <element signature="e#441#442#0" expanded="true" />
+            <element signature="e#475#476#0" expanded="true" />
+            <element signature="e#530#531#0" expanded="true" />
+            <element signature="e#575#576#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/PhotoWorker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1394">
+          <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.923077" vertical-offset="7164" max-vertical-offset="9594">
-          <caret line="446" column="34" selection-start-line="446" selection-start-column="34" selection-end-line="446" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4060" max-vertical-offset="9282">
+          <caret line="287" column="40" selection-start-line="287" selection-start-column="40" selection-end-line="287" selection-end-column="40" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="method#ClientActor#0;class#ClientActor#0;class#Client#0" expanded="false" />
             <element signature="method#newActor#0;class#ClientActor#0;class#Client#0" expanded="false" />
             <element signature="class#Request#0;class#Client#0" expanded="false" />
@@ -1503,30 +1712,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/protocol/services/MsgServicePhotoGetPhotoReply.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/WorkerService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="810">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4486" max-vertical-offset="8364">
+          <caret line="330" column="51" selection-start-line="330" selection-start-column="51" selection-end-line="330" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/workerService/PhotoManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="1394">
+          <caret line="53" column="51" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/client/DDObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19464286" vertical-offset="962" max-vertical-offset="5202">
+          <caret line="68" column="34" selection-start-line="68" selection-start-column="34" selection-end-line="68" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhotoInternal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1360">
+          <caret line="14" column="74" selection-start-line="14" selection-start-column="74" selection-end-line="14" selection-end-column="74" />
           <folding>
-            <element signature="e#840#841#0" expanded="true" />
-            <element signature="e#876#877#0" expanded="true" />
-            <element signature="e#913#914#0" expanded="true" />
-            <element signature="e#949#950#0" expanded="true" />
-            <element signature="e#1004#1005#0" expanded="true" />
-            <element signature="e#1092#1093#0" expanded="true" />
+            <element signature="e#872#873#0" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/services/photos/Photo.java">
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionPhoto.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11313868" vertical-offset="1702" max-vertical-offset="3132">
-          <caret line="104" column="23" selection-start-line="104" selection-start-column="23" selection-end-line="104" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.15178572" vertical-offset="153" max-vertical-offset="1003">
+          <caret line="14" column="72" selection-start-line="14" selection-start-column="72" selection-end-line="14" selection-end-column="72" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5498#5499#0" expanded="true" />
-            <element signature="e#5543#5544#0" expanded="true" />
+            <element signature="e#495#496#0" expanded="true" />
+            <element signature="e#572#573#0" expanded="true" />
+            <element signature="e#599#600#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pt/unl/fct/di/proto1/worker/Worker_Gui.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3614" max-vertical-offset="4335">
+          <caret line="261" column="34" selection-start-line="261" selection-start-column="34" selection-end-line="261" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartitionObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21755028" vertical-offset="0" max-vertical-offset="1632">
+          <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+          <folding>
+            <element signature="e#797#798#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proto1/CommonLibApp3/src/main/java/unl/fct/di/proto1/common/lib/core/worker/DDPartition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4857143" vertical-offset="0" max-vertical-offset="560">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

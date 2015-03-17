@@ -16,6 +16,11 @@ public class DDPartitionObject extends DDPartition {
         this.data = data;
     }
 
+    public DDPartitionObject(String newDDUI, int partId, int nDataElem) {
+        super(newDDUI, partId);
+        data = new Object[nDataElem];
+    }
+
     @Override
     public DDPartitionObject clone() {
         return new DDPartitionObject(DDUI, partId, Arrays.copyOf(data, data.length));
@@ -25,18 +30,21 @@ public class DDPartitionObject extends DDPartition {
         return data;
     }
 
+    // check DR
+    public Object[] getDataToClient() {
+        return data;
+    }
+
     // Perform an action as specified by a Consumer object
     //  public void forEach(Consumer<Integer> action, String newDDUI) {
     public DDPartitionObject forEach(Function<Object, Object> action, String newDDUI) {
         // create a new partition - partitions are read only
-        DDPartitionObject newDDPartition = clone();
-        // set the DDUI of the new DDInt
-        newDDPartition.setDDUI(newDDUI);
+        Object[] workData = this.getData();
+        DDPartitionObject newDDPartition = new DDPartitionObject(newDDUI, this.getPartId(), workData.length);
 
-        Object[] workData = newDDPartition.getData();
-
-        for (int i = 0, size = data.length; i < size; i++) {
-            workData[i] = action.apply(data[i]);
+        Object[] newData = newDDPartition.getData();
+        for (int i = 0, size = workData.length; i < size; i++) {
+            newData[i] = action.apply(workData[i]);
         }
         return newDDPartition;
     }
@@ -57,17 +65,16 @@ public class DDPartitionObject extends DDPartition {
 
     public DDPartitionObject filter(Predicate<Object> filter, String newDDUI) {
         // create a new partition - partitions are read only
-        DDPartitionObject newDDPartition = clone();
-        // set the DDUI of the new DDInt
-        newDDPartition.setDDUI(newDDUI);
+        Object[] workData = this.getData();
+        DDPartitionObject newDDPartition =  this.createNewPartition(newDDUI, this.getPartId(), workData.length);
 
         Object[] newDDData = newDDPartition.getData();
 
         // the elements that verify the test go to new DD partition
         int newElems = 0;
-        for (int i = 0, size = data.length; i < size; i++) {
-            if (filter.test(data[i])) {
-                newDDData[newElems++] = data[i]; // if the dataset is writable we have to clone the object
+        for (int i = 0, size = workData.length; i < size; i++) {
+            if (filter.test(workData[i])) {
+                newDDData[newElems++] = workData[i]; // if the dataset is writable we have to clone the object
             }
         }
 
@@ -76,6 +83,10 @@ public class DDPartitionObject extends DDPartition {
 
         return newDDPartition;
 
+    }
+
+    public DDPartitionObject createNewPartition(String newDDUI, int partId, int length) {
+        return new DDPartitionObject(newDDUI, partId, length);
     }
 
     @Override

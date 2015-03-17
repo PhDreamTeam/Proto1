@@ -12,7 +12,8 @@ import java.util.Arrays;
  *
  */
 public class DDPartitionPhotoInternal extends DDPartitionObject {
-    WorkerService ws;
+    // TODO quando fazemos load do disco temos de fazer o setWorkerService
+    transient WorkerService ws;
 
     public DDPartitionPhotoInternal(String DDUI, int partID, WorkerService ws) {
         super(DDUI, partID, null);
@@ -24,10 +25,15 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
         return ws.getPhotoManager().getAllPhotoWorkerFromDD(DDUI);
     }
 
+    // check DR
+    public Object[] getData() {
+        return getDataPhotoWorkerArray();
+    }
+
     /*
      * getData to client
      */
-    public Object[] getData() {
+    public Object[] getDataToClient() {
         // get working photo object
         PhotoWorker[] pws = getDataPhotoWorkerArray();
 
@@ -51,6 +57,7 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
         return nPhotos == pws.length ? ps : Arrays.copyOf(ps, nPhotos);
     }
 
+
     @Override
     public DDPartitionObject clone() {
         // TODO check if we should return an DDPartitionObject or DDPartitionPhoto
@@ -62,5 +69,11 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
         return new DDPartitionObject(DDUI, partId, pws);
     }
 
+    @Override
+    public DDPartitionObject createNewPartition(String newDDUI, int partId, int length) {
+        DDPartitionPhoto ddpp = new DDPartitionPhoto(newDDUI, partId, this.ws);
+        ddpp.setData(new Object[length]);
+        return ddpp;
 
+    }
 }
