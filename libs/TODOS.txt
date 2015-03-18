@@ -1,0 +1,47 @@
+
+
+// 0 is minimum priority
+
+
+TODO NEXT ACTION ===========================================
+
+TODO 3 suporte a múltiplos masters
+TODO 2 suporte a pedidos incompletos/parciais
+
+
+
+TODO ? Suporte à percepção de topologia e melhoramento das funcionalidades face à sua exploração
+
+TODO 2.5 colocar o Android operacional face às alterações feitas
+
+TODO 2 TD2: Identificar a API dos serviços de comunicação que devemos utilizar
+TODO 2 TD2: camada de comunicação no actor para disponibilizar sends transparentes à localização - redefinir o UntypedActor
+
+
+
+TODO 1 TD1: gestão dos serviços - registo dos serviços no master (not done);
+TODO 1 TD1: workers obtêm os serviços (not), escolhem (not), registam as suas escolhas no master(done);
+TODO 1 TD1: clientes seleccionam serviços (not).
+TODO 1 TD1: Válido para serviços e DDinternals
+
+
+
+// registry ==============================================
+
+// TODO 3 ms master die and live again:  keep original MasterRequest in new DDs
+// TODO 3 ms reconstruct a lost DD by replaying saved operations
+// TODO 3 ms masters save and load state, pending requests no need to be saved
+// TODO 3 workers reconnect to masters after master termination
+
+// TODO 2 ms Substitute client tells por CommunicationHelper.tell
+
+// TODO 1 ms DDIntMaster e DDObjectMaster no constructor temos a Msg e outros parâmetros da msg, reduzir isto
+// TODO 1 ms same as previous: also in methods: getData, forEach, ...
+
+
+// DONE ===========================================================
+
+// DONE Operação de Merge de dois DD
+// DONE DDPhoto support
+// DONE ms Substitute worker tells por CommunicationHelper.tell
+// DONE masters works well with workers crashes

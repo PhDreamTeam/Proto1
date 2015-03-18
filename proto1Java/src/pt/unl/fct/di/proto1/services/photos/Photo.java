@@ -112,11 +112,12 @@ public class Photo implements IPhoto {
                     photo = null;
                     lastOperationError = "Error in getPhotoReply: " + e.getMessage();
                 }
+
                 // clean up memory structures
                 getPhotoReplyMsgs.clear();
                 numberPhotoBytesReceived = 0;
 
-                // wake up client thread that asked to create DDInt
+                // wake up client thread that asked to get Photo data
                 synchronized (this) {
                     this.notify();
                 }

@@ -261,7 +261,7 @@ public class WorkerService {
                         ws.console.printException(e);
                     }
                 }
-                if(photoBytes == null) {
+                if (photoBytes == null) {
                     // build message
                     MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
                             msg.getDDUI(), msg.getRequestId(), 0, 0, null, false, "Error on photo loading");
@@ -277,9 +277,31 @@ public class WorkerService {
 
             // DDObject =====================================
 
-            else if (message instanceof MsgPartitionApplyFilterDDObject)
+            else if (message instanceof MsgPartitionApplyMergeDDObject) {
+                MsgPartitionApplyMergeDDObject msg = (MsgPartitionApplyMergeDDObject) message;
+                DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getSrcDDUI(),
+                        msg.getSrcPartId());
 
-            {
+                // duplicate partition with newDDUI and newpartID, but with parent data
+                DDPartitionObject newDDPartition = parentDDPartition.createNewPartition(msg.getDDUI(), msg.getPartId(), parentDDPartition.getData().length);
+                newDDPartition.setData(Arrays.copyOf(parentDDPartition.getData(), parentDDPartition.getData().length));
+
+                // keep new partition in array of partitions and show it in screen
+                ws.addDDPartition(newDDPartition);
+                ws.console.println("Apply merge result: " + newDDPartition);
+
+                // send msg to master - create message
+                MsgPartitionApplyMergeDDObjectReply msgOut = new MsgPartitionApplyMergeDDObjectReply(
+                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getSrcDDUI(), msg.getSrcPartId(),
+                        newDDPartition.getData().length, true, null);
+
+                // send reply
+                getSender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                ws.console.println("");
+            } //
+
+            else if (message instanceof MsgPartitionApplyFilterDDObject) {
                 MsgPartitionApplyFilterDDObject msg = (MsgPartitionApplyFilterDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
                         msg.getPartId());
@@ -301,9 +323,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDObject)
-
-            {
+            else if (message instanceof MsgPartitionApplyFunctionDDObject) {
                 MsgPartitionApplyFunctionDDObject msg = (MsgPartitionApplyFunctionDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
                         msg.getPartId());
@@ -324,9 +344,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionGetDataDDObject)
-
-            {
+            else if (message instanceof MsgPartitionGetDataDDObject) {
                 MsgPartitionGetDataDDObject msg = (MsgPartitionGetDataDDObject) message;
                 DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -343,9 +361,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionCreateDDObject)
-
-            {
+            else if (message instanceof MsgPartitionCreateDDObject) {
                 MsgPartitionCreateDDObject msgPartition = (MsgPartitionCreateDDObject) message;
 
                 // TODO if DDUI is from a internal service, throw error
@@ -367,9 +383,7 @@ public class WorkerService {
 
             // DDInt =====================================
 
-            else if (message instanceof MsgPartitionApplyFilterDDInt)
-
-            {
+            else if (message instanceof MsgPartitionApplyFilterDDInt) {
                 MsgPartitionApplyFilterDDInt msg = (MsgPartitionApplyFilterDDInt) message;
                 DDPartitionInt parentDDPartition = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -390,9 +404,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDInt)
-
-            {
+            else if (message instanceof MsgPartitionApplyFunctionDDInt) {
                 MsgPartitionApplyFunctionDDInt msg = (MsgPartitionApplyFunctionDDInt) message;
                 DDPartitionInt parentDDPartition = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -412,9 +424,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionGetDataDDInt)
-
-            {
+            else if (message instanceof MsgPartitionGetDataDDInt) {
                 MsgPartitionGetDataDDInt msg = (MsgPartitionGetDataDDInt) message;
                 DDPartitionInt p = (DDPartitionInt) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
@@ -431,9 +441,7 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
-            else if (message instanceof MsgPartitionCreateDDInt)
-
-            {
+            else if (message instanceof MsgPartitionCreateDDInt) {
                 MsgPartitionCreateDDInt msgPartition = (MsgPartitionCreateDDInt) message;
                 ActorNode masterActorNode = new ActorNode(getSender(), ActorState.ACTIVE, ActorType.Master);
 
@@ -455,18 +463,14 @@ public class WorkerService {
 
             // SETUP =====================================
 
-            else if (message instanceof MsgRegisterWorkerReply)
-
-            {
+            else if (message instanceof MsgRegisterWorkerReply) {
                 MsgRegisterWorkerReply msg = (MsgRegisterWorkerReply) message;
                 ws.setWorkerActorNode(msg.getAn());
                 // receive register confirmation - save partition IDs for the registered internal DDs
                 ws.getServiceManager().addInternalDDUIPartitionID(msg.getPartitionIds());
             } //
 
-            else if (message instanceof MsgGetMasterReply)
-
-            {
+            else if (message instanceof MsgGetMasterReply) {
                 // receive this from Directory service
                 ActorNode masterActorNode = ((MsgGetMasterReply) message).getActorNode();
                 ws.setCurrentMaster(masterActorNode);
@@ -490,9 +494,7 @@ public class WorkerService {
                 }
             } //
 
-            else if (message instanceof MsgRegisterReply)
-
-            {
+            else if (message instanceof MsgRegisterReply) {
                 // Directory service answers register from worker
                 // get master node from Directory service
                 Msg msgOut = new MsgGetMaster(UUID.randomUUID().toString());
@@ -502,9 +504,7 @@ public class WorkerService {
 
             // TODO watch for terminations
 
-            else
-
-            {
+            else {
                 ws.console.println("Unhandled message: " + message);
                 //unhandled(message);
             }
@@ -517,12 +517,12 @@ public class WorkerService {
          */
         private void sendMsgServicePhotoGetPhotoMultiparts(String ddui, String requestId, byte[] photoBytes, ActorRef sender) {
             // for number of msgs
-            for (int i = 0, nMsgs = (photoBytes.length  - 1)/ MAXPAYLOADSIZE + 1; i < nMsgs; i++) {
+            for (int i = 0, nMsgs = (photoBytes.length - 1) / MAXPAYLOADSIZE + 1; i < nMsgs; i++) {
                 // build msg
                 MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
                         ddui, requestId, i, photoBytes.length,
                         Arrays.copyOfRange(photoBytes, MAXPAYLOADSIZE * i,
-                            Math.min(MAXPAYLOADSIZE * (i + 1), photoBytes.length)), true, null);
+                                Math.min(MAXPAYLOADSIZE * (i + 1), photoBytes.length)), true, null);
 
                 // send msg to client and show it on console
                 sender.tell(msgOut, getSelf());

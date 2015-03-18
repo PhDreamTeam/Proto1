@@ -31,6 +31,6 @@ public class MsgApplyFilterDDObjectReply extends MsgReply implements Serializabl
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
-        return super.getIntermediateInfo() +  ", newDDUI: " + getNewDDUI()+ ", nElems: " + getnDataElemsDD();
+        return super.getIntermediateInfo() +  ", srcDDUI: " + getNewDDUI()+ ", nElems: " + getnDataElemsDD();
     }
 }

@@ -28,6 +28,6 @@ public class MsgPartitionApplyFunctionDDObject extends MsgPartitionRequest imple
 
     @Override
     public String toString() {
-        return super.toString() + ", newDDUI: " + getNewDDUI();
+        return super.toString() + ", srcDDUI: " + getNewDDUI();
     }
 }

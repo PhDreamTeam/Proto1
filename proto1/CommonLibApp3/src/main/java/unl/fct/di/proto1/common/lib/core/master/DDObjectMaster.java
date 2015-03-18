@@ -202,7 +202,7 @@ public class DDObjectMaster extends DDMaster {
     // Filter objects that match a Predicate object
     public DDObjectMaster filter(String newDDUI, Predicate<Object> filter, ActorNode requesterActorNode,
                                  String requestId, Msg msgRequest) {
-        // create a new local DDIntMaster
+        // create a new local DDObjectMaster
         DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
 
         // set nElems to 0
@@ -231,6 +231,64 @@ public class DDObjectMaster extends DDMaster {
         return newDD;
     }
 
+    /**
+     *
+     */
+    public DDObjectMaster merge(String ddToMergeDDUI, String newDDUI, ActorNode requesterActorNode,
+                                String requestId, MsgApplyMergeDDObject msgRequest) {
+
+        // create a new local DDObjectMaster
+        DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
+
+        // add partitions descriptors from ddToMerge to newDD
+        addPartitionDescriptorsFromDdToMergeToNewDD(ddToMergeDDUI, newDD);
+
+        // set nElems to 0
+        newDD.resetNDataElems();
+
+        // create new MasterRequest an put in in container of requests
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, newDD);
+        // create and activate timeout
+        req.createTimeout();
+
+        // send apply function to all partitions (their workers)
+        int nPartsFirstDD = partitionsDescriptors.size();
+        for (DDPartitionDescriptor partition : newDD.partitionsDescriptors) {
+            // set partition state
+            partition.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
+
+            // build message
+            String ddToDuplicate =  partition.getPartitionId() < nPartsFirstDD ? this.DDUI : ddToMergeDDUI;
+            int partIdFormDdToDuplicate = partition.getPartitionId() < nPartsFirstDD ?
+                    partition.getPartitionId() : partition.getPartitionId() - nPartsFirstDD;
+
+            MsgPartitionApplyMergeDDObject msgOut = new MsgPartitionApplyMergeDDObject(newDDUI, requestId,
+                    partition.getPartitionId(), ddToDuplicate, partIdFormDdToDuplicate);
+
+            // build request tracker and send message to worker if possible
+            GlManager.getCommunicationHelper().tell(partition.getWorkerNode(), msgOut,
+                    GlManager.getMasterActor(), req);
+
+            GlManager.getConsole().println("Sent: " + msgOut);
+        }
+        return newDD;
+    }
+
+    private void addPartitionDescriptorsFromDdToMergeToNewDD(String ddToMergeDDUI, DDObjectMaster newDD) {
+        DDObjectMaster ddToMerge = (DDObjectMaster)GlManager.getDDManager().getDD(ddToMergeDDUI);
+
+        int nPartitions = partitionsDescriptors.size();
+
+        // add clone of each ddToMerge partition
+        for (DDPartitionDescriptor pd: ddToMerge.partitionsDescriptors) {
+            // duplicate ddToMerge partition with partitionIdx corrected
+            DDPartitionDescriptor newPart = new DDPartitionDescriptor(newDD.getDDUI(),
+                    pd.partitionIdx + nPartitions, pd.getWorkerNode());
+            // add duplicate partition to newDD
+            newDD.partitionsDescriptors.add(newPart);
+        }
+    }
+
 
     // fire procedures ================================================================
 
@@ -249,7 +307,7 @@ public class DDObjectMaster extends DDMaster {
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // SUCCESS - nothing to do, just send msg to client
-                MsgCreateDDObjectReply msgOut = new MsgCreateDDObjectReply(getDDUI(), msg.getRequestId(), true, null);
+                Msg msgOut = ((MsgCreateDDObject)req.getMsgRequest()).getSuccessReplyMessage();
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
                 GlManager.getConsole().println("Sent: " + msgOut);
             } else {
@@ -279,8 +337,7 @@ public class DDObjectMaster extends DDMaster {
                 Object[] dataReply = getDataInternal(req);
 
                 // send data to client requester
-                MsgGetDataDDObjectReply msgOut = new MsgGetDataDDObjectReply(getDDUI(), msg.getRequestId(),
-                        dataReply, true, null);
+                Msg msgOut = ((MsgGetDataDDObject)req.getMsgRequest()).getSuccessReplyMessage(dataReply);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // FAILED
@@ -329,8 +386,7 @@ public class DDObjectMaster extends DDMaster {
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
-                MsgApplyFunctionDDObjectReply msgOut = new
-                        MsgApplyFunctionDDObjectReply(getDDUI(), msg.getRequestId(), msg.getNewDDUI(), true, null);
+                Msg msgOut = ((MsgApplyFunctionDDObject)req.getMsgRequest()).getSuccessReplyMessage();
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // failure - send failure to client requester
@@ -360,9 +416,8 @@ public class DDObjectMaster extends DDMaster {
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
-                MsgApplyFilterDDObjectReply msgOut = new
-                        MsgApplyFilterDDObjectReply(getDDUI(), msg.getRequestId(), msg.getNewDDUI(), newDD.nDataElems,
-                        true, null);
+
+                Msg msgOut = ((MsgApplyFilterDDObject)req.getMsgRequest()).getSuccessReplyMessage(newDD.nDataElems);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // failure - send failure to client requester
@@ -373,5 +428,38 @@ public class DDObjectMaster extends DDMaster {
         }
     }
 
+    public void fireMsgPartitionApplyMergeDDObjectReply(MsgPartitionApplyMergeDDObjectReply msg) {
+        MasterRequest req = requests.get(msg.getRequestId());
+
+        // count with data elements in new partition
+        // add answer to request
+        req.addAnswer(msg);
+
+        // update partition state
+//        DDMaster newDD = GlManager.getDDManager().getDD(msg.getSrcDDUI());
+        partitionsDescriptors.get(msg.getPartId()).setState(msg.isSuccess() ?
+                DDPartitionDescriptor.PartitionState.DEPLOYED :
+                DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
+
+        nDataElems += msg.getNElems();
+
+        // check if request is finished
+        if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
+            if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
+
+                // success - send success to client requester
+                Msg msgOut = ((MsgApplyMergeDDObject)req.getMsgRequest()).getSuccessReplyMessage(nDataElems);
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+
+            } else {
+                // failure - send failure to client requester
+                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+            }
+
+            GlManager.getConsole().println();
+        }
+
+    }
 }
 

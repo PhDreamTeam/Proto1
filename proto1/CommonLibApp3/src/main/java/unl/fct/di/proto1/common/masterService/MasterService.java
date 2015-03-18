@@ -363,7 +363,34 @@ public class MasterService {
 
             // DDObject  ========================================================
 
-            if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
+
+            if (message instanceof MsgPartitionApplyMergeDDObjectReply) {
+                MsgPartitionApplyMergeDDObjectReply msg = (MsgPartitionApplyMergeDDObjectReply) message;
+                DDObjectMaster newDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                    // update partition state
+                    newDD.fireMsgPartitionApplyMergeDDObjectReply(msg);
+                    // update screen - DD state could have changed
+                    ms.updateViewData();
+                } else {
+                    // message received after timeout or request finished
+                    console.println("Received message not recognized by MessageTracker: " + msg);
+                }
+            } //
+
+            else if (message instanceof MsgApplyMergeDDObject) {
+                MsgApplyMergeDDObject msg = (MsgApplyMergeDDObject) message;
+                DDObjectMaster parentDDObject = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+                // apply filter
+                DDObjectMaster newDDObject = parentDDObject.merge(msg.getDdToMergeDDUI(), msg.getNewDDUI(),
+                        clientActorNode, msg.getRequestId(), msg);
+                // add to screen
+                ms.addData(newDDObject);
+            } //
+
+
+            else if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
                 MsgPartitionApplyFilterDDObjectReply msg = (MsgPartitionApplyFilterDDObjectReply) message;
                 DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
                 if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {

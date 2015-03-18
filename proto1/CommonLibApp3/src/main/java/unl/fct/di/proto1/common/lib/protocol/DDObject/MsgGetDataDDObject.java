@@ -16,4 +16,8 @@ public class MsgGetDataDDObject extends Msg implements Serializable{
     public Msg getFailureReplyMessage(String failureReason) {
         return new MsgGetDataDDObjectReply(getDDUI(), getRequestId(), null, false, failureReason);
     }
+
+    public Msg getSuccessReplyMessage(Object[] data) {
+        return new MsgGetDataDDObjectReply(getDDUI(), getRequestId(), data, true, null);
+    }
 }

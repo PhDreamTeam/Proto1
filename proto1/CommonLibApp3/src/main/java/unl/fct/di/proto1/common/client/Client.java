@@ -315,6 +315,83 @@ public class Client {
         t.start();
     }
 
+    // ------------------------------------------------------------
+    // work with existing Internal Photos
+    public void workWithMergingPhotos() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String DDUI = "photoDD1";
+
+                    // OPEN IPHOTO DD1
+                    console.println("Opening IPHOTOS DDUI: " + DDUI);
+                    DDObject d1 = DDObject.openDDObject(DDUI);
+                    console.println("Opened: " + d1);
+                    console.println();
+
+                    // DD2 ===========================================================
+
+                    // APPLY FILTER to photo INTERNAL dd
+                    console.println("Applying filter to IPHOTO DD -> DD2");
+                    DDObject d2 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(10_000));
+                    console.println("End of Function to IPHOTO DD -> DD2");
+                    console.println();
+
+                    // Get data from DD2
+                    console.println("Getting data from DD2");
+                    Object[] result2 = d2.getData();
+                    console.println("DD2 received:" + Arrays.toString(result2));
+                    console.println();
+
+                    // display thumbnails
+                    displayThumbnails(result2);
+
+
+                    // DD3 ===========================================================
+
+                    // APPLY FILTER to photo INTERNAL dd
+                    console.println("Applying filter to IPHOTO DD -> DD3");
+                    DDObject d3 = d1.filter(new DDObjectFilterPhotoBetweenThen_1(25_000, 35_000));
+                    console.println("End of Function to IPHOTO DD -> DD3");
+                    console.println();
+
+                    // Get data from DD3
+                    console.println("Getting data from DD3");
+                    Object[] result3 = d3.getData();
+                    console.println("DD3 received:" + Arrays.toString(result3));
+                    console.println();
+
+                    // display thumbnails
+                    displayThumbnails(result3);
+
+
+                    // DD4 ===========================================================
+
+                    // APPLY MERGE to DD2 and DD3
+                    console.println("Applying merge DD2 with DD3 -> DD4");
+                    DDObject d4 = d2.merge(d3);
+                    console.println("End of Merge DD2 with DD3 -> DD4");
+                    console.println();
+
+                    // Get data from DD4
+                    console.println("Getting data from DD4");
+                    Object[] result4 = d4.getData();
+                    console.println("DD4 received:" + Arrays.toString(result4));
+                    console.println();
+
+                    // display thumbnails
+                    displayThumbnails(result4);
+
+                } catch (Exception e) {
+                    console.printException(e);
+                }
+            }
+        });
+        t.start();
+    }
+
     private void displayThumbnails(Object[] photos) {
         // TODO this code should run in swing EDT
 
@@ -485,6 +562,13 @@ public class Client {
             } //
 
             // DDObject ==================================
+
+            else if (message instanceof MsgApplyMergeDDObjectReply) {
+                MsgApplyMergeDDObjectReply msg = (MsgApplyMergeDDObjectReply) message;
+                DDObject dd = (DDObject) ClientManager.getDD(msg.getNewDDUI());
+                dd.fireMsgApplyMergeDDObjectReply(msg);
+            } //
+
 
             else if (message instanceof MsgOpenDDObjectReply) {
                 MsgOpenDDObjectReply msg = (MsgOpenDDObjectReply) message;

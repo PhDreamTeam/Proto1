@@ -28,6 +28,6 @@ public class MsgPartitionApplyFilterDDObjectReply extends MsgPartitionReply impl
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
-        return super.getIntermediateInfo() + ", newDDUI: " + getNewDDUI() + ", nElems: " + getNElems();
+        return super.getIntermediateInfo() + ", srcDDUI: " + getNewDDUI() + ", nElems: " + getNElems();
     }
 }

@@ -40,8 +40,13 @@ public class DDMaster implements Serializable {
     }
 
     public MasterRequest createMasterRequest(String requestId, ActorNode requestOwner, Msg msgRequest){
-        MasterRequest req = new MasterRequest(requestId, requestOwner, this, msgRequest);
-        requests.put(req.getRequestId(), req);
+        return createMasterRequest(requestId, requestOwner, msgRequest, this);
+    }
+
+    public MasterRequest createMasterRequest(String requestId, ActorNode requestOwner, Msg msgRequest,
+                                             DDMaster ddToTrackRequests){
+        MasterRequest req = new MasterRequest(requestId, requestOwner, ddToTrackRequests, msgRequest);
+        ddToTrackRequests.requests.put(req.getRequestId(), req);
         return req;
     }
 

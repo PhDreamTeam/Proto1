@@ -24,6 +24,6 @@ public class MsgApplyFunctionDDObjectReply extends MsgReply implements Serializa
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
-        return super.getIntermediateInfo() +  ", newDDUI: " + getNewDDUI();
+        return super.getIntermediateInfo() +  ", srcDDUI: " + getNewDDUI();
     }
 }

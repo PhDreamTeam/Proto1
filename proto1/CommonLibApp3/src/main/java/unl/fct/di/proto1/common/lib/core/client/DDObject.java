@@ -166,6 +166,40 @@ public class DDObject extends DD {
         return newDD;
     }
 
+
+    /**
+     *
+     */
+    public DDObject merge(DDObject ddToMerge) {
+        // create new DDInt to store the results
+        DDObject newDD = new DDObject(this);
+
+        // send msg to master
+        String requestId = UUID.randomUUID().toString();
+        MsgApplyMergeDDObject msg = new MsgApplyMergeDDObject(DDUI, requestId, ddToMerge.getDDUI(),
+                newDD.getDDUI());
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
+
+        // show it in screen
+        ClientManager.getConsole().println("Sent: " + msg);
+
+        // wait for operation conclusion in new DDInt
+        try {
+            synchronized (newDD) {
+                newDD.wait();
+            }
+        } catch (InterruptedException e) {
+            ClientManager.getConsole().printException(e);
+        }
+
+        // get result from new DDInt
+        if (newDD.getLastOperationError() != null) {
+            throw new RuntimeException(newDD.getLastOperationError());
+        }
+
+        return newDD;
+    }
+
     // Map objects to another DD as specified by a Function object
     public <R> Stream<R> map(Function<Integer, ? extends R> mapper) {
         //for (DDPartitionInt partition : partitionsDescriptors) {
@@ -296,6 +330,25 @@ public class DDObject extends DD {
         } else {
             // failure:
             lastOperationError = "Error applying filter: " + msg.getFailureReason();
+        }
+
+        // wake up client thread that asked to create DDInt
+        synchronized (this) {
+            this.notify();
+        }
+    }
+
+    public void fireMsgApplyMergeDDObjectReply(MsgApplyMergeDDObjectReply msg) {
+        if (msg.isSuccess()) {
+            // success: nothing to do
+            lastOperationError = null;
+
+            // save number of elems
+            nDataElems = msg.getnDataElemsDD();
+
+        } else {
+            // failure:
+            lastOperationError = "Error applying merge: " + msg.getFailureReason();
         }
 
         // wake up client thread that asked to create DDInt

@@ -29,11 +29,16 @@ public class MsgApplyFunctionDDObject extends Msg implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + ", newDDUI: " + getNewDDUI();
+        return super.toString() + ", srcDDUI: " + getNewDDUI();
     }
 
     @Override
     public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgApplyFunctionDDObjectReply(getDDUI(), getRequestId(), null, false, failureReason);
+        return new MsgApplyFunctionDDObjectReply(getDDUI(), getRequestId(), newDDUI, false, failureReason);
     }
+
+    public Msg getSuccessReplyMessage() {
+        return new MsgApplyFunctionDDObjectReply(getDDUI(), getRequestId(), newDDUI, true, null);
+    }
+
 }

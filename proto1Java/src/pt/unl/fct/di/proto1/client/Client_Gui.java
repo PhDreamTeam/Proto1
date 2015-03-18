@@ -77,7 +77,8 @@ public class Client_Gui extends JFrame implements IClientGui {
         JButton openDDObjectButton = new JButton("Open DDObject");
         JButton photosButton = new JButton("INTERNAL PHOTOS");
         JButton printlnButton = new JButton("Println");
-        JButton imageTestButton = new JButton("imageTest"); // DEBUG
+        JButton imageTestButton = new JButton("Image Test");
+        JButton mergeTestButton = new JButton("Merge Test");
 
         JPanel panelControl = new JPanel();
         panelControl.setBorder(BorderFactory.createTitledBorder("Control"));
@@ -85,6 +86,7 @@ public class Client_Gui extends JFrame implements IClientGui {
         panelControl.add(createDDObjectButton);
         panelControl.add(openDDObjectButton);
         panelControl.add(photosButton);
+        panelControl.add(mergeTestButton);
         panelControl.add(printlnButton);
         panelControl.add(imageTestButton);
         textFieldUUID = new JTextField(30);
@@ -147,6 +149,14 @@ public class Client_Gui extends JFrame implements IClientGui {
                 client.workWithImageTest();
             }
         });
+
+        mergeTestButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.workWithMergingPhotos();
+            }
+        });
+
 
         // show frame
         setVisible(true);

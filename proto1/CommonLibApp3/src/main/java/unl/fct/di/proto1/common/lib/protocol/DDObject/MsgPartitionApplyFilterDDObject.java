@@ -30,6 +30,6 @@ public class MsgPartitionApplyFilterDDObject extends MsgPartitionRequest impleme
 
     @Override
     public String toString() {
-        return super.toString() +  ", newDDUI: " + getNewDDUI();
+        return super.toString() +  ", srcDDUI: " + getNewDDUI();
     }
 }

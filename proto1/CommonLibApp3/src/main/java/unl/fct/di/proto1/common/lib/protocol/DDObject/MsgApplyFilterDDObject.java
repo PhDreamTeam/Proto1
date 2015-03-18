@@ -30,11 +30,15 @@ public class MsgApplyFilterDDObject extends Msg implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + " newDDUI: " + getNewDDUI();
+        return super.toString() + " srcDDUI: " + getNewDDUI();
     }
 
     @Override
     public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), null, 0, false, failureReason);
+        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, 0, false, failureReason);
+    }
+
+    public Msg getSuccessReplyMessage(int nElems) {
+        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, nElems, true, null);
     }
 }
