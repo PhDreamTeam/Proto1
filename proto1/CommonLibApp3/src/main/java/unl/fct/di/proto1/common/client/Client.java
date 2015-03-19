@@ -255,6 +255,12 @@ public class Client {
                     console.println("Opened: " + d1);
                     console.println();
 
+                    // APPLY COUNT to photoDD1
+                    console.println("Applying count to photoDD1");
+                    int count = d1.count();
+                    console.println("End of count to photoDD1: count -> " + count);
+                    console.println();
+
                     // GET IPHOTO DD1 data
                     console.println("Getting data from IPHOTOS DDUI: " + DDUI);
                     Object[] photos = d1.getData();
@@ -283,6 +289,12 @@ public class Client {
                     console.println("Applying filter to IPHOTO DD -> DD3");
                     DDObject d3 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(100_000));
                     console.println("End of Function to IPHOTO DD -> DD3.");
+                    console.println();
+
+                    // APPLY COUNT to DD3
+                    console.println("Applying count to DD3");
+                    count = d3.count();
+                    console.println("End of count to DD3: count -> " + count);
                     console.println();
 
                     // Get data from DD3
@@ -392,6 +404,99 @@ public class Client {
         t.start();
     }
 
+
+    // ------------------------------------------------------------
+    // reduce
+    public void workWithReduceOnPhotos() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String DDUI = "photoDD1";
+
+                    // OPEN IPHOTO DD1
+                    console.println("Opening IPHOTOS DDUI: " + DDUI);
+                    DDObject d1 = DDObject.openDDObject(DDUI);
+                    console.println("Opened: " + d1);
+                    console.println();
+
+                    // Get data from DD1
+                    console.println("Getting data from DD1");
+                    Object[] result1 = d1.getData();
+                    console.println("DD1 received:" + Arrays.toString(result1));
+                    console.println();
+
+                    // display thumbnails
+                    displayThumbnails(result1);
+
+                    // DD2 ===========================================================
+
+                    // APPLY FOREACH to photo INTERNAL dd
+                    console.println("Applying foreach to IPHOTO DD -> DD2");
+                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionIdentity_1());
+                    console.println("End of foreach to IPHOTO DD -> DD2");
+                    console.println();
+
+                    // APPLY REDUCE to DD2
+                    console.println("Applying reduce DD2");
+                    Object result2 = d2.reduce(new DDObjectReductionAdd_1());
+                    console.println("End of reduce DD2: result -> " + result2);
+                    console.println();
+
+                } catch (Exception e) {
+                    console.printException(e);
+                }
+            }
+        });
+        t.start();
+    }
+
+    public void PiReduceExample() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    // dummy elems, used to represent test points
+                    Byte[] data = new Byte[100_000];
+
+                    // CREATE DD1
+                    console.println("Creating DD1" );
+                    DDObject<Integer> d1 = new DDObject(data) ;
+                    console.println("Created DD1: " + d1);
+                    console.println();
+
+                    // DD2 ===========================================================
+
+                    // APPLY FOREACH to DD1
+                    console.println("Applying foreach to DD1 -> DD2");
+                    DDObject<Integer> d2 = d1.forEach( new DDObjectFunctionGenerateAndCheckPoint_1());
+                    console.println("End of foreach to DD1 -> DD2");
+                    console.println();
+
+                    // APPLY COUNT to DD2
+                    console.println("Applying count to DD2");
+                    int count = d2.count();
+                    console.println("End of count to DD2: count -> " + count);
+                    console.println();
+
+
+                    // APPLY REDUCE to DD2
+                    console.println("Applying reduce DD2");
+                    Integer result2 = d2.reduce(new DDObjectReductionAdd_1());
+                    console.println("End of reduce DD2: Pi is roughly " + 4.0 * result2 / count);
+                    console.println();
+
+                } catch (Exception e) {
+                    console.printException(e);
+                }
+            }
+        });
+        t.start();
+    }
+
     private void displayThumbnails(Object[] photos) {
         // TODO this code should run in swing EDT
 
@@ -444,61 +549,6 @@ public class Client {
     }
 
 
-    // ------------------------------------------------------------
-    // work with existing Internal Photos
-    // DEBUG verificar....
-    public void workWithImageTest() {
-//        System.out.println("Vou começar o teste");
-//        console.println("Vou começar o teste");
-//        PhotoWorker pw = new PhotoWorker("123456765r4e", "C:/PhD/code/Proto1/photos/kk1.jpg", null);
-//        PhotoWorker pw2 = new PhotoWorker("123456765r5e", "C:/PhD/code/Proto1/photos/kk2.jpg", null);
-//        System.out.println("Foto carregada");
-//        console.println("Foto carregada");
-//        JFrame jf = new JFrame();
-//
-//        JPanel jp = new JPanel();
-//        JScrollPane scrollPane = new JScrollPane(jp);
-//        jf.add(scrollPane);
-//
-//        try {
-//            // thumbnail
-//            ImageIcon t = new ImageIcon();
-//            t.setImage(pw.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-//            JLabel l1 = new JLabel(t);
-//            jp.add(l1);
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 2
-//            ImageIcon t2 = new ImageIcon(pw.getThumbnail());
-//            jp.add(new JLabel(t2));
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 3
-//            ImageIcon t3 = new ImageIcon();
-//            t3.setImage(pw2.getPhoto().getScaledInstance(100, 100, Image.SCALE_FAST));
-//            jp.add(new JLabel(t3));
-//            console.println("Thumbnail adicionado");
-//
-//            // thumbnail 4
-//            ImageIcon t4 = new ImageIcon(pw2.getThumbnail());
-//            jp.add(new JLabel(t4));
-//            console.println("Thumbnail adicionado");
-//
-//            // original image
-//            ImageIcon i = new ImageIcon();
-//            i.setImage(pw.getPhoto());
-//            jp.add(new JLabel(i));
-//            console.println("Imagem adicionada");
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("EXCEÇÃO: " + e.getMessage());
-//        }
-//        jf.setSize(400, 600);
-//        jf.setVisible(true);
-        console.println("ImageTest terminado...");
-    }
 
 
 
@@ -562,6 +612,18 @@ public class Client {
             } //
 
             // DDObject ==================================
+
+            else if (message instanceof MsgGetCountDDObjectReply) {
+                MsgGetCountDDObjectReply msg = (MsgGetCountDDObjectReply) message;
+                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
+                dd.fireMsgGetCountDDObjectReply(msg);
+            } //
+
+            else if (message instanceof MsgApplyReduceDDObjectReply ) {
+                MsgApplyReduceDDObjectReply msg = (MsgApplyReduceDDObjectReply ) message;
+                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
+                dd.fireMsgApplyReduceDDObjectReply(msg);
+            } //
 
             else if (message instanceof MsgApplyMergeDDObjectReply) {
                 MsgApplyMergeDDObjectReply msg = (MsgApplyMergeDDObjectReply) message;

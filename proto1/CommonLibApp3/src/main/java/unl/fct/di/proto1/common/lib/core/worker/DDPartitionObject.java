@@ -3,6 +3,7 @@ package unl.fct.di.proto1.common.lib.core.worker;
 
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
 
 import java.util.Arrays;
 
@@ -60,13 +61,13 @@ public class DDPartitionObject extends DDPartition {
             //workData[i] = mapper.apply(data[i]);
         }
 
-       return null;
+        return null;
     }
 
     public DDPartitionObject filter(Predicate<Object> filter, String newDDUI) {
         // create a new partition - partitions are read only
         Object[] workData = this.getData();
-        DDPartitionObject newDDPartition =  this.createNewPartition(newDDUI, this.getPartId(), workData.length);
+        DDPartitionObject newDDPartition = this.createNewPartition(newDDUI, this.getPartId(), workData.length);
 
         Object[] newDDData = newDDPartition.getData();
 
@@ -85,6 +86,15 @@ public class DDPartitionObject extends DDPartition {
 
     }
 
+    public Object doReduction(Reduction reduction) {
+        Object result = null;
+
+        for (Object elem : getData()) {
+            result = result == null ? elem : reduction.reduce(elem, result);
+        }
+        return result;
+    }
+
     public DDPartitionObject createNewPartition(String newDDUI, int partId, int length) {
         return new DDPartitionObject(newDDUI, partId, length);
     }
@@ -98,4 +108,5 @@ public class DDPartitionObject extends DDPartition {
     public void setData(Object[] data) {
         this.data = data;
     }
+
 }

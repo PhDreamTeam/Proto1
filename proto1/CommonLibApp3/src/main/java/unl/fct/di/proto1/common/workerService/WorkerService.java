@@ -277,6 +277,39 @@ public class WorkerService {
 
             // DDObject =====================================
 
+            else if (message instanceof MsgPartitionGetCountDDObject) {
+                MsgPartitionGetCountDDObject msg = (MsgPartitionGetCountDDObject) message;
+                DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
+
+                MsgPartitionGetCountDDObjectReply msgOut;
+                if (p != null) {
+                    msgOut = msg.getSuccessReplyMessage(p.getData().length);
+                } else {
+                    msgOut = msg.getFailureReplyMessage("partition not found");
+                }
+                // send reply and show it on screen
+                getSender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                ws.console.println("");
+            } //
+
+            else if (message instanceof MsgPartitionApplyReduceDDObject) {
+                MsgPartitionApplyReduceDDObject msg = (MsgPartitionApplyReduceDDObject) message;
+                DDPartitionObject ddPart = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
+
+                // apply reduction
+                Object result = ddPart.doReduction(msg.getReduction());
+                ws.console.println("Apply reduction result: " + result);
+
+                // send msg to master - create message
+                MsgPartitionApplyReduceDDObjectReply msgOut = new MsgPartitionApplyReduceDDObjectReply(
+                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), result, true, null);
+                // send reply
+                getSender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+                ws.console.println("");
+            } //
+
             else if (message instanceof MsgPartitionApplyMergeDDObject) {
                 MsgPartitionApplyMergeDDObject msg = (MsgPartitionApplyMergeDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getSrcDDUI(),
@@ -351,7 +384,7 @@ public class WorkerService {
                 MsgPartitionGetDataDDObjectReply msgOut;
                 if (p != null) {
                     msgOut = new MsgPartitionGetDataDDObjectReply(
-                            p.getDDUI(), msg.getRequestId(), p.getPartId(), p.getDataToClient(), true, null); // check DR getData() => getDataToClient()
+                            p.getDDUI(), msg.getRequestId(), p.getPartId(), p.getDataToClient(), true, null);
                 } else {
                     msgOut = msg.getFailureReplyMessage("partition not found");
                 }

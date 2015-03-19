@@ -7,9 +7,9 @@ import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
 import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.master.*;
-import unl.fct.di.proto1.common.lib.protocol.*;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
+import unl.fct.di.proto1.common.lib.protocol.*;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -363,8 +363,47 @@ public class MasterService {
 
             // DDObject  ========================================================
 
+            if (message instanceof MsgPartitionGetCountDDObjectReply) {
+                MsgPartitionGetCountDDObjectReply msg = (MsgPartitionGetCountDDObjectReply) message;
+                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                    // do it
+                    dd.fireMsgPartitionGetCountDDObjectReply(msg);
+                } else {
+                    // message received after timeout or request finished
+                    console.println("Received message not recognized by MessageTracker: " + msg);
+                }
+            } //
 
-            if (message instanceof MsgPartitionApplyMergeDDObjectReply) {
+            else if (message instanceof MsgGetCountDDObject) {
+                MsgGetCountDDObject msg = (MsgGetCountDDObject) message;
+                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+                // apply count
+                dd.doCount(clientActorNode, msg.getRequestId(), msg);
+            } //
+
+            else if (message instanceof MsgPartitionApplyReduceDDObjectReply) {
+                MsgPartitionApplyReduceDDObjectReply msg = (MsgPartitionApplyReduceDDObjectReply) message;
+                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                    // handle reply
+                    dd.fireMsgPartitionApplyReduceDDObjectReply(msg);
+                } else {
+                    // message received after timeout or request finished
+                    console.println("Received message not recognized by MessageTracker: " + msg);
+                }
+            } //
+
+            else if (message instanceof MsgApplyReduceDDObject) {
+                MsgApplyReduceDDObject msg = (MsgApplyReduceDDObject) message;
+                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+                // apply reduce
+                dd.doReduce(clientActorNode, msg.getRequestId(), msg);
+            } //
+
+            else if (message instanceof MsgPartitionApplyMergeDDObjectReply) {
                 MsgPartitionApplyMergeDDObjectReply msg = (MsgPartitionApplyMergeDDObjectReply) message;
                 DDObjectMaster newDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
                 if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {

@@ -110,6 +110,10 @@ public class MasterRequest implements Serializable {
         }
     }
 
+    public HashMap<Integer, MsgPartitionReply> getAnswers() {
+        return answers;
+    }
+
     private void deleteAllPendingMsgTrkRequests() {
         pendingRequests.clear();
     }

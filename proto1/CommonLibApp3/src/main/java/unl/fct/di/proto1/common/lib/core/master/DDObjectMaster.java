@@ -5,10 +5,12 @@ import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.Msg;
+import unl.fct.di.proto1.common.lib.protocol.MsgPartitionReply;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 // TODO FILTER: CHECK THIS: each worker will have a partition that can have a smaller size (maybe empty), adjust it at reply (is this correct or what?)
@@ -274,6 +276,50 @@ public class DDObjectMaster extends DDMaster {
         return newDD;
     }
 
+    /**
+     *
+     */
+    public void doReduce(ActorNode requesterActorNode, String requestId, MsgApplyReduceDDObject msgRequest) {
+        // create new MasterRequest an put in in container of requests
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        // create and activate timeout
+        req.createTimeout();
+
+        // send apply function to all partitions (their workers)
+        for (DDPartitionDescriptor partition : partitionsDescriptors) {
+            // build message
+            MsgPartitionApplyReduceDDObject msgOut = new MsgPartitionApplyReduceDDObject(this.DDUI, requestId,
+                    partition.getPartitionId(), msgRequest.getReduction());
+
+            // build request tracker and send message to worker if possible
+            GlManager.getCommunicationHelper().tell(partition.getWorkerNode(), msgOut,
+                    GlManager.getMasterActor(), req);
+
+            GlManager.getConsole().println("Sent: " + msgOut);
+        }
+    }
+
+    public void doCount(ActorNode requesterActorNode, String requestId, MsgGetCountDDObject msgRequest) {
+        // create new MasterRequest an put in in container of requests
+        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        // create and activate timeout
+        req.createTimeout();
+
+        for (DDPartitionDescriptor partition : partitionsDescriptors) {
+            // build message
+            MsgPartitionGetCountDDObject msgOut = new MsgPartitionGetCountDDObject(getDDUI(), requestId,
+                    partition.getPartitionId());
+
+            // build request tracker and send message to worker if possible
+            GlManager.getCommunicationHelper().tell(partition.getWorkerNode(), msgOut,
+                    GlManager.getMasterActor(), req);
+            //partition.getWorkerNode().getActorRef().tell(msg, GlManager.getMasterActor());
+            GlManager.getConsole().println("Sent: " + msgOut);
+        }
+
+
+    }
+
     private void addPartitionDescriptorsFromDdToMergeToNewDD(String ddToMergeDDUI, DDObjectMaster newDD) {
         DDObjectMaster ddToMerge = (DDObjectMaster)GlManager.getDDManager().getDD(ddToMergeDDUI);
 
@@ -459,7 +505,71 @@ public class DDObjectMaster extends DDMaster {
 
             GlManager.getConsole().println();
         }
-
     }
+
+    public void fireMsgPartitionApplyReduceDDObjectReply(MsgPartitionApplyReduceDDObjectReply msg) {
+        // get request and add msg to it
+        MasterRequest req = requests.get(msg.getRequestId());
+        req.addAnswer(msg);
+
+        // checking if request is finished
+        if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
+            if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
+
+                // success - calculate reduce results from all partitions result
+                Object result = calculateReduceResults(req);
+
+                // send result to client requester
+                Msg msgOut = ((MsgApplyReduceDDObject)req.getMsgRequest()).getSuccessReplyMessage(result);
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+            } else {
+                // failure - send failure to client requester
+                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+            }
+            GlManager.getConsole().println();
+        }
+    }
+
+    public void fireMsgPartitionGetCountDDObjectReply(MsgPartitionGetCountDDObjectReply msg) {
+        // get request and add msg to it
+        MasterRequest req = requests.get(msg.getRequestId());
+        req.addAnswer(msg);
+
+        // checking if request is finished
+        if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
+            if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
+
+                //count
+                int count = 0;
+                for (int partIdx : req.getAnswers().keySet()) {
+                    count += ((MsgPartitionGetCountDDObjectReply) (req.getAnswers().get(partIdx))).getCount();
+                }
+
+                // send result to client requester
+                Msg msgOut = ((MsgGetCountDDObject)req.getMsgRequest()).getSuccessReplyMessage(count);
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+            } else {
+                // failure - send failure to client requester
+                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+            }
+            GlManager.getConsole().println();
+        }
+    }
+
+    private Object calculateReduceResults(MasterRequest req) {
+        Object result = null;
+        HashMap<Integer, MsgPartitionReply> replies = req.getAnswers();
+        for ( int partIdx :replies.keySet()) {
+            Object partResult = ((MsgPartitionApplyReduceDDObjectReply) (replies.get(partIdx))).getResult();
+            if (result == null)
+                result = partResult;
+            else
+                result = ((MsgApplyReduceDDObject)(req.getMsgRequest())).getReduction().reduce(partResult, result);
+        }
+        return result;
+    }
+
 }
 

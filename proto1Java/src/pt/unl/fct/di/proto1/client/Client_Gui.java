@@ -77,8 +77,9 @@ public class Client_Gui extends JFrame implements IClientGui {
         JButton openDDObjectButton = new JButton("Open DDObject");
         JButton photosButton = new JButton("INTERNAL PHOTOS");
         JButton printlnButton = new JButton("Println");
-        JButton imageTestButton = new JButton("Image Test");
         JButton mergeTestButton = new JButton("Merge Test");
+        JButton reduceTestButton = new JButton("Reduce Test");
+        JButton piReduceTestButton = new JButton("Pi Reduce Test");
 
         JPanel panelControl = new JPanel();
         panelControl.setBorder(BorderFactory.createTitledBorder("Control"));
@@ -87,8 +88,9 @@ public class Client_Gui extends JFrame implements IClientGui {
         panelControl.add(openDDObjectButton);
         panelControl.add(photosButton);
         panelControl.add(mergeTestButton);
+        panelControl.add(reduceTestButton);
+        panelControl.add(piReduceTestButton);
         panelControl.add(printlnButton);
-        panelControl.add(imageTestButton);
         textFieldUUID = new JTextField(30);
         panelControl.add(textFieldUUID);
         panelViewer.add(panelControl);
@@ -143,13 +145,6 @@ public class Client_Gui extends JFrame implements IClientGui {
             }
         });
 
-        imageTestButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                client.workWithImageTest();
-            }
-        });
-
         mergeTestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,6 +152,19 @@ public class Client_Gui extends JFrame implements IClientGui {
             }
         });
 
+        reduceTestButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.workWithReduceOnPhotos();
+            }
+        });
+
+        piReduceTestButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.PiReduceExample();
+            }
+        });
 
         // show frame
         setVisible(true);

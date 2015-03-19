@@ -5,10 +5,12 @@
 
 TODO NEXT ACTION ===========================================
 
+TODO 3 Reduce operation, reduce to a single value (OK), reduce to several values (???)
+
 TODO 3 suporte a múltiplos masters
 TODO 2 suporte a pedidos incompletos/parciais
 
-
+TODO 2 Reduce não permite várias operações simultaneas, porque se bloqueia no this do DD - bloquear em MSG, adicionar uma hash das Msg enviadas <RequestId, Msg>
 
 TODO ? Suporte à percepção de topologia e melhoramento das funcionalidades face à sua exploração
 

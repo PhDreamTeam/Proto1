@@ -4,11 +4,12 @@ import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
 
 import java.util.UUID;
 
 
-public class DDObject extends DD {
+public class DDObject<T> extends DD {
 
     // space to be used only with getData
     Object[] data = null;
@@ -240,11 +241,75 @@ public class DDObject extends DD {
         return newDD;
     }
 
+    public T reduce(Reduction<T> reduceFunction) {
+
+        // send msg to master
+        String requestId = UUID.randomUUID().toString();
+        MsgApplyReduceDDObject<T> msg = new MsgApplyReduceDDObject<>(DDUI, requestId, reduceFunction);
+        sentMsgsHashMap.put(requestId, msg);
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
+
+        // show it in screen
+        ClientManager.getConsole().println("Sent: " + msg);
+
+        // wait for operation conclusion in new DDObject - to enable more operations in old DD
+        try {
+            synchronized (msg) {
+                msg.wait();
+            }
+        } catch (InterruptedException e) {
+            ClientManager.getConsole().printException(e);
+        }
+
+        MsgApplyReduceDDObjectReply<T> replyMsg = (MsgApplyReduceDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        // TODO cleanup old messages
+        // get result from new DDInt
+        if (!replyMsg.isSuccess()) {
+            throw new RuntimeException("Error applying Reduce: " + replyMsg.getFailureReason());
+        }
+        return replyMsg.getResult();
+    }
+
+    /*
+     *
+     */
+    public int count() {
+        // send MsgGetCount to master
+        String requestId = UUID.randomUUID().toString();
+        MsgGetCountDDObject msg = new MsgGetCountDDObject(DDUI, requestId);
+        sentMsgsHashMap.put(requestId, msg);
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
+
+        // show it in screen
+        ClientManager.getConsole().println("Sent: " + msg);
+
+        // wait for operation conclusion in new DDObject - to enable more operations in old DD
+        try {
+            synchronized (msg) {
+                msg.wait();
+            }
+        } catch (InterruptedException e) {
+            ClientManager.getConsole().printException(e);
+        }
+
+        MsgGetCountDDObjectReply replyMsg = (MsgGetCountDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        // TODO cleanup old messages
+        if (!replyMsg.isSuccess()) {
+            throw new RuntimeException("Error applying Count: " + replyMsg.getFailureReason());
+        }
+        return replyMsg.getCount();
+    }
+
+
 
     @Override
     public String toString() {
         return "DDObject " + super.toString();
     }
+
+
+    // ===============================================================
+    // fire functions
 
     public void fireMsgCreateDDObjectReply(MsgCreateDDObjectReply msg) {
         if (msg.isSuccess()) {
@@ -354,6 +419,27 @@ public class DDObject extends DD {
         // wake up client thread that asked to create DDInt
         synchronized (this) {
             this.notify();
+        }
+    }
+
+    public void fireMsgApplyReduceDDObjectReply(MsgApplyReduceDDObjectReply<T> msgReply) {
+        receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);
+        MsgApplyReduceDDObject<T> origSentMsg = (MsgApplyReduceDDObject) sentMsgsHashMap.get(msgReply.getRequestId());
+
+        // wake up client thread that asked to create DDInt
+        synchronized (origSentMsg) {
+            origSentMsg.notify();
+        }
+    }
+
+
+    public void fireMsgGetCountDDObjectReply(MsgGetCountDDObjectReply msgReply) {
+        receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);
+        MsgGetCountDDObject origSentMsg = (MsgGetCountDDObject ) sentMsgsHashMap.get(msgReply.getRequestId());
+
+        // wake up client thread that asked to get Count
+        synchronized (origSentMsg) {
+            origSentMsg.notify();
         }
     }
 }
