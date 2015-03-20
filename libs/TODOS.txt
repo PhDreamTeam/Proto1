@@ -5,20 +5,27 @@
 
 TODO NEXT ACTION ===========================================
 
-TODO 3 Reduce operation, reduce to a single value (OK), reduce to several values (???)
+/*
+ * TODO 3 suporte a múltiplos masters
+ * TODO ? Suporte à percepção de topologia e melhoramento das funcionalidades face à sua exploração
+ * - considerar apenas masters e comunicação entre eles (como primeira abstracção)
+ * - Partições com uuid e não com partId sequencial: o data set não tem ordem
+ * - os DDs terem a mensagem que resultou na sua criação - para recuperação em caso de falha (em vez do parent)
+ * - registar workers em round robin nos masters e o mesmo para os clientes
+ * - criar uma tabela de configuração de routing de comunicação entre masters, para testes, simula topologia da rede
+ */
 
-TODO 3 suporte a múltiplos masters
+
+TODO 3.1 generics on ....
+
 TODO 2 suporte a pedidos incompletos/parciais
 
-TODO 2 Reduce não permite várias operações simultaneas, porque se bloqueia no this do DD - bloquear em MSG, adicionar uma hash das Msg enviadas <RequestId, Msg>
-
-TODO ? Suporte à percepção de topologia e melhoramento das funcionalidades face à sua exploração
+TODO 2 cli usar nas operações do cliente o sistema de guardar as mensagens de envio e recepção e sincronismo na msg - sistematizar o código
 
 TODO 2.5 colocar o Android operacional face às alterações feitas
 
 TODO 2 TD2: Identificar a API dos serviços de comunicação que devemos utilizar
 TODO 2 TD2: camada de comunicação no actor para disponibilizar sends transparentes à localização - redefinir o UntypedActor
-
 
 
 TODO 1 TD1: gestão dos serviços - registo dos serviços no master (not done);
@@ -43,6 +50,8 @@ TODO 1 TD1: Válido para serviços e DDinternals
 
 // DONE ===========================================================
 
+// DONE Count operation
+// DONE Reduce operation, reduce to a single value
 // DONE Operação de Merge de dois DD
 // DONE DDPhoto support
 // DONE ms Substitute worker tells por CommunicationHelper.tell

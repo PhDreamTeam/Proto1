@@ -15,10 +15,7 @@ import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFunctionDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgCreateDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgGetDataDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
-import unl.fct.di.proto1.common.lib.protocol.MsgGetMaster;
-import unl.fct.di.proto1.common.lib.protocol.MsgGetMasterReply;
-import unl.fct.di.proto1.common.lib.protocol.MsgRegister;
-import unl.fct.di.proto1.common.lib.protocol.MsgRegisterReply;
+import unl.fct.di.proto1.common.lib.protocol.*;
 import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoReply;
 import unl.fct.di.proto1.common.remoteActions.*;
 
@@ -268,10 +265,10 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                  //  displayThumbnails(photos);
+                    //  displayThumbnails(photos);
 
                     // display photos
-                  //  displayPhotos(photos);
+                    //  displayPhotos(photos);
 
                     // APPLY FUNCTION to photo dd
                     console.println("Applying Function to IPHOTO DD -> DD2");
@@ -463,8 +460,8 @@ public class Client {
                     Byte[] data = new Byte[100_000];
 
                     // CREATE DD1
-                    console.println("Creating DD1" );
-                    DDObject<Integer> d1 = new DDObject(data) ;
+                    console.println("Creating DD1");
+                    DDObject<Integer> d1 = new DDObject(data);
                     console.println("Created DD1: " + d1);
                     console.println();
 
@@ -472,7 +469,7 @@ public class Client {
 
                     // APPLY FOREACH to DD1
                     console.println("Applying foreach to DD1 -> DD2");
-                    DDObject<Integer> d2 = d1.forEach( new DDObjectFunctionGenerateAndCheckPoint_1());
+                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionGenerateAndCheckPoint_1());
                     console.println("End of foreach to DD1 -> DD2");
                     console.println();
 
@@ -508,7 +505,7 @@ public class Client {
         jf.add(scrollPane);
 
         for (int i = 0; i < photos.length; i++) {
-            ImageIcon t = new ImageIcon(((Photo)photos[i]).getThumbnail());
+            ImageIcon t = new ImageIcon(((Photo) photos[i]).getThumbnail());
             jp.add(new JLabel(t));
         }
         jf.setSize(300, 400);
@@ -516,7 +513,6 @@ public class Client {
 
         jf.setVisible(true);
     }
-
 
 
     private void displayPhotos(Object[] photos) {
@@ -532,14 +528,14 @@ public class Client {
 
 
         for (int i = 0; i < photos.length; i++) {
-            Photo p = ((Photo)photos[i]);
+            Photo p = ((Photo) photos[i]);
             console.println("Loading photo: " + p.getPhotoUuid());
             ImageIcon t = null;
             try {
                 t = new ImageIcon(p.getPhoto());
                 jp.add(new JLabel(t));
             } catch (Exception e) {
-               console.println("Error loading photo " + p.getPhotoUuid());
+                console.println("Error loading photo " + p.getPhotoUuid());
             }
         }
         jf.pack();
@@ -547,9 +543,6 @@ public class Client {
 
         jf.setVisible(true);
     }
-
-
-
 
 
     // ------------------------------------------------------------
@@ -613,35 +606,19 @@ public class Client {
 
             // DDObject ==================================
 
-            else if (message instanceof MsgGetCountDDObjectReply) {
-                MsgGetCountDDObjectReply msg = (MsgGetCountDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
-                dd.fireMsgGetCountDDObjectReply(msg);
-            } //
-
-            else if (message instanceof MsgApplyReduceDDObjectReply ) {
-                MsgApplyReduceDDObjectReply msg = (MsgApplyReduceDDObjectReply ) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
-                dd.fireMsgApplyReduceDDObjectReply(msg);
-            } //
-
-            else if (message instanceof MsgApplyMergeDDObjectReply) {
-                MsgApplyMergeDDObjectReply msg = (MsgApplyMergeDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getNewDDUI());
-                dd.fireMsgApplyMergeDDObjectReply(msg);
-            } //
-
-
             else if (message instanceof MsgOpenDDObjectReply) {
                 MsgOpenDDObjectReply msg = (MsgOpenDDObjectReply) message;
                 DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
                 dd.fireMsgOpenDDObjectReply(msg);
             } //
 
-            else if (message instanceof MsgApplyFilterDDObjectReply) {
-                MsgApplyFilterDDObjectReply msg = (MsgApplyFilterDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getNewDDUI());
-                dd.fireMsgApplyFilterDDObjectReply(msg);
+            else if (message instanceof MsgApplyFilterDDObjectReply ||
+                    message instanceof MsgApplyMergeDDObjectReply ||
+                    message instanceof MsgGetCountDDObjectReply ||
+                    message instanceof MsgApplyReduceDDObjectReply) {
+                MsgReply msg = (MsgReply) message;
+                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
+                dd.fireMsgReply(msg);
             } //
 
             else if (message instanceof MsgApplyFunctionDDObjectReply) {

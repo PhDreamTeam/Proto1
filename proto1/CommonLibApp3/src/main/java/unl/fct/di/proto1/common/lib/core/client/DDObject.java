@@ -2,6 +2,8 @@ package unl.fct.di.proto1.common.lib.core.client;
 
 import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
+import unl.fct.di.proto1.common.lib.protocol.Msg;
+import unl.fct.di.proto1.common.lib.protocol.MsgReply;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
@@ -168,35 +170,42 @@ public class DDObject<T> extends DD {
     }
 
 
-    /**
-     *
-     */
-    public DDObject merge(DDObject ddToMerge) {
-        // create new DDInt to store the results
-        DDObject newDD = new DDObject(this);
 
-        // send msg to master
+    public DDObject merge(DDObject ddToMerge) {
+        // create new DDInt to store the results, create RequestId
+        DDObject newDD = new DDObject(this);
         String requestId = UUID.randomUUID().toString();
+
+        // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
         MsgApplyMergeDDObject msg = new MsgApplyMergeDDObject(DDUI, requestId, ddToMerge.getDDUI(),
                 newDD.getDDUI());
+        sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-
-        // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
 
-        // wait for operation conclusion in new DDInt
+        // wait for operation conclusion in original msg
         try {
-            synchronized (newDD) {
-                newDD.wait();
+            synchronized (msg) {
+                msg.wait();
             }
         } catch (InterruptedException e) {
             ClientManager.getConsole().printException(e);
         }
 
-        // get result from new DDInt
-        if (newDD.getLastOperationError() != null) {
-            throw new RuntimeException(newDD.getLastOperationError());
+        // process reply and return result
+        MsgApplyMergeDDObjectReply replyMsg = (MsgApplyMergeDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        if (!replyMsg.isSuccess()) {
+            // remove newDD - and throw exception
+            ClientManager.removeDD(msg.getNewDDUI());
+            throw new RuntimeException("Error applying Merge: " + replyMsg.getFailureReason());
+        } else {
+            // save number of elems
+            newDD.nDataElems = replyMsg.getnDataElemsDD();
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
 
         return newDD;
     }
@@ -212,32 +221,41 @@ public class DDObject<T> extends DD {
 
     // Filter objects that match a Predicate object
     public DDObject filter(Predicate<Object> predicate) {
-        // create new DDInt to store the results
+        // create new DDInt to store the results, create RequestId
         DDObject newDD = new DDObject(this);
-
-
-        // send msg to master
         String requestId = UUID.randomUUID().toString();
+
+        // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
         MsgApplyFilterDDObject msg = new MsgApplyFilterDDObject(DDUI, requestId, newDD.getDDUI(),
                 predicate);
+        sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-
-        // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
 
-        // wait for operation conclusion in new DDInt - to enable more operations in old DD
+        // wait for operation conclusion in original msg
         try {
-            synchronized (newDD) {
-                newDD.wait();
+            synchronized (msg) {
+                msg.wait();
             }
         } catch (InterruptedException e) {
             ClientManager.getConsole().printException(e);
         }
 
-        // get result from new DDInt
-        if (newDD.getLastOperationError() != null) {
-            throw new RuntimeException(newDD.getLastOperationError());
+        // process reply and return result
+        MsgApplyFilterDDObjectReply replyMsg = (MsgApplyFilterDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        if (!replyMsg.isSuccess()) {
+            // remove newDD - and throw exception
+            ClientManager.removeDD(msg.getNewDDUI());
+            throw new RuntimeException("Error applying Filter: " + replyMsg.getFailureReason());
+        } else {
+            // save number of elems
+            newDD.nDataElems = replyMsg.getnDataElemsDD();
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
+
         return newDD;
     }
 
@@ -262,17 +280,19 @@ public class DDObject<T> extends DD {
         }
 
         MsgApplyReduceDDObjectReply<T> replyMsg = (MsgApplyReduceDDObjectReply) (receivedMsgsHashMap.get(requestId));
-        // TODO cleanup old messages
+
         // get result from new DDInt
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error applying Reduce: " + replyMsg.getFailureReason());
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
+
         return replyMsg.getResult();
     }
 
-    /*
-     *
-     */
     public int count() {
         // send MsgGetCount to master
         String requestId = UUID.randomUUID().toString();
@@ -293,10 +313,14 @@ public class DDObject<T> extends DD {
         }
 
         MsgGetCountDDObjectReply replyMsg = (MsgGetCountDDObjectReply) (receivedMsgsHashMap.get(requestId));
-        // TODO cleanup old messages
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error applying Count: " + replyMsg.getFailureReason());
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
+
         return replyMsg.getCount();
     }
 
@@ -308,8 +332,7 @@ public class DDObject<T> extends DD {
     }
 
 
-    // ===============================================================
-    // fire functions
+    // Fire functions ===============================================================
 
     public void fireMsgCreateDDObjectReply(MsgCreateDDObjectReply msg) {
         if (msg.isSuccess()) {
@@ -351,7 +374,6 @@ public class DDObject<T> extends DD {
         }
     }
 
-
     public void fireMsgGetDataDDObjectReply(MsgGetDataDDObjectReply msg) {
         if (msg.isSuccess()) {
             // get data reference
@@ -384,58 +406,10 @@ public class DDObject<T> extends DD {
         }
     }
 
-    public void fireMsgApplyFilterDDObjectReply(MsgApplyFilterDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // success: nothing to do
-            lastOperationError = null;
 
-            // save number of elems
-            nDataElems = msg.getnDataElemsDD();
-
-        } else {
-            // failure:
-            lastOperationError = "Error applying filter: " + msg.getFailureReason();
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
-    public void fireMsgApplyMergeDDObjectReply(MsgApplyMergeDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // success: nothing to do
-            lastOperationError = null;
-
-            // save number of elems
-            nDataElems = msg.getnDataElemsDD();
-
-        } else {
-            // failure:
-            lastOperationError = "Error applying merge: " + msg.getFailureReason();
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
-    public void fireMsgApplyReduceDDObjectReply(MsgApplyReduceDDObjectReply<T> msgReply) {
+    public void fireMsgReply(MsgReply msgReply) {
         receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);
-        MsgApplyReduceDDObject<T> origSentMsg = (MsgApplyReduceDDObject) sentMsgsHashMap.get(msgReply.getRequestId());
-
-        // wake up client thread that asked to create DDInt
-        synchronized (origSentMsg) {
-            origSentMsg.notify();
-        }
-    }
-
-
-    public void fireMsgGetCountDDObjectReply(MsgGetCountDDObjectReply msgReply) {
-        receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);
-        MsgGetCountDDObject origSentMsg = (MsgGetCountDDObject ) sentMsgsHashMap.get(msgReply.getRequestId());
+        Msg origSentMsg = sentMsgsHashMap.get(msgReply.getRequestId());
 
         // wake up client thread that asked to get Count
         synchronized (origSentMsg) {
