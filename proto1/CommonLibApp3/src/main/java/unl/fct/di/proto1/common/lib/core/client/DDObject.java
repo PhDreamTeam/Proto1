@@ -13,36 +13,88 @@ import java.util.UUID;
 
 public class DDObject<T> extends DD {
 
-    // space to be used only with getData
-    Object[] data = null;
-
     // create a new DD based on an array
     public DDObject(Object[] data) {
-        // create super DD with a new UUDI and with no parent and number of elems
+        // create super DD with a new UUDI and with no parent and number of elems, save DD
         super(null, data.length);
-
-        // save this DD in the Manager
+        String requestId = UUID.randomUUID().toString();
         ClientManager.putDD(this);
 
-        // send msg to create DD in master
-        String requestId = UUID.randomUUID().toString();
+        // create Create DD Msg, keep it in sentMsgsHashMap, send it to master and show it on screen
         MsgCreateDDObject msg = new MsgCreateDDObject(DDUI, requestId, data);
+        sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-        // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
 
         // wait for completion of create DD
         try {
-            synchronized (this) {
-                this.wait();
+            synchronized (msg) {
+                msg.wait();
             }
         } catch (InterruptedException e) {
             ClientManager.getConsole().printException(e);
         }
 
-        if (lastOperationError != null) {
-            throw new RuntimeException(lastOperationError);
+        // process reply and return result
+        MsgReply replyMsg = receivedMsgsHashMap.get(requestId);
+        if (!replyMsg.isSuccess()) {
+            // remove this DD - and throw exception
+            ClientManager.removeDD(this.getDDUI());
+            throw new RuntimeException("Error Creating DD: " + replyMsg.getFailureReason());
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
+    }
+
+    /**
+     * To open a connection to a DD already existent in master
+     */
+    private DDObject(String DDUI) {
+        // create new DDObject to store the results, create RequestId
+        super(DDUI);
+        String requestId = UUID.randomUUID().toString();
+        ClientManager.putDD(this);
+
+        // create Open msg, keep it in sentMsgsHashMap, send it to master and show it on screen
+        MsgOpenDDObject msg = new MsgOpenDDObject(DDUI, requestId);
+        sentMsgsHashMap.put(requestId, msg);
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
+        ClientManager.getConsole().println("Sent: " + msg);
+
+        // wait for completion of create DD on sent msg
+        try {
+            synchronized (msg) {
+                msg.wait();
+            }
+        } catch (InterruptedException e) {
+            ClientManager.getConsole().printException(e);
+        }
+
+        // process reply and return result
+        MsgOpenDDObjectReply replyMsg = (MsgOpenDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        if (!replyMsg.isSuccess()) {
+            // remove this DD - and throw exception
+            ClientManager.removeDD(this.getDDUI());
+            throw new RuntimeException("Error Opening DD: " + replyMsg.getFailureReason());
+        } else {
+            // save number of elems
+            nDataElems = replyMsg.getnDataElemsDD();
+        }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
+    }
+
+    // Must be private - client should not call this constructor
+    private DDObject(DDObject parentDD) {
+        // create super DD with a new UUDI and with the parent and number of elems
+        super(parentDD, parentDD.getNDataElems());
+
+        // save this DDInt in the Manager
+        ClientManager.putDD(this);
     }
 
     // create a DD access object from the DDUI of a DD already in system
@@ -62,73 +114,45 @@ public class DDObject<T> extends DD {
         }
     }
 
-    /**
-     * To open a connection to a DD already existent in master
-     */
-    private DDObject(String DDUI) {
-        super(DDUI);
-
-        // save this DD in the Manager
-        ClientManager.putDD(this);
-
-        // send msg to open DD in master
-        String requestId = UUID.randomUUID().toString();
-        MsgOpenDDObject msg = new MsgOpenDDObject(DDUI, requestId);
-        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-        // show it in screen
-        ClientManager.getConsole().println("Sent: " + msg);
-
-        // wait for completion of create DD
-        try {
-            synchronized (this) {
-                this.wait();
-            }
-        } catch (InterruptedException e) {
-            ClientManager.getConsole().printException(e);
-        }
-
-        if (lastOperationError != null) {
-            throw new RuntimeException(lastOperationError);
-        }
-    }
-
-    // Must be private - client should not call this constructor
-    private DDObject(DDObject parentDD) {
-        // create super DD with a new UUDI and with the parent and number of elems
-        super(parentDD, parentDD.getNDataElems());
-
-        // save this DDInt in the Manager
-        ClientManager.putDD(this);
-    }
-
-
+    // get Data from the remote workers (client<->master<->worker)
     public Object[] getData() {
-        // send MsgGetData to master
+        // create new DDObject to store the results, create RequestId
         String requestId = UUID.randomUUID().toString();
-        MsgGetDataDDObject msg = new MsgGetDataDDObject(DDUI, requestId);
-        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
 
-        // show it in screen
+        // create getData msg, keep it in sentMsgsHashMap, send it to master and show it on screen
+        MsgGetDataDDObject msg = new MsgGetDataDDObject(DDUI, requestId);
+        sentMsgsHashMap.put(requestId, msg);
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
 
-        // wait for data of DDInt
+        // wait for data of DDObject
         try {
-            synchronized (this) {
-                this.wait();
+            synchronized (msg) {
+                msg.wait();
             }
         } catch (InterruptedException e) {
             ClientManager.getConsole().printException(e);
         }
 
-        if (lastOperationError != null) {
-            throw new RuntimeException(lastOperationError);
+        // process reply and return result
+        Object[] data = null;
+        MsgGetDataDDObjectReply replyMsg = (MsgGetDataDDObjectReply ) (receivedMsgsHashMap.get(requestId));
+        if (!replyMsg.isSuccess()) {
+            throw new RuntimeException("Error Getting Data: " + replyMsg.getFailureReason());
+        } else {
+            data = replyMsg.getData();
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
 
         return data;
     }
 
-
+    /**************************************/
     // aggregate operations
+    /**************************************/
 
     /**
      * Perform an action as specified by a Consumer object
@@ -140,36 +164,39 @@ public class DDObject<T> extends DD {
      * @return the new DD
      */
     public DDObject forEach(Function<Object, Object> action) {
-        // create new DDInt to store the results
+        // create new DDObject to store the results, create RequestId
         DDObject newDD = new DDObject(this);
-
-
-        // send msg to master
         String requestId = UUID.randomUUID().toString();
-        MsgApplyFunctionDDObject msg = new MsgApplyFunctionDDObject(DDUI, requestId, newDD.getDDUI(), action);
-        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
 
-        // show it in screen
+        // create forEach msg, keep it in sentMsgsHashMap, send it to master and show it on screen
+        MsgApplyFunctionDDObject msg = new MsgApplyFunctionDDObject(DDUI, requestId, newDD.getDDUI(), action);
+        sentMsgsHashMap.put(requestId, msg);
+        ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
 
-        // wait for operation conclusion in new DDInt
+        // wait for operation conclusion in the sent Msg
         try {
-            synchronized (newDD) {
-                newDD.wait();
+            synchronized (msg) {
+                msg.wait();
             }
         } catch (InterruptedException e) {
             ClientManager.getConsole().printException(e);
         }
 
-        // get result from new DDInt
-        if (newDD.getLastOperationError() != null) {
-            throw new RuntimeException(newDD.getLastOperationError());
+        // get result from new DDObject
+        MsgReply replyMsg = receivedMsgsHashMap.get(requestId);
+        if (!replyMsg.isSuccess()) {
+            // remove newDD - and throw exception
+            ClientManager.removeDD(msg.getNewDDUI());
+            throw new RuntimeException("Error applying Function: " + replyMsg.getFailureReason());
         }
+
+        // clean up original and reply messages
+        sentMsgsHashMap.remove(msg.getRequestId());
+        receivedMsgsHashMap.remove(replyMsg.getRequestId());
 
         return newDD;
     }
-
-
 
     public DDObject merge(DDObject ddToMerge) {
         // create new DDInt to store the results, create RequestId
@@ -221,7 +248,7 @@ public class DDObject<T> extends DD {
 
     // Filter objects that match a Predicate object
     public DDObject filter(Predicate<Object> predicate) {
-        // create new DDInt to store the results, create RequestId
+        // create new DDObject to store the results, create RequestId
         DDObject newDD = new DDObject(this);
         String requestId = UUID.randomUUID().toString();
 
@@ -324,88 +351,14 @@ public class DDObject<T> extends DD {
         return replyMsg.getCount();
     }
 
-
-
     @Override
     public String toString() {
         return "DDObject " + super.toString();
     }
 
-
-    // Fire functions ===============================================================
-
-    public void fireMsgCreateDDObjectReply(MsgCreateDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // success: nothing to do
-            lastOperationError = null;
-        } else {
-            // failure:
-            lastOperationError = "Error creating DDObject: " + msg.getFailureReason();
-
-            // remove previously created DD - this DD does not exist in Master
-            ClientManager.removeDD(msg.getDDUI());
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
-    public void fireMsgOpenDDObjectReply(MsgOpenDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // success: nothing to do
-            lastOperationError = null;
-
-            // save number of elems
-            nDataElems = msg.getnDataElemsDD();
-
-        } else {
-            // failure:
-            lastOperationError = "Error opening DDObject: " + DDUI + ", DDUI not recognized!: " + msg.getFailureReason();
-
-            // remove previously created DD - this DD does not exist in Master
-            ClientManager.removeDD(msg.getDDUI());
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
-    public void fireMsgGetDataDDObjectReply(MsgGetDataDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // get data reference
-            data = msg.getData();
-            lastOperationError = null;
-        } else {
-            // no data
-            data = null;
-            lastOperationError = "Error in get data: " + msg.getFailureReason();
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
-    public void fireMsgApplyFunctionDDObjectReply(MsgApplyFunctionDDObjectReply msg) {
-        if (msg.isSuccess()) {
-            // success: nothing to do
-            lastOperationError = null;
-        } else {
-            // failure:
-            lastOperationError = "Error applying function: " + msg.getFailureReason();
-        }
-
-        // wake up client thread that asked to create DDInt
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
+    /**************************************/
+    // Fire functions =====================
+    /**************************************/
 
     public void fireMsgReply(MsgReply msgReply) {
         receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);

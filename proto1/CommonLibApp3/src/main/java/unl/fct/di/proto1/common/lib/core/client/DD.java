@@ -1,6 +1,7 @@
 package unl.fct.di.proto1.common.lib.core.client;
 
 import unl.fct.di.proto1.common.lib.protocol.Msg;
+import unl.fct.di.proto1.common.lib.protocol.MsgReply;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public abstract class DD {
 
     //hashmaps to handle sent and received msgs (e.g. allow access to the result of multiple reduce operations)
     HashMap<String, Msg> sentMsgsHashMap = new HashMap<>();
-    HashMap<String, Msg> receivedMsgsHashMap = new HashMap<>();
+    HashMap<String, MsgReply> receivedMsgsHashMap = new HashMap<>();
 
     public DD(DD parentDD, int nDataElems) {
         DDUI = UUID.randomUUID().toString();

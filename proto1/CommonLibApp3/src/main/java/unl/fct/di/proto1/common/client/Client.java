@@ -606,39 +606,18 @@ public class Client {
 
             // DDObject ==================================
 
-            else if (message instanceof MsgOpenDDObjectReply) {
-                MsgOpenDDObjectReply msg = (MsgOpenDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
-                dd.fireMsgOpenDDObjectReply(msg);
-            } //
-
             else if (message instanceof MsgApplyFilterDDObjectReply ||
                     message instanceof MsgApplyMergeDDObjectReply ||
                     message instanceof MsgGetCountDDObjectReply ||
-                    message instanceof MsgApplyReduceDDObjectReply) {
+                    message instanceof MsgApplyReduceDDObjectReply ||
+                    message instanceof MsgApplyFunctionDDObjectReply ||
+                    message instanceof MsgGetDataDDObjectReply ||
+                    message instanceof MsgOpenDDObjectReply ||
+                    message instanceof MsgCreateDDObjectReply) {
                 MsgReply msg = (MsgReply) message;
                 DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
                 dd.fireMsgReply(msg);
             } //
-
-            else if (message instanceof MsgApplyFunctionDDObjectReply) {
-                MsgApplyFunctionDDObjectReply msg = (MsgApplyFunctionDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getNewDDUI());
-                dd.fireMsgApplyFunctionDDObjectReply(msg);
-            } //
-
-            else if (message instanceof MsgGetDataDDObjectReply) {
-                MsgGetDataDDObjectReply msg = (MsgGetDataDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
-                dd.fireMsgGetDataDDObjectReply(msg);
-            } //
-
-            else if (message instanceof MsgCreateDDObjectReply) {
-                MsgCreateDDObjectReply msg = (MsgCreateDDObjectReply) message;
-                DDObject dd = (DDObject) ClientManager.getDD(msg.getDDUI());
-                dd.fireMsgCreateDDObjectReply(msg);
-            } //
-
 
             // DDInt =================================
 
