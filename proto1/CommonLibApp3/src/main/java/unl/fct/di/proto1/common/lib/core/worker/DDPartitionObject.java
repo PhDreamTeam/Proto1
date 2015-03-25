@@ -1,6 +1,7 @@
 package unl.fct.di.proto1.common.lib.core.worker;
 
 
+import unl.fct.di.proto1.common.lib.protocol.DDObject.MsgPartitionApplyFunctionDDObject;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
@@ -9,25 +10,37 @@ import java.util.Arrays;
 
 // TODO check if we need to keep the parent of this DD
 
-public class DDPartitionObject extends DDPartition {
-    Object[] data;
+public class DDPartitionObject<T> extends DDPartition {
+    T[] data;
 
-    public DDPartitionObject(String DDUI, int partId, Object[] data) {
+    public DDPartitionObject(String DDUI, int partId, T[] data) {
         super(DDUI, partId);
         this.data = data;
     }
 
-    public DDPartitionObject(String newDDUI, int partId, int nDataElem) {
+
+    public DDPartitionObject(String newDDUI, int partId, int nDataElem, T[] arrayType) {
         super(newDDUI, partId);
-        data = new Object[nDataElem];
+        // create an array of nDataElems of arrayType
+        data = Arrays.copyOf(arrayType, nDataElem);
     }
 
     @Override
     public DDPartitionObject clone() {
-        return new DDPartitionObject(DDUI, partId, Arrays.copyOf(data, data.length));
+        T[] array = Arrays.copyOf(data, data.length);
+        return new DDPartitionObject<T>(DDUI, partId, array);
     }
 
-    public Object[] getData() {
+    public DDPartitionObject cloneToNewDD(String newDDUI, int partId) {
+        T[] array = Arrays.copyOf(data, data.length);
+        return new DDPartitionObject<T>(newDDUI, partId, array);
+    }
+
+    public DDPartitionObject<T> createNewPartition(String newDDUI, int partId, int length) {
+        return new DDPartitionObject<>(newDDUI, partId, length, Arrays.copyOf(data, 0));
+    }
+
+    public T[] getData() {
         return data;
     }
 
@@ -38,17 +51,19 @@ public class DDPartitionObject extends DDPartition {
 
     // Perform an action as specified by a Consumer object
     //  public void forEach(Consumer<Integer> action, String newDDUI) {
-    public DDPartitionObject forEach(Function<Object, Object> action, String newDDUI) {
+    public <R> DDPartitionObject<R> forEach(MsgPartitionApplyFunctionDDObject<T, R> msg) {
         // create a new partition - partitions are read only
-        Object[] workData = this.getData();
-        DDPartitionObject newDDPartition = new DDPartitionObject(newDDUI, this.getPartId(), workData.length);
+        T[] workData = this.getData();
+        DDPartitionObject<R> newDDPartition = new DDPartitionObject<>(msg.getNewDDUI(), this.getPartId(), workData.length, msg.getArrayRType());
 
-        Object[] newData = newDDPartition.getData();
+        R[] newData = newDDPartition.getData();
         for (int i = 0, size = workData.length; i < size; i++) {
-            newData[i] = action.apply(workData[i]);
+            newData[i] = msg.getAction().apply(workData[i]);
         }
         return newDDPartition;
     }
+
+
 
     // Map objects to another DD as specified by a Function object
     public <R> R map(Function<Object, ? extends R> mapper) {
@@ -64,12 +79,12 @@ public class DDPartitionObject extends DDPartition {
         return null;
     }
 
-    public DDPartitionObject filter(Predicate<Object> filter, String newDDUI) {
+    public DDPartitionObject<T> filter(Predicate<T> filter, String newDDUI) {
         // create a new partition - partitions are read only
-        Object[] workData = this.getData();
-        DDPartitionObject newDDPartition = this.createNewPartition(newDDUI, this.getPartId(), workData.length);
+        T[] workData = this.getData();
+        DDPartitionObject<T> newDDPartition = this.createNewPartition(newDDUI, this.getPartId(), workData.length);
 
-        Object[] newDDData = newDDPartition.getData();
+        T[] newDDData = newDDPartition.getData();
 
         // the elements that verify the test go to new DD partition
         int newElems = 0;
@@ -95,17 +110,13 @@ public class DDPartitionObject extends DDPartition {
         return result;
     }
 
-    public DDPartitionObject createNewPartition(String newDDUI, int partId, int length) {
-        return new DDPartitionObject(newDDUI, partId, length);
-    }
-
     @Override
     public String toString() {
         return super.toString() + " " + Arrays.toString(data);
     }
 
 
-    public void setData(Object[] data) {
+    public void setData(T[] data) {
         this.data = data;
     }
 

@@ -14,7 +14,7 @@ import java.util.UUID;
 public class DDObject<T> extends DD {
 
     // create a new DD based on an array
-    public DDObject(Object[] data) {
+    public DDObject(T[] data) {
         // create super DD with a new UUDI and with no parent and number of elems, save DD
         super(null, data.length);
         String requestId = UUID.randomUUID().toString();
@@ -98,6 +98,7 @@ public class DDObject<T> extends DD {
     }
 
     // create a DD access object from the DDUI of a DD already in system
+    // TODO generic ??
     static public DDObject openDDObject(String DDUI) throws Exception {
         DD dd = ClientManager.getDD(DDUI);
         if (dd != null) {
@@ -115,7 +116,7 @@ public class DDObject<T> extends DD {
     }
 
     // get Data from the remote workers (client<->master<->worker)
-    public Object[] getData() {
+    public T[] getData() {
         // create new DDObject to store the results, create RequestId
         String requestId = UUID.randomUUID().toString();
 
@@ -135,8 +136,8 @@ public class DDObject<T> extends DD {
         }
 
         // process reply and return result
-        Object[] data = null;
-        MsgGetDataDDObjectReply replyMsg = (MsgGetDataDDObjectReply ) (receivedMsgsHashMap.get(requestId));
+        T[] data = null;
+        MsgGetDataDDObjectReply<T> replyMsg = (MsgGetDataDDObjectReply<T> ) (receivedMsgsHashMap.get(requestId));
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error Getting Data: " + replyMsg.getFailureReason());
         } else {
@@ -163,13 +164,13 @@ public class DDObject<T> extends DD {
      *               should produce aa new element of the same type
      * @return the new DD
      */
-    public DDObject forEach(Function<Object, Object> action) {
+    public <R> DDObject<R> forEach(Function<T, R> action, R[] arrayRType) {
         // create new DDObject to store the results, create RequestId
-        DDObject newDD = new DDObject(this);
+        DDObject<R> newDD = new DDObject<>(this);
         String requestId = UUID.randomUUID().toString();
 
         // create forEach msg, keep it in sentMsgsHashMap, send it to master and show it on screen
-        MsgApplyFunctionDDObject msg = new MsgApplyFunctionDDObject(DDUI, requestId, newDD.getDDUI(), action);
+        MsgApplyFunctionDDObject<T, R> msg = new MsgApplyFunctionDDObject<>(DDUI, requestId, newDD.getDDUI(), action, arrayRType);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -247,13 +248,13 @@ public class DDObject<T> extends DD {
     }
 
     // Filter objects that match a Predicate object
-    public DDObject filter(Predicate<Object> predicate) {
+    public DDObject<T> filter(Predicate<T> predicate) {
         // create new DDObject to store the results, create RequestId
         DDObject newDD = new DDObject(this);
         String requestId = UUID.randomUUID().toString();
 
         // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
-        MsgApplyFilterDDObject msg = new MsgApplyFilterDDObject(DDUI, requestId, newDD.getDDUI(),
+        MsgApplyFilterDDObject<T> msg = new MsgApplyFilterDDObject<>(DDUI, requestId, newDD.getDDUI(),
                 predicate);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
@@ -293,6 +294,10 @@ public class DDObject<T> extends DD {
         MsgApplyReduceDDObject<T> msg = new MsgApplyReduceDDObject<>(DDUI, requestId, reduceFunction);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
+
+
+//        T[]  array = new T[20];
+//        int[] arr = new int[20];
 
         // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
@@ -355,6 +360,7 @@ public class DDObject<T> extends DD {
     public String toString() {
         return "DDObject " + super.toString();
     }
+
 
     /**************************************/
     // Fire functions =====================

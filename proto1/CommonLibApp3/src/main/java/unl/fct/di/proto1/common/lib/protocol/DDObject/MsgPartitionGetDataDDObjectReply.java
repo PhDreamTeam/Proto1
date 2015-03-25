@@ -6,16 +6,16 @@ import unl.fct.di.proto1.common.lib.protocol.MsgPartitionReply;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class MsgPartitionGetDataDDObjectReply extends MsgPartitionReply implements Serializable {
-    Object[] data;
+public class MsgPartitionGetDataDDObjectReply<T> extends MsgPartitionReply implements Serializable {
+    T[] data;
 
-    public MsgPartitionGetDataDDObjectReply(String DDUI, String requestId, int partId, Object[] data,
+    public MsgPartitionGetDataDDObjectReply(String DDUI, String requestId, int partId, T[] data,
                                             boolean success, String failureReason) {
         super(DDUI, requestId, partId, success, failureReason);
         this.data = data;
     }
 
-    public Object[] getData() {
+    public T[] getData() {
         return data;
     }
 

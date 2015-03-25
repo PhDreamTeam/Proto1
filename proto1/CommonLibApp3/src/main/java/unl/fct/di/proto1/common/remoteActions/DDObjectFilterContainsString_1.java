@@ -5,7 +5,7 @@ import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import java.io.Serializable;
 
 
-public class DDObjectFilterContainsString_1 implements Predicate<Object>, Serializable {
+public class DDObjectFilterContainsString_1 implements Predicate<String>, Serializable {
     String val;
 
     public DDObjectFilterContainsString_1(String val) {
@@ -13,7 +13,7 @@ public class DDObjectFilterContainsString_1 implements Predicate<Object>, Serial
     }
 
     @Override
-    public boolean test(Object value) {
-        return ((String)value).contains(val);
+    public boolean test(String value) {
+        return value.contains(val);
     }
 }

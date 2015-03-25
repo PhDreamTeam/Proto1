@@ -6,13 +6,13 @@ import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import java.io.Serializable;
 
 
-public class MsgPartitionApplyFilterDDObject extends MsgPartitionRequest implements Serializable {
-    Predicate<Object> filter;
+public class MsgPartitionApplyFilterDDObject<T> extends MsgPartitionRequest implements Serializable {
+    Predicate<T> filter;
     String newDDUI;
 
 
     public MsgPartitionApplyFilterDDObject(String DDUI, String requestId, int partId, String newDDUI,
-                                           Predicate<Object> filter) {
+                                           Predicate<T> filter) {
         super(DDUI, requestId, partId);
         this.newDDUI = newDDUI;
         this.filter = filter;
@@ -23,7 +23,7 @@ public class MsgPartitionApplyFilterDDObject extends MsgPartitionRequest impleme
         return newDDUI;
     }
 
-    public Predicate<Object> getFilter() {
+    public Predicate<T> getFilter() {
         return filter;
     }
 

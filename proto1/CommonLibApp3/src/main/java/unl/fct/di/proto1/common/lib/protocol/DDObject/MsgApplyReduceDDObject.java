@@ -27,6 +27,6 @@ public class MsgApplyReduceDDObject<T> extends Msg implements Serializable {
     }
 
     public Msg getSuccessReplyMessage(T result) {
-        return new MsgApplyReduceDDObjectReply<T>(getDDUI(), getRequestId(), result, true, null);
+        return new MsgApplyReduceDDObjectReply<>(getDDUI(), getRequestId(), result, true, null);
     }
 }

@@ -10,6 +10,7 @@ import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.client.ClientManager;
 import unl.fct.di.proto1.common.lib.core.client.DDInt;
 import unl.fct.di.proto1.common.lib.core.client.DDObject;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFilterDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFunctionDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgCreateDDIntReply;
@@ -17,6 +18,7 @@ import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgGetDataDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.*;
 import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoReply;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.remoteActions.*;
 
 import javax.swing.*;
@@ -148,7 +150,7 @@ public class Client {
             public void run() {
                 // CREATE DD1
                 console.println("Creating DD1 DDObject...");
-                DDObject d1 = new DDObject(new Object[]{"um", "dois", "três", "quatro", "cinco", "seis"});
+                DDObject<String> d1 = new DDObject<>(new String[]{"um", "dois", "três", "quatro", "cinco", "seis"});
                 console.println("DD1 created:" + d1);
                 console.println();
 
@@ -160,13 +162,13 @@ public class Client {
 
                 // Apply function to DD2
                 console.println("Applying Function to DD1 -> DD2");
-                DDObject d2 = d1.forEach(new DDObjectFunctionAddLenght_1());
+                DDObject<String> d2 = d1.forEach(new DDObjectFunctionAddLength_1(), new String[]{});
                 console.println("End of Function to DD1 -> DD2.");
                 console.println();
 
                 // Get data from DD2
                 console.println("Getting data from DD2...");
-                Object[] result2 = d2.getData();
+                String[] result2 = d2.getData();
                 console.println("DD2 received:" + Arrays.toString(result2));
                 console.println();
 
@@ -174,13 +176,13 @@ public class Client {
 
                 // Apply filter to DD2
                 console.println("Applying filter to DD2 -> DD3");
-                DDObject d3 = d2.filter(new DDObjectFilterContainsString_1("S"));
+                DDObject<String> d3 = d2.filter(new DDObjectFilterContainsString_1("S"));
                 console.println("End of Function to DD2 -> DD3.");
                 console.println();
 
                 // Get data from DD3
                 console.println("Getting data from DD3...");
-                Object[] result3 = d3.getData();
+                String[] result3 = d3.getData();
                 console.println("DD3 received:" + Arrays.toString(result3));
                 console.println();
 
@@ -188,13 +190,13 @@ public class Client {
 
                 // Apply filter to DD3
                 console.println("Applying filter to DD3 -> DD4");
-                DDObject d4 = d3.filter(new DDObjectFilterContainsString_1("I"));
+                DDObject<String> d4 = d3.filter(new DDObjectFilterContainsString_1("I"));
                 console.println("End of Function to DD3 -> DD4.");
                 console.println();
 
                 // Get data from DD4
                 console.println("Getting data from DD4...");
-                Object[] result4 = d4.getData();
+                String[] result4 = d4.getData();
                 console.println("DD4 received:" + Arrays.toString(result4));
                 console.println();
 
@@ -248,7 +250,8 @@ public class Client {
 
                     // OPEN IPHOTO DD1
                     console.println("Opening IPHOTOS DDUI: " + DDUI);
-                    DDObject d1 = DDObject.openDDObject(DDUI);
+                    @SuppressWarnings("unchecked")
+                    DDObject<IPhotoRemote> d1 = (DDObject<IPhotoRemote>)(DDObject.openDDObject(DDUI));
                     console.println("Opened: " + d1);
                     console.println();
 
@@ -260,7 +263,7 @@ public class Client {
 
                     // GET IPHOTO DD1 data
                     console.println("Getting data from IPHOTOS DDUI: " + DDUI);
-                    Object[] photos = d1.getData();
+                    IPhotoRemote[] photos = d1.getData();
                     console.println("Received photos:" + Arrays.toString(photos));
                     console.println();
 
@@ -268,17 +271,17 @@ public class Client {
                     //  displayThumbnails(photos);
 
                     // display photos
-                    //  displayPhotos(photos);
+                    displayPhotos(photos);
 
                     // APPLY FUNCTION to photo dd
                     console.println("Applying Function to IPHOTO DD -> DD2");
-                    DDObject d2 = d1.forEach(new DDObjectFunctionPhotoToSize_1());
+                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionPhotoToSize_1(), new Integer[]{});
                     console.println("End of Function to IPHOTO DD -> DD2.");
                     console.println();
 
                     // Get data from DD2
                     console.println("Getting data from DD2...");
-                    Object[] result2 = d2.getData();
+                    Integer[] result2 = d2.getData();
                     console.println("DD2 received:" + Arrays.toString(result2));
                     console.println();
 
@@ -305,7 +308,7 @@ public class Client {
 
                     // APPLY FILTER TEST to dd
                     console.println("Applying filter to DD2 (Integer) -> DD4 (Integer)");
-                    DDObject d4 = d2.filter(new DDObjectFilterIntegerBiggerThen_1(100_000));
+                    DDObject<Integer> d4 = d2.filter(new DDObjectFilterIntegerBiggerThen_1(100_000));
                     console.println("End of Function to DD2 (Integer) -> DD4 (Integer).");
                     console.println();
 
@@ -414,7 +417,8 @@ public class Client {
 
                     // OPEN IPHOTO DD1
                     console.println("Opening IPHOTOS DDUI: " + DDUI);
-                    DDObject d1 = DDObject.openDDObject(DDUI);
+                    @SuppressWarnings("unchecked")
+                    DDObject<Photo> d1 = (DDObject<Photo>)(DDObject.openDDObject(DDUI));
                     console.println("Opened: " + d1);
                     console.println();
 
@@ -431,7 +435,8 @@ public class Client {
 
                     // APPLY FOREACH to photo INTERNAL dd
                     console.println("Applying foreach to IPHOTO DD -> DD2");
-                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionIdentity_1());
+                    Function<Photo, Integer> f = new DDObjectFunctionIdentity_1();
+                    DDObject<Integer> d2 = d1.forEach(f, new Integer[]{});
                     console.println("End of foreach to IPHOTO DD -> DD2");
                     console.println();
 
@@ -461,7 +466,7 @@ public class Client {
 
                     // CREATE DD1
                     console.println("Creating DD1");
-                    DDObject<Integer> d1 = new DDObject(data);
+                    DDObject<Byte> d1 = new DDObject<>(data);
                     console.println("Created DD1: " + d1);
                     console.println();
 
@@ -469,7 +474,7 @@ public class Client {
 
                     // APPLY FOREACH to DD1
                     console.println("Applying foreach to DD1 -> DD2");
-                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionGenerateAndCheckPoint_1());
+                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionGenerateAndCheckPoint_1(), new Integer[]{});
                     console.println("End of foreach to DD1 -> DD2");
                     console.println();
 
@@ -532,7 +537,7 @@ public class Client {
             console.println("Loading photo: " + p.getPhotoUuid());
             ImageIcon t = null;
             try {
-                t = new ImageIcon(p.getPhoto());
+                t = new ImageIcon(p.getPhotoInBytes());
                 jp.add(new JLabel(t));
             } catch (Exception e) {
                 console.println("Error loading photo " + p.getPhotoUuid());

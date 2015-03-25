@@ -6,12 +6,12 @@ import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import java.io.Serializable;
 
 
-public class MsgApplyFilterDDObject extends Msg implements Serializable {
+public class MsgApplyFilterDDObject<T> extends Msg implements Serializable {
     String newDDUI;
-    Predicate<Object> filter;
+    Predicate<T> filter;
 
     public MsgApplyFilterDDObject(String DDUI, String requestId, String newDDUI,
-                                  Predicate<Object> filter) {
+                                  Predicate<T> filter) {
         super(DDUI, requestId);
         this.newDDUI = newDDUI;
         this.filter = filter;
@@ -22,7 +22,7 @@ public class MsgApplyFilterDDObject extends Msg implements Serializable {
         return newDDUI;
     }
 
-    public Predicate<Object> getFilter() {
+    public Predicate<T> getFilter() {
         return filter;
     }
 

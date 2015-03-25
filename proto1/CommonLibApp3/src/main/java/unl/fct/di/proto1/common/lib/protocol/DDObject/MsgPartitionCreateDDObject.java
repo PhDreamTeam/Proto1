@@ -6,15 +6,15 @@ import unl.fct.di.proto1.common.lib.protocol.MsgPartitionRequest;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class MsgPartitionCreateDDObject extends MsgPartitionRequest implements Serializable {
-    Object[] data;
+public class MsgPartitionCreateDDObject<T> extends MsgPartitionRequest implements Serializable {
+    T[] data;
 
-    public MsgPartitionCreateDDObject(String DDUI, String requestId, int partId, Object[] data) {
+    public MsgPartitionCreateDDObject(String DDUI, String requestId, int partId, T[] data) {
         super(DDUI, requestId, partId);
         this.data = data;
     }
 
-    public Object[] getData() {
+    public T[] getData() {
         return data;
     }
 

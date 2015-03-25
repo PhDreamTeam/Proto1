@@ -6,15 +6,17 @@ import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import java.io.Serializable;
 
 
-public class MsgApplyFunctionDDObject extends Msg implements Serializable {
+public class MsgApplyFunctionDDObject<T, R> extends Msg implements Serializable {
     String newDDUI;
-    Function<Object, Object> action;
+    Function<T, R> action;
+    R[] arrayRType;
 
     public MsgApplyFunctionDDObject(String DDUI, String requestId, String newDDUI,
-                                    Function<Object, Object> action) {
+                                    Function<T, R> action, R[] arrayRType) {
         super(DDUI, requestId);
         this.newDDUI = newDDUI;
         this.action = action;
+        this.arrayRType = arrayRType;
     }
 
 
@@ -22,10 +24,13 @@ public class MsgApplyFunctionDDObject extends Msg implements Serializable {
         return newDDUI;
     }
 
-    public Function<Object, Object> getAction() {
+    public Function<T, R> getAction() {
         return action;
     }
 
+    public R[] getArrayRType() {
+        return arrayRType;
+    }
 
     @Override
     public String toString() {

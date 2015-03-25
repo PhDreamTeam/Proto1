@@ -4,7 +4,6 @@ import pt.unl.fct.di.proto1.services.photos.Photo;
 import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.workerService.WorkerService;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -42,7 +41,7 @@ public class DDPartitionPhoto extends DDPartitionPhotoInternal{
             try {
                 ps[nPhotos] = pw.getPhotoObject();
                 nPhotos++;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 ws.getWorkerGui().println("Photo failed to load: " + pw.getPathFileName());
             }
         }

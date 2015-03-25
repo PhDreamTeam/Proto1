@@ -15,14 +15,14 @@ import java.util.HashMap;
 
 // TODO FILTER: CHECK THIS: each worker will have a partition that can have a smaller size (maybe empty), adjust it at reply (is this correct or what?)
 
-public class DDObjectMaster extends DDMaster {
+public class DDObjectMaster<T> extends DDMaster {
 
     // save data ref for resend to failed or substitute workers
-    Object[] data;
+    T[] data;
 
 
     // create a new DDInt based on an array
-    public DDObjectMaster(String DDUI, String createRequestId, Object[] data, ActorNode ownerActorNode, Msg msgRequest) {
+    public DDObjectMaster(String DDUI, String createRequestId, T[] data, ActorNode ownerActorNode, Msg msgRequest) {
         // super data
         super(DDUI, data.length, null, ownerActorNode);
 
@@ -97,13 +97,13 @@ public class DDObjectMaster extends DDMaster {
     }
 
 
-    private void buildPartitions(Object[] data, ActorNode[] workers, MasterRequest req) {
+    private void buildPartitions(T[] data, ActorNode[] workers, MasterRequest req) {
         int nPartitions = workers.length;
         int startIdx = 0, nElemsPerPartition = data.length / workers.length;
 
         for (int i = 0; i < nPartitions; i++) {
             int nElems = nElemsPerPartition + (i < data.length % workers.length ? 1 : 0);
-            Object[] partitionData = Arrays.copyOfRange(data, startIdx, startIdx + nElems);
+            T[] partitionData = Arrays.copyOfRange(data, startIdx, startIdx + nElems);
 
             // create new partition descriptor
             DDPartitionDescriptor partDesc = new DDPartitionDescriptor(DDUI, i, workers[i]);
@@ -118,7 +118,7 @@ public class DDObjectMaster extends DDMaster {
         }
     }
 
-    private void sendDataToWorker(Object[] data, DDPartitionDescriptor pDescriptor, MasterRequest req) {
+    private void sendDataToWorker(T[] data, DDPartitionDescriptor pDescriptor, MasterRequest req) {
         // set state of partition
         pDescriptor.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
@@ -163,10 +163,10 @@ public class DDObjectMaster extends DDMaster {
     /**
      * Perform an action as specified by a Consumer object
      */
-    public DDObjectMaster forEach(String newDDUI, Function<Object, Object> action, ActorNode requesterActorNode,
-                                  String requestId, Msg msgRequest) {
+    public <R> DDObjectMaster<R> forEach(String newDDUI, Function<T, R> action, ActorNode requesterActorNode,
+                                  String requestId, MsgApplyFunctionDDObject<T, R> msgRequest) {
         // create a new local DDIntMaster
-        DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
+        DDObjectMaster<R> newDD = new DDObjectMaster<>(newDDUI, this, requesterActorNode);
 
         // create new MasterRequest an put in in container of requests
         MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
@@ -179,9 +179,9 @@ public class DDObjectMaster extends DDMaster {
             partition.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
             // build message
-            MsgPartitionApplyFunctionDDObject msgOut = new
-                    MsgPartitionApplyFunctionDDObject(this.DDUI, requestId, partition.getPartitionId(),
-                    newDDUI, action);
+            MsgPartitionApplyFunctionDDObject<T, R> msgOut = new
+                    MsgPartitionApplyFunctionDDObject<>(this.DDUI, requestId, partition.getPartitionId(),
+                    newDDUI, action, msgRequest.getArrayRType());
 
             // build request tracker and send message to worker if possible
             GlManager.getCommunicationHelper().tell(partition.getWorkerNode(), msgOut,
@@ -202,7 +202,7 @@ public class DDObjectMaster extends DDMaster {
 
 
     // Filter objects that match a Predicate object
-    public DDObjectMaster filter(String newDDUI, Predicate<Object> filter, ActorNode requesterActorNode,
+    public DDObjectMaster<T> filter(String newDDUI, Predicate<T> filter, ActorNode requesterActorNode,
                                  String requestId, Msg msgRequest) {
         // create a new local DDObjectMaster
         DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
@@ -221,7 +221,7 @@ public class DDObjectMaster extends DDMaster {
             partition.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
             // build message
-            MsgPartitionApplyFilterDDObject msgOut = new MsgPartitionApplyFilterDDObject(this.DDUI, requestId,
+            MsgPartitionApplyFilterDDObject<T> msgOut = new MsgPartitionApplyFilterDDObject<>(this.DDUI, requestId,
                     partition.getPartitionId(), newDDUI, filter);
 
             // build request tracker and send message to worker if possible
@@ -236,11 +236,11 @@ public class DDObjectMaster extends DDMaster {
     /**
      *
      */
-    public DDObjectMaster merge(String ddToMergeDDUI, String newDDUI, ActorNode requesterActorNode,
+    public <T> DDObjectMaster<T> merge(String ddToMergeDDUI, String newDDUI, ActorNode requesterActorNode,
                                 String requestId, MsgApplyMergeDDObject msgRequest) {
 
         // create a new local DDObjectMaster
-        DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
+        DDObjectMaster<T> newDD = new DDObjectMaster<>(newDDUI, this, requesterActorNode);
 
         // add partitions descriptors from ddToMerge to newDD
         addPartitionDescriptorsFromDdToMergeToNewDD(ddToMergeDDUI, newDD);
@@ -349,7 +349,7 @@ public class DDObjectMaster extends DDMaster {
         // add answer to request
         req.addAnswer(msg);
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // SUCCESS - nothing to do, just send msg to client
@@ -366,7 +366,7 @@ public class DDObjectMaster extends DDMaster {
         }
     }
 
-    public void fireMsgPartitionGetDataDDObjectReply(MsgPartitionGetDataDDObjectReply msg) {
+    public void fireMsgPartitionGetDataDDObjectReply(MsgPartitionGetDataDDObjectReply<T> msg) {
         MasterRequest req = requests.get(msg.getRequestId());
 
         // add answer to request
@@ -376,14 +376,16 @@ public class DDObjectMaster extends DDMaster {
         if(msg.isSuccess())
             req.addElemsReceived(msg.getData().length);
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // SUCCESS - get data and return it to request owner
-                Object[] dataReply = getDataInternal(req);
+                T[] dataReply = getDataInternal(req);
 
                 // send data to client requester
-                Msg msgOut = ((MsgGetDataDDObject)req.getMsgRequest()).getSuccessReplyMessage(dataReply);
+                @SuppressWarnings("unchecked")
+                MsgGetDataDDObject<T> msgGetData = (MsgGetDataDDObject<T>)req.getMsgRequest();
+                MsgGetDataDDObjectReply<T> msgOut = msgGetData.getSuccessReplyMessage(dataReply);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // FAILED
@@ -398,17 +400,25 @@ public class DDObjectMaster extends DDMaster {
         // registar a msg e verificar se já terminou e se sim dar a resposta ao cliente
     }
 
-    private Object[] getDataInternal(MasterRequest req) {
+    private T[] getDataInternal(MasterRequest req) {
         // TODO Work with partial request replies, consider that some responses may not come and the idx logic will not work.
         // reserve space to data
-        Object[] dataReply = new Object[req.getNElemsReceived()];
+        T[] dataReply = null;
 
         // get all data
         for (int i = 0, idx = 0, size = partitionsDescriptors.size(); i < size; i++) {
-            Object[] dPart = ((MsgPartitionGetDataDDObjectReply) req.answers.get(i)).getData();
-            // copy data
-            System.arraycopy(dPart, 0, dataReply, idx, dPart.length);
-            idx += dPart.length;
+            @SuppressWarnings("unchecked")
+            MsgPartitionGetDataDDObjectReply<T> msgReply = (MsgPartitionGetDataDDObjectReply<T>) req.answers.get(i);
+            T[] partitionData = msgReply.getData();
+            if(dataReply == null) {
+                // build result array from array from first message
+                dataReply = Arrays.copyOf(partitionData, req.getNElemsReceived());
+            }
+            else {
+                // copy data
+                System.arraycopy(partitionData, 0, dataReply, idx, partitionData.length);
+            }
+            idx += partitionData.length;
         }
         return dataReply;
     }
@@ -428,7 +438,7 @@ public class DDObjectMaster extends DDMaster {
                 DDPartitionDescriptor.PartitionState.DEPLOYED :
                 DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
@@ -458,7 +468,7 @@ public class DDObjectMaster extends DDMaster {
 
         newDD.nDataElems += msg.getNElems();
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
@@ -482,14 +492,13 @@ public class DDObjectMaster extends DDMaster {
         req.addAnswer(msg);
 
         // update partition state
-//        DDMaster newDD = GlManager.getDDManager().getDD(msg.getSrcDDUI());
         partitionsDescriptors.get(msg.getPartId()).setState(msg.isSuccess() ?
                 DDPartitionDescriptor.PartitionState.DEPLOYED :
                 DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
 
         nDataElems += msg.getNElems();
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
 
@@ -517,10 +526,11 @@ public class DDObjectMaster extends DDMaster {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
 
                 // success - calculate reduce results from all partitions result
-                Object result = calculateReduceResults(req);
+                T result = calculateReduceResults(req);
 
                 // send result to client requester
-                Msg msgOut = ((MsgApplyReduceDDObject)req.getMsgRequest()).getSuccessReplyMessage(result);
+                @SuppressWarnings("unchecked")
+                Msg msgOut = ((MsgApplyReduceDDObject<T>)req.getMsgRequest()).getSuccessReplyMessage(result);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // failure - send failure to client requester
@@ -558,15 +568,18 @@ public class DDObjectMaster extends DDMaster {
         }
     }
 
-    private Object calculateReduceResults(MasterRequest req) {
-        Object result = null;
+    private T calculateReduceResults(MasterRequest req) {
+        T result = null;
         HashMap<Integer, MsgPartitionReply> replies = req.getAnswers();
         for ( int partIdx :replies.keySet()) {
-            Object partResult = ((MsgPartitionApplyReduceDDObjectReply) (replies.get(partIdx))).getResult();
+            T partResult = ((MsgPartitionApplyReduceDDObjectReply<T>) (replies.get(partIdx))).getResult();
             if (result == null)
                 result = partResult;
-            else
-                result = ((MsgApplyReduceDDObject)(req.getMsgRequest())).getReduction().reduce(partResult, result);
+            else {
+                @SuppressWarnings("unchecked")
+                MsgApplyReduceDDObject<T> m = (MsgApplyReduceDDObject<T>) (req.getMsgRequest());
+                result = m.getReduction().reduce(partResult, result);
+            }
         }
         return result;
     }

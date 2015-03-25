@@ -31,7 +31,7 @@ public class MasterService {
 
     List<ActorNode> workers, clients;
     List<MasterRequest> requests;
-   // List<DDMaster> data;
+    // List<DDMaster> data;
 
     IMasterGui masterGui;
     IConsole console;
@@ -51,7 +51,7 @@ public class MasterService {
         workers = masterGui.getWorkers();
         clients = masterGui.getClients();
         requests = masterGui.getRequests();
-       // data = masterGui.getData();
+        // data = masterGui.getData();
 
 
         system = masterGui.createSystem(MASTER_SYSTEM_NAME);
@@ -248,6 +248,7 @@ public class MasterService {
 
     /**
      * Gets the number of workers that the system assign to DD
+     *
      * @return The workers assigned to the DD
      */
     public ActorNode[] getWorkers(int dataElemSize, int nDataElems) {
@@ -364,173 +365,64 @@ public class MasterService {
             // DDObject  ========================================================
 
             if (message instanceof MsgPartitionGetCountDDObjectReply) {
-                MsgPartitionGetCountDDObjectReply msg = (MsgPartitionGetCountDDObjectReply) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // do it
-                    dd.fireMsgPartitionGetCountDDObjectReply(msg);
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionGetCountReply((MsgPartitionGetCountDDObjectReply) message);
             } //
 
             else if (message instanceof MsgGetCountDDObject) {
-                MsgGetCountDDObject msg = (MsgGetCountDDObject) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // apply count
-                dd.doCount(clientActorNode, msg.getRequestId(), msg);
+                handleGetCount((MsgGetCountDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyReduceDDObjectReply) {
-                MsgPartitionApplyReduceDDObjectReply msg = (MsgPartitionApplyReduceDDObjectReply) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // handle reply
-                    dd.fireMsgPartitionApplyReduceDDObjectReply(msg);
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionApplyReduceReply((MsgPartitionApplyReduceDDObjectReply) message);
             } //
 
             else if (message instanceof MsgApplyReduceDDObject) {
-                MsgApplyReduceDDObject msg = (MsgApplyReduceDDObject) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // apply reduce
-                dd.doReduce(clientActorNode, msg.getRequestId(), msg);
+                handleApplyReduce((MsgApplyReduceDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyMergeDDObjectReply) {
-                MsgPartitionApplyMergeDDObjectReply msg = (MsgPartitionApplyMergeDDObjectReply) message;
-                DDObjectMaster newDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // update partition state
-                    newDD.fireMsgPartitionApplyMergeDDObjectReply(msg);
-                    // update screen - DD state could have changed
-                    ms.updateViewData();
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionApplyMergeReply((MsgPartitionApplyMergeDDObjectReply) message);
             } //
 
             else if (message instanceof MsgApplyMergeDDObject) {
-                MsgApplyMergeDDObject msg = (MsgApplyMergeDDObject) message;
-                DDObjectMaster parentDDObject = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // apply filter
-                DDObjectMaster newDDObject = parentDDObject.merge(msg.getDdToMergeDDUI(), msg.getNewDDUI(),
-                        clientActorNode, msg.getRequestId(), msg);
-                // add to screen
-                ms.addData(newDDObject);
+                handleApplyMerge((MsgApplyMergeDDObject) message);
             } //
 
 
             else if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
-                MsgPartitionApplyFilterDDObjectReply msg = (MsgPartitionApplyFilterDDObjectReply) message;
-                DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // update partition state
-                    parentDD.fireMsgPartitionApplyFilterDDObjectReply(msg);
-                    // update screen - DD state could have changed
-                    ms.updateViewData();
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionApplyFilterReply((MsgPartitionApplyFilterDDObjectReply) message);
             } //
 
             else if (message instanceof MsgApplyFilterDDObject) {
-                MsgApplyFilterDDObject msg = (MsgApplyFilterDDObject) message;
-                DDObjectMaster parentDDObject = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // apply filter
-                DDObjectMaster newDDObject = parentDDObject.filter(msg.getNewDDUI(), msg.getFilter(),
-                        clientActorNode, msg.getRequestId(), msg);
-                // add to screen
-                ms.addData(newDDObject);
+                handleApplyFilter((MsgApplyFilterDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyFunctionDDObjectReply) {
-                MsgPartitionApplyFunctionDDObjectReply msg = (MsgPartitionApplyFunctionDDObjectReply) message;
-                DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // update partition state
-                    parentDD.fireMsgPartitionApplyFunctionDDObjectReply(msg);
-                    // update screen - DD state could have changed
-                    ms.updateViewData();
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionApplyFunctionReply((MsgPartitionApplyFunctionDDObjectReply) message);
             } //
 
             else if (message instanceof MsgApplyFunctionDDObject) {
-                MsgApplyFunctionDDObject msg = (MsgApplyFunctionDDObject) message;
-                DDObjectMaster parentDDObject = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // for each
-                DDObjectMaster newDDObject = parentDDObject.forEach(msg.getNewDDUI(), msg.getAction(),
-                        clientActorNode, msg.getRequestId(), msg);
-                // add to screen
-                ms.addData(newDDObject);
+                handleApplyFunction((MsgApplyFunctionDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionGetDataDDObjectReply) {
-                MsgPartitionGetDataDDObjectReply msg = (MsgPartitionGetDataDDObjectReply) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    // do it
-                    dd.fireMsgPartitionGetDataDDObjectReply(msg);
-                    // update screen - DD state could have changed
-                    ms.updateViewData();
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionGetDataReply((MsgPartitionGetDataDDObjectReply) message);
             } //
 
             else if (message instanceof MsgGetDataDDObject) {
-                MsgGetDataDDObject msg = (MsgGetDataDDObject) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // get data
-                dd.getData(msg.getRequestId(), clientActorNode, msg);
+                handleGetData((MsgGetDataDDObject) message);
             } //
 
             else if (message instanceof MsgOpenDDObject) {
-                MsgOpenDDObject msg = (MsgOpenDDObject) message;
-                // check if DD exists in DDManager
-                DDMaster dd = GlManager.getDDManager().getDD(msg.getDDUI());
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // open DD
-                DDMaster.OpenDDMaster(dd, clientActorNode, getSelf(), msg, DDObjectMaster.class);
+                handleOpenDD((MsgOpenDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionCreateDDObjectReply) {
-                MsgPartitionCreateDDObjectReply msg = (MsgPartitionCreateDDObjectReply) message;
-                DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
-                if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
-                    dd.fireMsgCreatePartitionDDObjectReply(msg);
-                    // update screen - DD state could have changed
-                    ms.updateViewData();
-                } else {
-                    // message received after timeout or request finished
-                    console.println("Received message not recognized by MessageTracker: " + msg);
-                }
+                handlePartitionCreateDD((MsgPartitionCreateDDObjectReply) message);
             } //
 
             else if (message instanceof MsgCreateDDObject) {
-                MsgCreateDDObject msg = (MsgCreateDDObject) message;
-                ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // create new DDObject
-                DDObjectMaster d = new DDObjectMaster(msg.getDDUI(), msg.getRequestId(), msg.getData(),
-                        clientActorNode, msg);
-                // add to screen
-                ms.addData(d);
+                handleCreateDD((MsgCreateDDObject) message);
             }
 
             // DDInt ========================================================
@@ -648,10 +540,11 @@ public class MasterService {
                     Msg msgOut;
                     if (msg.getType().equals(ActorType.Worker)) {
                         // register worker internal services
-                        int[] partIds = ms.registerWorkerInternalServices(an, ((MsgRegisterWorker)msg).getInternalDDUIs());
+                        int[] partIds = ms.registerWorkerInternalServices(an,
+                                ((MsgRegisterWorker) msg).getInternalDDUIs());
                         // reply...
                         msgOut = new MsgRegisterWorkerReply(msg.getRequestId(), partIds, an, true, null);
-                    }else
+                    } else
                         msgOut = new MsgRegisterReply(msg.getRequestId(), true, null);
 
                     getSender().tell(msgOut, getSelf());
@@ -677,12 +570,186 @@ public class MasterService {
                 console.println("Unhandled message: " + message);
             }
         }
+
+        // ==================================
+        // Message handle functions
+        // ==================================
+
+        // GetCount
+        private void handlePartitionGetCountReply(MsgPartitionGetCountDDObjectReply msg) {
+            DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // do it
+                dd.fireMsgPartitionGetCountDDObjectReply(msg);
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleGetCount(MsgGetCountDDObject msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> dd = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // apply count
+            dd.doCount(clientActorNode, msg.getRequestId(), msg);
+        }
+
+        // ApplyReduce
+        private void handlePartitionApplyReduceReply(MsgPartitionApplyReduceDDObjectReply msg) {
+            DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // handle reply
+                dd.fireMsgPartitionApplyReduceDDObjectReply(msg);
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleApplyReduce(MsgApplyReduceDDObject msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> dd = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // apply reduce
+            dd.doReduce(clientActorNode, msg.getRequestId(), msg);
+        }
+
+        // ApplyMerge
+        private void handlePartitionApplyMergeReply(MsgPartitionApplyMergeDDObjectReply msg) {
+            DDObjectMaster newDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // update partition state
+                newDD.fireMsgPartitionApplyMergeDDObjectReply(msg);
+                // update screen - DD state could have changed
+                ms.updateViewData();
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleApplyMerge(MsgApplyMergeDDObject msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> parentDDObject = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // apply filter
+            DDObjectMaster<T> newDDObject = parentDDObject.merge(msg.getDdToMergeDDUI(), msg.getNewDDUI(),
+                    clientActorNode, msg.getRequestId(), msg);
+            // add to screen
+            ms.addData(newDDObject);
+        }
+
+        // ApplyFilter
+        private void handlePartitionApplyFilterReply(MsgPartitionApplyFilterDDObjectReply msg) {
+            DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // update partition state
+                parentDD.fireMsgPartitionApplyFilterDDObjectReply(msg);
+                // update screen - DD state could have changed
+                ms.updateViewData();
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleApplyFilter(MsgApplyFilterDDObject<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> parentDDObject = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // apply filter
+            DDObjectMaster<T> newDDObject = parentDDObject.filter(msg.getNewDDUI(), msg.getFilter(),
+                    clientActorNode, msg.getRequestId(), msg);
+            // add to screen
+            ms.addData(newDDObject);
+        }
+
+        // ApplyFunction
+        private void handlePartitionApplyFunctionReply(MsgPartitionApplyFunctionDDObjectReply msg) {
+            DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // update partition state
+                parentDD.fireMsgPartitionApplyFunctionDDObjectReply(msg);
+                // update screen - DD state could have changed
+                ms.updateViewData();
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T, R> void handleApplyFunction(MsgApplyFunctionDDObject<T, R> msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> parentDDObject = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // for each, returns newDD
+            DDObjectMaster<R> newDDObject = parentDDObject.forEach(msg.getNewDDUI(), msg.getAction(),
+                    clientActorNode, msg.getRequestId(), msg);
+            // add to screen
+            ms.addData(newDDObject);
+        }
+
+        // GetData
+        private <T> void handlePartitionGetDataReply(MsgPartitionGetDataDDObjectReply<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> dd = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                // do it
+                dd.fireMsgPartitionGetDataDDObjectReply(msg);
+                // update screen - DD state could have changed
+                ms.updateViewData();
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleGetData(MsgGetDataDDObject<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDObjectMaster<T> dd = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // get data
+            dd.getData(msg.getRequestId(), clientActorNode, msg);
+        }
+
+        // OpenDD
+        private void handleOpenDD(MsgOpenDDObject msg) {
+            DDMaster dd = GlManager.getDDManager().getDD(msg.getDDUI());
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // open DD
+            DDMaster.OpenDDMaster(dd, clientActorNode, getSelf(), msg, DDObjectMaster.class);
+        }
+
+        // CreateDD
+        private void handlePartitionCreateDD(MsgPartitionCreateDDObjectReply msg) {
+            DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
+            if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
+                dd.fireMsgCreatePartitionDDObjectReply(msg);
+                // update screen - DD state could have changed
+                ms.updateViewData();
+            } else {
+                // message received after timeout or request finished
+                console.println("Received message not recognized by MessageTracker: " + msg);
+            }
+        }
+
+        private <T> void handleCreateDD(MsgCreateDDObject<T> msg) {
+            ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
+            // create new DDObject
+            DDObjectMaster<T> dd = new DDObjectMaster<>(msg.getDDUI(), msg.getRequestId(), msg.getData(),
+                    clientActorNode, msg);
+            // add to screen
+            ms.addData(dd);
+        }
+
     }
+
 
     /**
      * Register  worker internal internalDDUIs
      *
-     * @param an Actor node of the registering worker
+     * @param an            Actor node of the registering worker
      * @param internalDDUIs
      * @return partition ID for this worker
      */
@@ -693,17 +760,17 @@ public class MasterService {
             String ddui = internalDDUIs.get(i);
             // check if DD exists - create if not
             DDMaster dd = GlManager.getDDManager().getDD(ddui);
-            if(dd == null){
+            if (dd == null) {
                 // add new internal service DD
                 dd = new DDObjectMaster(ddui);
                 // add to gui
                 addData(dd);
             } else {
-                if(!(dd instanceof DDObjectMaster))
+                if (!(dd instanceof DDObjectMaster))
                     throw new RuntimeException("Internal worker service DD (" + ddui +
                             ") should be a DDOBjectMaster, found -> " + dd.getClass().getSimpleName());
             }
-            DDObjectMaster ddo = (DDObjectMaster)dd;
+            DDObjectMaster ddo = (DDObjectMaster) dd;
             // add this worker as a worker with a partition in that dd
             partitionsIds[i] = ddo.addWorkerInternalPartition(an);
         }

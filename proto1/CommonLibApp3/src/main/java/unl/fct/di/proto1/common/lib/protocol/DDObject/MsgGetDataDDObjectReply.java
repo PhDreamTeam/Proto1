@@ -7,17 +7,17 @@ import java.util.Arrays;
 
 
 
-public class MsgGetDataDDObjectReply extends MsgReply implements Serializable {
-    Object[] data;
+public class MsgGetDataDDObjectReply<T> extends MsgReply implements Serializable {
+    T[] data;
 
-    public MsgGetDataDDObjectReply(String DDUI, String requestId, Object[] data,
+    public MsgGetDataDDObjectReply(String DDUI, String requestId, T[] data,
                                    boolean success, String failureReason) {
         super(DDUI, requestId, success, failureReason);
         this.data = data;
     }
 
 
-    public Object[] getData() {
+    public T[] getData() {
         return data;
     }
 

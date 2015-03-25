@@ -8,17 +8,17 @@ import java.io.Serializable;
  * Created by At DR on 19-03-2015.
  *
  */
-public class MsgPartitionApplyReduceDDObjectReply extends MsgPartitionReply implements Serializable {
-    Object result;
+public class MsgPartitionApplyReduceDDObjectReply<T> extends MsgPartitionReply implements Serializable {
+    T result;
 
     public MsgPartitionApplyReduceDDObjectReply(String DDUI, String requestId, int partId,
-                                                  Object result,
+                                                  T result,
                                                   boolean success, String failureReason) {
         super(DDUI, requestId, partId, success, failureReason);
         this.result = result;
     }
 
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 

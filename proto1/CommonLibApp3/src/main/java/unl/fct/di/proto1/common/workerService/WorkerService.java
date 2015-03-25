@@ -334,6 +334,8 @@ public class WorkerService {
                 ws.console.println("");
             } //
 
+            // TODO CONTINUAR O FILTER HERE HERE HERE GENERICSSSS <T> E cenas dessas
+            // TODO mover o código para funções de handle
             else if (message instanceof MsgPartitionApplyFilterDDObject) {
                 MsgPartitionApplyFilterDDObject msg = (MsgPartitionApplyFilterDDObject) message;
                 DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
@@ -362,7 +364,8 @@ public class WorkerService {
                         msg.getPartId());
 
                 // apply function
-                DDPartitionObject newDDPartition = parentDDPartition.forEach(msg.getAction(), msg.getNewDDUI());
+                @SuppressWarnings("unchecked")
+                DDPartitionObject newDDPartition = parentDDPartition.forEach(msg);
 
                 // keep new partition in array of partitions and show it in screen
                 ws.addDDPartition(newDDPartition);

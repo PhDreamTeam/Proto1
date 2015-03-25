@@ -1,9 +1,7 @@
 package unl.fct.di.proto1.common.remoteActions;
 
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -11,7 +9,7 @@ import java.io.Serializable;
  *
  */
 
-public class DDObjectFilterIntegerBiggerThen_1 implements Predicate<Object>, Serializable {
+public class DDObjectFilterIntegerBiggerThen_1 implements Predicate<Integer>, Serializable {
     int limit;
 
     public DDObjectFilterIntegerBiggerThen_1(int limit) {
@@ -19,8 +17,8 @@ public class DDObjectFilterIntegerBiggerThen_1 implements Predicate<Object>, Ser
     }
 
     @Override
-    public boolean test(Object value) {
-        return (Integer)value > limit;
+    public boolean test(Integer value) {
+        return value > limit;
     }
 
 }

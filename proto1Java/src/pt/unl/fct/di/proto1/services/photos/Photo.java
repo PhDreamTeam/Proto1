@@ -32,6 +32,7 @@ public class Photo implements IPhoto {
     ActorNode workerActorNode;
     String photoUuid;
     byte[] thumbnail;
+    byte[] photoInBytes;
 
     // data to be used by client
     transient BufferedImage photo = null;  // only present after client call getPhoto to worker
@@ -59,10 +60,9 @@ public class Photo implements IPhoto {
         return thumbnail;
     }
 
-    @Override
-    public BufferedImage getPhoto() throws Exception {
-        if (photo != null)
-            return photo;
+    public byte[] getPhotoInBytes() throws Exception {
+        if (photoInBytes != null)
+            return photoInBytes;
 
         // build worker actor ref
         if (workerActorNode.getActorRef() == null)
@@ -92,6 +92,23 @@ public class Photo implements IPhoto {
             throw new RuntimeException(lastOperationError);
         }
 
+        return photoInBytes;
+    }
+
+    @Override
+    public BufferedImage getPhoto() throws Exception {
+        if (photo != null)
+            return photo;
+
+        if (photoInBytes == null)
+            photoInBytes = getPhotoInBytes();
+
+
+        // build photo from byte array
+        InputStream in = new ByteArrayInputStream(photoInBytes);
+        photo = ImageIO.read(in);
+        in.close();
+
         return photo;
     }
 
@@ -106,10 +123,10 @@ public class Photo implements IPhoto {
 
             if ((numberPhotoBytesReceived += msg.getPhoto().length) == msg.getPhotoNumBytes()) {
                 try {
-                    photo = getBufferedImageFromMsgs();
+                    photoInBytes = getImageBytesFromMsgs();
                 } catch (Exception e) {
                     ClientManager.getConsole().printException(e);
-                    photo = null;
+                    photoInBytes = null;
                     lastOperationError = "Error in getPhotoReply: " + e.getMessage();
                 }
 
@@ -134,36 +151,27 @@ public class Photo implements IPhoto {
         }
     }
 
-    private BufferedImage getBufferedImageFromMsgs() throws Exception {
-
+    private byte[] getImageBytesFromMsgs() throws Exception {
         int photoSize = getPhotoReplyMsgs.get(0).getPhotoNumBytes();
 
         // build photoBytes
-        byte[] photobytes = new byte[photoSize];
-
-        BufferedImage p = null;
+        byte[] photoBytes = new byte[photoSize];
 
         // copy bytes from Msgs to this photobytes
         int currentIdx = 0;
         for (int i = 0, size = getPhotoReplyMsgs.size(); i < size; i++) {
             MsgServicePhotoGetPhotoReply msgAux = getPhotoReplyMsgs.get(i);
-            System.arraycopy(msgAux.getPhoto(), 0, photobytes, currentIdx, msgAux.getPhoto().length);
+            System.arraycopy(msgAux.getPhoto(), 0, photoBytes, currentIdx, msgAux.getPhoto().length);
             currentIdx += msgAux.getPhoto().length;
         }
 
         if (currentIdx == photoSize) {
             ClientManager.getConsole().println("photo successfully received with " + currentIdx + " bytes");
-
-            // build photo from byte array
-            InputStream in = new ByteArrayInputStream(photobytes);
-            p = ImageIO.read(in);
-            in.close();
-
             lastOperationError = null;
         } else throw new RuntimeException("Error Photo of unexpected size received, received: " + currentIdx +
                 ", expected: " + photoSize + " bytes");
 
-        return p;
+        return photoBytes;
     }
 
     @Override

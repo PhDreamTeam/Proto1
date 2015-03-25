@@ -5,7 +5,7 @@ import unl.fct.di.proto1.common.lib.protocol.Msg;
 import java.io.Serializable;
 
 
-public class MsgGetDataDDObject extends Msg implements Serializable{
+public class MsgGetDataDDObject<T> extends Msg implements Serializable{
 
     public MsgGetDataDDObject(String DDUI, String requestId) {
         super(DDUI, requestId);
@@ -14,10 +14,10 @@ public class MsgGetDataDDObject extends Msg implements Serializable{
 
     @Override
     public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgGetDataDDObjectReply(getDDUI(), getRequestId(), null, false, failureReason);
+        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), null, false, failureReason);
     }
 
-    public Msg getSuccessReplyMessage(Object[] data) {
-        return new MsgGetDataDDObjectReply(getDDUI(), getRequestId(), data, true, null);
+    public MsgGetDataDDObjectReply<T> getSuccessReplyMessage(T[] data) {
+        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), data, true, null);
     }
 }

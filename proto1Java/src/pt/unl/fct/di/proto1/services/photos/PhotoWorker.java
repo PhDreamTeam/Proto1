@@ -3,18 +3,18 @@ package pt.unl.fct.di.proto1.services.photos;
 
 import org.imgscalr.Scalr;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  *
  */
-public class PhotoWorker implements Serializable {
+public class PhotoWorker implements IPhotoRemote {
     String uuid;
     String pathFileName;
 
@@ -36,7 +36,7 @@ public class PhotoWorker implements Serializable {
         this.workerActorNode = workerActorNode;
     }
 
-    public String getUuid() {
+    public String getPhotoUuid() {
         return uuid;
     }
 
@@ -44,7 +44,7 @@ public class PhotoWorker implements Serializable {
         return pathFileName;
     }
 
-    public byte[] getThumbnail() throws IOException {
+    public byte[] getThumbnail() throws Exception {
         if (thumbnail != null)
             return thumbnail;
 
@@ -63,6 +63,7 @@ public class PhotoWorker implements Serializable {
         return thumbnail;
     }
 
+    // TODO ler directamente do ficheiro, sem utiliar o BufferedImage
     private void loadPhoto() throws IOException {
         photo = ImageIO.read(new File(pathFileName));
         // TODO console.println("loading image from: " + pathFileName);
@@ -80,7 +81,7 @@ public class PhotoWorker implements Serializable {
         return baos.toByteArray();
     }
 
-    public Photo  getPhotoObject() throws IOException {
+    public Photo  getPhotoObject() throws Exception {
         if(photoClient == null)
             photoClient = new Photo(uuid, getThumbnail(), workerActorNode);
         return photoClient;

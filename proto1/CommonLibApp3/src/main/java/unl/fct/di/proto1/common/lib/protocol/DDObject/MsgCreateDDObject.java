@@ -6,15 +6,15 @@ import unl.fct.di.proto1.common.lib.protocol.Msg;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class MsgCreateDDObject extends Msg implements Serializable {
-    Object[] data;
+public class MsgCreateDDObject<T> extends Msg implements Serializable {
+    T[] data;
 
-    public MsgCreateDDObject(String DDUI, String requestId, Object[] data) {
+    public MsgCreateDDObject(String DDUI, String requestId, T[] data) {
         super(DDUI, requestId);
         this.data = data;
     }
 
-    public Object[] getData() {
+    public T[] getData() {
         return data;
     }
 
