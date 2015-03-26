@@ -8,8 +8,6 @@ import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoRep
  */
 public interface IPhoto extends IPhotoRemote {
 
-
-
     Object getPhoto() throws Exception;
 
     public void fireMsgServicePhotoGetPhotoReply(MsgServicePhotoGetPhotoReply msg);

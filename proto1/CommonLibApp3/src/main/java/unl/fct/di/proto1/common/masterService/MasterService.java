@@ -388,7 +388,6 @@ public class MasterService {
                 handleApplyMerge((MsgApplyMergeDDObject) message);
             } //
 
-
             else if (message instanceof MsgPartitionApplyFilterDDObjectReply) {
                 handlePartitionApplyFilterReply((MsgPartitionApplyFilterDDObjectReply) message);
             } //

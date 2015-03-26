@@ -1,6 +1,5 @@
 package unl.fct.di.proto1.common.lib.core.client;
 
-import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
@@ -98,7 +97,6 @@ public class DDInt extends DD {
         ClientManager.putDD(this);
     }
 
-
     public int[] getData() {
         // send MsgGetData to master
         String requestId = UUID.randomUUID().toString();
@@ -163,15 +161,6 @@ public class DDInt extends DD {
         }
 
         return newDD;
-    }
-
-    // Map objects to another DD as specified by a Function object
-    public <R> Stream<R> map(Function<Integer, ? extends R> mapper) {
-        //for (DDPartitionInt partition : partitionsDescriptors) {
-        //    partition.map(mapper);
-        //}
-        // TODO
-        return null;
     }
 
     // Filter objects that match a Predicate object

@@ -156,7 +156,7 @@ public class Client {
 
                 // GET DD1 data
                 console.println("Getting data from DD1...");
-                Object[] result = d1.getData();
+                String[] result = d1.getData();
                 console.println("DD1 received:" + Arrays.toString(result));
                 console.println();
 
@@ -339,7 +339,8 @@ public class Client {
 
                     // OPEN IPHOTO DD1
                     console.println("Opening IPHOTOS DDUI: " + DDUI);
-                    DDObject d1 = DDObject.openDDObject(DDUI);
+                    @SuppressWarnings("unchecked")
+                    DDObject<IPhotoRemote> d1 = DDObject.openDDObject(DDUI);
                     console.println("Opened: " + d1);
                     console.println();
 
@@ -347,13 +348,13 @@ public class Client {
 
                     // APPLY FILTER to photo INTERNAL dd
                     console.println("Applying filter to IPHOTO DD -> DD2");
-                    DDObject d2 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(10_000));
+                    DDObject<IPhotoRemote> d2 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(10_000));
                     console.println("End of Function to IPHOTO DD -> DD2");
                     console.println();
 
                     // Get data from DD2
                     console.println("Getting data from DD2");
-                    Object[] result2 = d2.getData();
+                    IPhotoRemote[] result2 = d2.getData();
                     console.println("DD2 received:" + Arrays.toString(result2));
                     console.println();
 
@@ -365,13 +366,13 @@ public class Client {
 
                     // APPLY FILTER to photo INTERNAL dd
                     console.println("Applying filter to IPHOTO DD -> DD3");
-                    DDObject d3 = d1.filter(new DDObjectFilterPhotoBetweenThen_1(25_000, 35_000));
+                    DDObject<IPhotoRemote> d3 = d1.filter(new DDObjectFilterPhotoBetweenThen_1(25_000, 35_000));
                     console.println("End of Function to IPHOTO DD -> DD3");
                     console.println();
 
                     // Get data from DD3
                     console.println("Getting data from DD3");
-                    Object[] result3 = d3.getData();
+                    IPhotoRemote[] result3 = d3.getData();
                     console.println("DD3 received:" + Arrays.toString(result3));
                     console.println();
 
@@ -383,13 +384,13 @@ public class Client {
 
                     // APPLY MERGE to DD2 and DD3
                     console.println("Applying merge DD2 with DD3 -> DD4");
-                    DDObject d4 = d2.merge(d3);
+                    DDObject<IPhotoRemote> d4 = d2.merge(d3);
                     console.println("End of Merge DD2 with DD3 -> DD4");
                     console.println();
 
                     // Get data from DD4
                     console.println("Getting data from DD4");
-                    Object[] result4 = d4.getData();
+                    IPhotoRemote[] result4 = d4.getData();
                     console.println("DD4 received:" + Arrays.toString(result4));
                     console.println();
 
@@ -418,13 +419,13 @@ public class Client {
                     // OPEN IPHOTO DD1
                     console.println("Opening IPHOTOS DDUI: " + DDUI);
                     @SuppressWarnings("unchecked")
-                    DDObject<Photo> d1 = (DDObject<Photo>)(DDObject.openDDObject(DDUI));
+                    DDObject<IPhotoRemote> d1 = (DDObject<IPhotoRemote>)(DDObject.openDDObject(DDUI));
                     console.println("Opened: " + d1);
                     console.println();
 
                     // Get data from DD1
                     console.println("Getting data from DD1");
-                    Object[] result1 = d1.getData();
+                    IPhotoRemote[] result1 = d1.getData();
                     console.println("DD1 received:" + Arrays.toString(result1));
                     console.println();
 
@@ -435,14 +436,14 @@ public class Client {
 
                     // APPLY FOREACH to photo INTERNAL dd
                     console.println("Applying foreach to IPHOTO DD -> DD2");
-                    Function<Photo, Integer> f = new DDObjectFunctionIdentity_1();
+                    Function<IPhotoRemote, Integer> f = new DDObjectFunctionIdentity_1();
                     DDObject<Integer> d2 = d1.forEach(f, new Integer[]{});
                     console.println("End of foreach to IPHOTO DD -> DD2");
                     console.println();
 
                     // APPLY REDUCE to DD2
                     console.println("Applying reduce DD2");
-                    Object result2 = d2.reduce(new DDObjectReductionAdd_1());
+                    Integer result2 = d2.reduce(new DDObjectReductionAdd_1());
                     console.println("End of reduce DD2: result -> " + result2);
                     console.println();
 

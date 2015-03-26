@@ -34,8 +34,6 @@ public abstract class DD {
         this.DDUI = DDUI;
     }
 
-//    public abstract int[] getData();
-
     public String getDDUI() {
         return DDUI;
     }
@@ -52,25 +50,11 @@ public abstract class DD {
         this.lastOperationError = lastOperationError;
     }
 
-//    public abstract DD forEach(Function<Integer, Integer> action);
-
-    // Map objects to another DD as specified by a Function object
-//    public abstract <R> Stream<R> map(Function<Integer, ? extends R> mapper);
-
-    // Filter objects that match a Predicate object
-//    public abstract DD filter(Predicate<Integer> predicate);
-
     @Override
     public String toString() {
         return getDDUI() + " " + getNDataElems();
     }
 
 
-//    public abstract void fireMsgCreateDDIntReply(MsgCreateDDIntReply msg);
 
-//    public abstract void fireMsgGetDataDDIntReply(MsgGetDataDDIntReply msg);
-
-//    public abstract void fireMsgApplyFunctionDDIntReply(MsgApplyFunctionDDIntReply msg);
-
-//    public abstract void fireMsgApplyFilterDDIntReply(MsgApplyFilterDDIntReply msg);
 }

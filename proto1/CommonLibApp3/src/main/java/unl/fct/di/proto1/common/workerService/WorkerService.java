@@ -66,7 +66,8 @@ public class WorkerService {
 
 
         // Connect to DirectoryService
-        ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730", "ds", ActorType.Directory);
+        ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730", "ds",
+                ActorType.Directory);
         console.println("Trying to connect to Directory actorNode -> " + dsActorNode.getPath());
         directoryServiceActorRef = dsActorNode.generateActorRef(system);
         if (directoryServiceActorRef != null)
@@ -249,171 +250,38 @@ public class WorkerService {
             // Service ======================================
 
             if (message instanceof MsgServicePhotoGetPhoto) {
-                MsgServicePhotoGetPhoto msg = (MsgServicePhotoGetPhoto) message;
-                PhotoWorker pw = ws.getPhotoManager().getPhotoWorker(msg.getPhotoUuid());
-
-                // get photo bytes
-                byte[] photoBytes = null;
-                if (pw != null) {
-                    try {
-                        photoBytes = pw.getPhotoInBytes();
-                    } catch (IOException e) {
-                        ws.console.printException(e);
-                    }
-                }
-                if (photoBytes == null) {
-                    // build message
-                    MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
-                            msg.getDDUI(), msg.getRequestId(), 0, 0, null, false, "Error on photo loading");
-                    // send msg to client and show it on console
-                    getSender().tell(msgOut, getSelf());
-                    ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                } else {
-                    sendMsgServicePhotoGetPhotoMultiparts(msg.getDDUI(), msg.getRequestId(), photoBytes, getSender());
-                }
-                ws.console.println("");
+                handleServicePhotoGetPhoto((MsgServicePhotoGetPhoto) message);
             } //
 
 
             // DDObject =====================================
 
             else if (message instanceof MsgPartitionGetCountDDObject) {
-                MsgPartitionGetCountDDObject msg = (MsgPartitionGetCountDDObject) message;
-                DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
-
-                MsgPartitionGetCountDDObjectReply msgOut;
-                if (p != null) {
-                    msgOut = msg.getSuccessReplyMessage(p.getData().length);
-                } else {
-                    msgOut = msg.getFailureReplyMessage("partition not found");
-                }
-                // send reply and show it on screen
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionGetCount((MsgPartitionGetCountDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyReduceDDObject) {
-                MsgPartitionApplyReduceDDObject msg = (MsgPartitionApplyReduceDDObject) message;
-                DDPartitionObject ddPart = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
-
-                // apply reduction
-                Object result = ddPart.doReduction(msg.getReduction());
-                ws.console.println("Apply reduction result: " + result);
-
-                // send msg to master - create message
-                MsgPartitionApplyReduceDDObjectReply msgOut = new MsgPartitionApplyReduceDDObjectReply(
-                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), result, true, null);
-                // send reply
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionApplyReduce((MsgPartitionApplyReduceDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyMergeDDObject) {
-                MsgPartitionApplyMergeDDObject msg = (MsgPartitionApplyMergeDDObject) message;
-                DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getSrcDDUI(),
-                        msg.getSrcPartId());
-
-                // duplicate partition with newDDUI and newpartID, but with parent data
-                DDPartitionObject newDDPartition = parentDDPartition.createNewPartition(msg.getDDUI(), msg.getPartId(), parentDDPartition.getData().length);
-                newDDPartition.setData(Arrays.copyOf(parentDDPartition.getData(), parentDDPartition.getData().length));
-
-                // keep new partition in array of partitions and show it in screen
-                ws.addDDPartition(newDDPartition);
-                ws.console.println("Apply merge result: " + newDDPartition);
-
-                // send msg to master - create message
-                MsgPartitionApplyMergeDDObjectReply msgOut = new MsgPartitionApplyMergeDDObjectReply(
-                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getSrcDDUI(), msg.getSrcPartId(),
-                        newDDPartition.getData().length, true, null);
-
-                // send reply
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionApplyMerge((MsgPartitionApplyMergeDDObject) message);
             } //
 
-            // TODO CONTINUAR O FILTER HERE HERE HERE GENERICSSSS <T> E cenas dessas
-            // TODO mover o código para funções de handle
             else if (message instanceof MsgPartitionApplyFilterDDObject) {
-                MsgPartitionApplyFilterDDObject msg = (MsgPartitionApplyFilterDDObject) message;
-                DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
-                        msg.getPartId());
-
-                // apply function
-                DDPartitionObject newDDPartition = parentDDPartition.filter(msg.getFilter(), msg.getNewDDUI());
-
-                // keep new partition in array of partitions and show it in screen
-                ws.addDDPartition(newDDPartition);
-                ws.console.println("Apply filter result: " + newDDPartition);
-
-                // send msg to master - create message
-                MsgPartitionApplyFilterDDObjectReply msgOut = new MsgPartitionApplyFilterDDObjectReply(
-                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(),
-                        newDDPartition.getData().length, true, null);
-                // send reply
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionApplyFilter((MsgPartitionApplyFilterDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionApplyFunctionDDObject) {
-                MsgPartitionApplyFunctionDDObject msg = (MsgPartitionApplyFunctionDDObject) message;
-                DDPartitionObject parentDDPartition = (DDPartitionObject) ws.getPartition(msg.getDDUI(),
-                        msg.getPartId());
-
-                // apply function
-                @SuppressWarnings("unchecked")
-                DDPartitionObject newDDPartition = parentDDPartition.forEach(msg);
-
-                // keep new partition in array of partitions and show it in screen
-                ws.addDDPartition(newDDPartition);
-                ws.console.println("Apply function result: " + newDDPartition);
-
-                // send msg to master - create message
-                MsgPartitionApplyFunctionDDObjectReply msgOut = new MsgPartitionApplyFunctionDDObjectReply(
-                        msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(), true, null);
-                // send reply
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionApplyFunction((MsgPartitionApplyFunctionDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionGetDataDDObject) {
-                MsgPartitionGetDataDDObject msg = (MsgPartitionGetDataDDObject) message;
-                DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
-
-                MsgPartitionGetDataDDObjectReply msgOut;
-                if (p != null) {
-                    msgOut = new MsgPartitionGetDataDDObjectReply(
-                            p.getDDUI(), msg.getRequestId(), p.getPartId(), p.getDataToClient(), true, null);
-                } else {
-                    msgOut = msg.getFailureReplyMessage("partition not found");
-                }
-                // send reply and show it on screen
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionGetData((MsgPartitionGetDataDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionCreateDDObject) {
-                MsgPartitionCreateDDObject msgPartition = (MsgPartitionCreateDDObject) message;
-
-                // TODO if DDUI is from a internal service, throw error
-
-                DDPartitionObject partition = new DDPartitionObject(msgPartition.getDDUI(),
-                        msgPartition.getPartId(), msgPartition.getData());
-                // show in screen
-                ws.addDDPartition(partition);
-                ws.console.println("MsgCreatePartitionDDObject: processed");
-
-                // send reply
-                Msg msgOut = new MsgPartitionCreateDDObjectReply(msgPartition.getDDUI(),
-                        msgPartition.getRequestId(), msgPartition.getPartId(), true, null);
-                getSender().tell(msgOut, getSelf());
-                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
-                ws.console.println("");
+                handlePartitionCreate((MsgPartitionCreateDDObject) message);
             } //
 
 
@@ -545,6 +413,172 @@ public class WorkerService {
                 //unhandled(message);
             }
         }
+
+        // =============================================================
+        // handle messages
+        // =============================================================
+
+        private void handleServicePhotoGetPhoto(MsgServicePhotoGetPhoto msg) {
+            PhotoWorker pw = ws.getPhotoManager().getPhotoWorker(msg.getPhotoUuid());
+
+            // get photo bytes
+            byte[] photoBytes = null;
+            if (pw != null) {
+                try {
+                    photoBytes = pw.getPhotoInBytes();
+                } catch (IOException e) {
+                    ws.console.printException(e);
+                }
+            }
+            if (photoBytes == null) {
+                // build message
+                MsgServicePhotoGetPhotoReply msgOut = new MsgServicePhotoGetPhotoReply(
+                        msg.getDDUI(), msg.getRequestId(), 0, 0, null, false, "Error on photo loading");
+                // send msg to client and show it on console
+                getSender().tell(msgOut, getSelf());
+                ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            } else {
+                sendMsgServicePhotoGetPhotoMultiparts(msg.getDDUI(), msg.getRequestId(), photoBytes, getSender());
+            }
+            ws.console.println("");
+        } //
+
+        // =============================================================
+
+        private void handlePartitionGetCount(MsgPartitionGetCountDDObject msg) {
+            DDPartitionObject p = (DDPartitionObject) ws.getPartition(msg.getDDUI(), msg.getPartId());
+
+            MsgPartitionGetCountDDObjectReply msgOut;
+            if (p != null) {
+                msgOut = msg.getSuccessReplyMessage(p.getData().length);
+            } else {
+                msgOut = msg.getFailureReplyMessage("partition not found");
+            }
+            // send reply and show it on screen
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T> void handlePartitionApplyReduce(MsgPartitionApplyReduceDDObject<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDPartitionObject<T> ddPart = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(), msg.getPartId());
+
+            // apply reduction
+            T result = ddPart.doReduction(msg.getReduction());
+            ws.console.println("Apply reduction result: " + result);
+
+            // send msg to master - create message
+            MsgPartitionApplyReduceDDObjectReply<T> msgOut = new MsgPartitionApplyReduceDDObjectReply<>(
+                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), result, true, null);
+            // send reply
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T> void handlePartitionApplyMerge(MsgPartitionApplyMergeDDObject msg) {
+            @SuppressWarnings("unchecked")
+            DDPartitionObject<T> parentDDPartition = (DDPartitionObject<T>) ws.getPartition(msg.getSrcDDUI(),
+                    msg.getSrcPartId());
+
+            // duplicate partition with newDDUI and newpartID, but with parent data
+            DDPartitionObject<T> newDDPartition = parentDDPartition.createNewPartition(msg.getDDUI(), msg.getPartId(),
+                    parentDDPartition.getData().length);
+            newDDPartition.setData(Arrays.copyOf(parentDDPartition.getData(), parentDDPartition.getData().length));
+
+            // keep new partition in array of partitions and show it in screen
+            ws.addDDPartition(newDDPartition);
+            ws.console.println("Apply merge result: " + newDDPartition);
+
+            // send msg to master - create message
+            MsgPartitionApplyMergeDDObjectReply msgOut = new MsgPartitionApplyMergeDDObjectReply(
+                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getSrcDDUI(), msg.getSrcPartId(),
+                    newDDPartition.getData().length, true, null);
+
+            // send reply
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T> void handlePartitionApplyFilter(MsgPartitionApplyFilterDDObject<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDPartitionObject<T> parentDDPartition = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(),
+                    msg.getPartId());
+
+            // apply function
+            DDPartitionObject<T> newDDPartition = parentDDPartition.filter(msg.getFilter(), msg.getNewDDUI());
+
+            // keep new partition in array of partitions and show it in screen
+            ws.addDDPartition(newDDPartition);
+            ws.console.println("Apply filter result: " + newDDPartition);
+
+            // send msg to master - create message
+            MsgPartitionApplyFilterDDObjectReply msgOut = new MsgPartitionApplyFilterDDObjectReply(
+                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(),
+                    newDDPartition.getData().length, true, null);
+            // send reply
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T, R> void handlePartitionApplyFunction(MsgPartitionApplyFunctionDDObject<T, R> msg) {
+            @SuppressWarnings("unchecked")
+            DDPartitionObject<T> parentDDPartition = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(),
+                    msg.getPartId());
+
+            // apply function
+            DDPartitionObject<R> newDDPartition = parentDDPartition.forEach(msg);
+
+            // keep new partition in array of partitions and show it in screen
+            ws.addDDPartition(newDDPartition);
+            ws.console.println("Apply function result: " + newDDPartition);
+
+            // send msg to master - create message
+            MsgPartitionApplyFunctionDDObjectReply msgOut = new MsgPartitionApplyFunctionDDObjectReply(
+                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(), true, null);
+            // send reply
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T> void handlePartitionGetData(MsgPartitionGetDataDDObject<T> msg) {
+            @SuppressWarnings("unchecked")
+            DDPartitionObject<T> p = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(), msg.getPartId());
+
+            MsgPartitionGetDataDDObjectReply<T> msgOut;
+            if (p != null) {
+                T[] data = p.getDataToClient();
+                msgOut = msg.getSuccessReplyMessage(data);
+            } else {
+                msgOut = msg.getFailureReplyMessage("partition not found");
+            }
+            // send reply and show it on screen
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
+        private <T> void handlePartitionCreate(MsgPartitionCreateDDObject<T> msg) {
+            // TODO if DDUI is from a internal service, throw error
+
+            // create new partition
+            DDPartitionObject<T> partition = new DDPartitionObject<>(msg.getDDUI(), msg.getPartId(), msg.getData());
+            // add it to ws and show in screen
+            ws.addDDPartition(partition);
+            ws.console.println("Partition created DDObject: " + msg.getDDUI());
+
+            // send reply
+            Msg msgOut = new MsgPartitionCreateDDObjectReply(msg.getDDUI(),
+                    msg.getRequestId(), msg.getPartId(), true, null);
+            getSender().tell(msgOut, getSelf());
+            ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
+            ws.console.println("");
+        }
+
 
         final static int MAXPAYLOADSIZE = 100 * 1024; // 128K akka max
 

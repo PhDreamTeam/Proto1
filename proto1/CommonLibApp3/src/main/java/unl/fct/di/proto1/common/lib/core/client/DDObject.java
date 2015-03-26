@@ -1,6 +1,5 @@
 package unl.fct.di.proto1.common.lib.core.client;
 
-import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.Msg;
 import unl.fct.di.proto1.common.lib.protocol.MsgReply;
@@ -21,13 +20,14 @@ public class DDObject<T> extends DD {
         ClientManager.putDD(this);
 
         // create Create DD Msg, keep it in sentMsgsHashMap, send it to master and show it on screen
-        MsgCreateDDObject msg = new MsgCreateDDObject(DDUI, requestId, data);
+        MsgCreateDDObject<T> msg = new MsgCreateDDObject<>(DDUI, requestId, data);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
 
         // wait for completion of create DD
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -65,6 +65,7 @@ public class DDObject<T> extends DD {
 
         // wait for completion of create DD on sent msg
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -128,6 +129,7 @@ public class DDObject<T> extends DD {
 
         // wait for data of DDObject
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -136,13 +138,13 @@ public class DDObject<T> extends DD {
         }
 
         // process reply and return result
-        T[] data = null;
+        @SuppressWarnings("unchecked")
         MsgGetDataDDObjectReply<T> replyMsg = (MsgGetDataDDObjectReply<T> ) (receivedMsgsHashMap.get(requestId));
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error Getting Data: " + replyMsg.getFailureReason());
-        } else {
-            data = replyMsg.getData();
         }
+
+        T[] data = replyMsg.getData();
 
         // clean up original and reply messages
         sentMsgsHashMap.remove(msg.getRequestId());
@@ -177,6 +179,7 @@ public class DDObject<T> extends DD {
 
         // wait for operation conclusion in the sent Msg
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -199,9 +202,9 @@ public class DDObject<T> extends DD {
         return newDD;
     }
 
-    public DDObject merge(DDObject ddToMerge) {
+    public DDObject<T> merge(DDObject<T> ddToMerge) {
         // create new DDInt to store the results, create RequestId
-        DDObject newDD = new DDObject(this);
+        DDObject<T> newDD = new DDObject<>(this);
         String requestId = UUID.randomUUID().toString();
 
         // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
@@ -213,6 +216,7 @@ public class DDObject<T> extends DD {
 
         // wait for operation conclusion in original msg
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -238,19 +242,10 @@ public class DDObject<T> extends DD {
         return newDD;
     }
 
-    // Map objects to another DD as specified by a Function object
-    public <R> Stream<R> map(Function<Integer, ? extends R> mapper) {
-        //for (DDPartitionInt partition : partitionsDescriptors) {
-        //    partition.map(mapper);
-        //}
-        // TODO
-        return null;
-    }
-
     // Filter objects that match a Predicate object
     public DDObject<T> filter(Predicate<T> predicate) {
         // create new DDObject to store the results, create RequestId
-        DDObject newDD = new DDObject(this);
+        DDObject<T> newDD = new DDObject<>(this);
         String requestId = UUID.randomUUID().toString();
 
         // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
@@ -262,6 +257,7 @@ public class DDObject<T> extends DD {
 
         // wait for operation conclusion in original msg
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -288,22 +284,16 @@ public class DDObject<T> extends DD {
     }
 
     public T reduce(Reduction<T> reduceFunction) {
-
-        // send msg to master
+        // create reqID, create msg, keep msg, send master and show it on screen
         String requestId = UUID.randomUUID().toString();
         MsgApplyReduceDDObject<T> msg = new MsgApplyReduceDDObject<>(DDUI, requestId, reduceFunction);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-
-
-//        T[]  array = new T[20];
-//        int[] arr = new int[20];
-
-        // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
 
         // wait for operation conclusion in new DDObject - to enable more operations in old DD
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -311,7 +301,8 @@ public class DDObject<T> extends DD {
             ClientManager.getConsole().printException(e);
         }
 
-        MsgApplyReduceDDObjectReply<T> replyMsg = (MsgApplyReduceDDObjectReply) (receivedMsgsHashMap.get(requestId));
+        @SuppressWarnings("unchecked")
+        MsgApplyReduceDDObjectReply<T> replyMsg = (MsgApplyReduceDDObjectReply<T>) (receivedMsgsHashMap.get(requestId));
 
         // get result from new DDInt
         if (!replyMsg.isSuccess()) {
@@ -326,17 +317,16 @@ public class DDObject<T> extends DD {
     }
 
     public int count() {
-        // send MsgGetCount to master
+        // create reqID, create msg, keep msg, send master and show it on screen
         String requestId = UUID.randomUUID().toString();
         MsgGetCountDDObject msg = new MsgGetCountDDObject(DDUI, requestId);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
-
-        // show it in screen
         ClientManager.getConsole().println("Sent: " + msg);
 
         // wait for operation conclusion in new DDObject - to enable more operations in old DD
         try {
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (msg) {
                 msg.wait();
             }
@@ -371,6 +361,7 @@ public class DDObject<T> extends DD {
         Msg origSentMsg = sentMsgsHashMap.get(msgReply.getRequestId());
 
         // wake up client thread that asked to get Count
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (origSentMsg) {
             origSentMsg.notify();
         }

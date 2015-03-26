@@ -325,7 +325,7 @@ public class DDObjectMaster<T> extends DDMaster {
 
         int nPartitions = partitionsDescriptors.size();
 
-        // add clone of each ddToMerge partition
+        // add doClone of each ddToMerge partition
         for (DDPartitionDescriptor pd: ddToMerge.partitionsDescriptors) {
             // duplicate ddToMerge partition with partitionIdx corrected
             DDPartitionDescriptor newPart = new DDPartitionDescriptor(newDD.getDDUI(),

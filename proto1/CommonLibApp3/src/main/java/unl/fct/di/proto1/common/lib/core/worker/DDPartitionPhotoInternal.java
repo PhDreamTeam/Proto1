@@ -2,6 +2,7 @@ package unl.fct.di.proto1.common.lib.core.worker;
 
 import pt.unl.fct.di.proto1.services.photos.Photo;
 import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 import unl.fct.di.proto1.common.workerService.WorkerService;
 
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Arrays;
  * Created by AT DR on 11-03-2015.
  *
  */
-public class DDPartitionPhotoInternal extends DDPartitionObject {
+public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
     // TODO quando fazemos load do disco temos de fazer o setWorkerService
     transient WorkerService ws;
 
@@ -19,20 +20,22 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
         this.ws = ws;
     }
 
-    public PhotoWorker[] getDataPhotoWorkerArray() {
+    private PhotoWorker[] getDataPhotoWorkerArray() {
         // get data (photoWorker) from information on file
         return ws.getPhotoManager().getAllPhotoWorkerFromDD(DDUI);
     }
 
-    // check DR
-    public Object[] getData() {
+    /**
+     * Returns the effective stored data of data set
+     */
+    public IPhotoRemote[] getData() {
         return getDataPhotoWorkerArray();
     }
 
-    /*
-     * getData to client
+    /**
+     * Returns the data that client can manipulate. In normal DD is equal to get data.
      */
-    public Object[] getDataToClient() {
+    public IPhotoRemote[] getDataToClient() {
         // get working photo object
         PhotoWorker[] pws = getDataPhotoWorkerArray();
 
@@ -43,12 +46,12 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
         int nPhotos = 0;
 
         // get all photoObjects
-        for (int i = 0, size = pws.length; i < size; i++) {
+        for (PhotoWorker pw : pws) {
             try {
-                ps[nPhotos] = pws[i].getPhotoObject();
+                ps[nPhotos] = pw.getPhotoObject();
                 nPhotos++;
             } catch (Exception e) {
-                ws.getWorkerGui().println("Photo failed to load: " + pws[i].getPathFileName());
+                ws.getWorkerGui().println("Photo failed to load: " + pw.getPathFileName());
             }
         }
 
@@ -58,20 +61,18 @@ public class DDPartitionPhotoInternal extends DDPartitionObject {
 
 
     @Override
-    public DDPartitionObject clone() {
-        // TODO check if we should return an DDPartitionObject or DDPartitionPhoto
-
-        // first get data
+    public DDPartitionObject<IPhotoRemote> doClone() {
+         // first get data
         PhotoWorker[] pws = getDataPhotoWorkerArray();
 
         // we should return a DDPartitionObject to operate on it
-        return new DDPartitionObject(DDUI, partId, pws);
+        return new DDPartitionObject<IPhotoRemote>(DDUI, partId, pws);
     }
 
     @Override
-    public DDPartitionObject createNewPartition(String newDDUI, int partId, int length) {
+    public DDPartitionObject<IPhotoRemote> createNewPartition(String newDDUI, int partId, int length) {
         DDPartitionPhoto ddpp = new DDPartitionPhoto(newDDUI, partId, this.ws);
-        ddpp.setData(new Object[length]);
+        ddpp.setData(new IPhotoRemote[length]);
         return ddpp;
 
     }
