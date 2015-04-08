@@ -3,6 +3,7 @@ package unl.fct.di.proto1.common.workerService;
 import akka.actor.ActorSystem;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartition;
 
 import java.io.*;
@@ -53,5 +54,5 @@ public interface IWorkerGui extends IConsole{
 
     String[] getFileList();
 
-
+    IPhotoWorker createPhotoWorker(String uuid, String pathFileName, ActorNode workerActorNode);
 }

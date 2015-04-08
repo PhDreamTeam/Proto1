@@ -56,3 +56,14 @@ TODO 1 TD1: Válido para serviços e DDinternals
 // DONE DDPhoto support
 // DONE ms Substitute worker tells por CommunicationHelper.tell
 // DONE masters works well with workers crashes
+
+
+
+
+
+/***************************************************************************/
+Ponderar sobre se os dados dos DD's podem normalmente ser grandes. (podem não caber nas mensagens)
+Sendo assim podemos obter um objecto com os dados ou com o proxy para obter os dados.
+Ser possível pedir os dados diretamente ao worker e não passar pelo master...
+Ter um getData e um getAllData?!?!?
+

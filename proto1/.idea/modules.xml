@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidTests/AndroidTests.iml" filepath="$PROJECT_DIR$/AndroidTests/AndroidTests.iml" />
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CommonAndroid/CommonAndroid.iml" filepath="$PROJECT_DIR$/CommonAndroid/CommonAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" filepath="$PROJECT_DIR$/CommonLibApp3/CommonLibApp3.iml" />
       <module fileurl="file://$PROJECT_DIR$/DirectoryService/DirectoryService.iml" filepath="$PROJECT_DIR$/DirectoryService/DirectoryService.iml" />
       <module fileurl="file://$PROJECT_DIR$/MasterService/MasterService.iml" filepath="$PROJECT_DIR$/MasterService/MasterService.iml" />

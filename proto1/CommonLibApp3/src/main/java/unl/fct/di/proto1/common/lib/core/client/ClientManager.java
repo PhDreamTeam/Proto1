@@ -3,8 +3,8 @@ package unl.fct.di.proto1.common.lib.core.client;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import pt.unl.fct.di.proto1.services.photos.Photo;
 import unl.fct.di.proto1.common.IConsole;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhoto;
 
 import java.util.HashMap;
 
@@ -19,13 +19,13 @@ public class ClientManager {
 
     static HashMap<String, DD> DDMap =  new HashMap<>();
 
-    static HashMap<String, Photo> photoMap = new HashMap<>();
+    static HashMap<String, IPhoto> photoMap = new HashMap<>();
 
-    public static void putPhotoInPhotoMap(Photo p){
+    public static void putPhotoInPhotoMap(IPhoto p){
         photoMap.put(p.getPhotoUuid(), p);
     }
 
-    public static Photo getPhotoInPhotoMap(String photoUuid){
+    public static IPhoto getPhotoInPhotoMap(String photoUuid){
         return photoMap.get(photoUuid);
     }
 

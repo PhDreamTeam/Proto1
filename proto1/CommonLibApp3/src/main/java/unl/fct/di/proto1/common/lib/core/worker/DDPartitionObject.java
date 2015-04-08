@@ -50,9 +50,9 @@ public class DDPartitionObject<T> extends DDPartition {
     /**
      * Returns the data that client can manipulate. In normal DD is equal to get data.
      */
-    public T[] getDataToClient() {
-        return data;
-    }
+//    public T[] getDataToClient() {
+//        return data;
+//    }
 
     public <R> DDPartitionObject<R> forEach(MsgPartitionApplyFunctionDDObject<T, R> msg) {
         // create a new partition - partitions are read only

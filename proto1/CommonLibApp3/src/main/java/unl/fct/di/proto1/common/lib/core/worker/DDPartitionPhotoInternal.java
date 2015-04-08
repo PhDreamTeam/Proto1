@@ -1,8 +1,8 @@
 package unl.fct.di.proto1.common.lib.core.worker;
 
-import pt.unl.fct.di.proto1.services.photos.Photo;
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhoto;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.workerService.WorkerService;
 
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Created by AT DR on 11-03-2015.
  *
  */
-public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
+public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoWorker> {
     // TODO quando fazemos load do disco temos de fazer o setWorkerService
     transient WorkerService ws;
 
@@ -20,7 +20,7 @@ public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
         this.ws = ws;
     }
 
-    private PhotoWorker[] getDataPhotoWorkerArray() {
+    private IPhotoWorker[] getDataPhotoWorkerArray() {
         // get data (photoWorker) from information on file
         return ws.getPhotoManager().getAllPhotoWorkerFromDD(DDUI);
     }
@@ -28,7 +28,7 @@ public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
     /**
      * Returns the effective stored data of data set
      */
-    public IPhotoRemote[] getData() {
+    public IPhotoWorker[] getData() {
         return getDataPhotoWorkerArray();
     }
 
@@ -37,16 +37,16 @@ public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
      */
     public IPhotoRemote[] getDataToClient() {
         // get working photo object
-        PhotoWorker[] pws = getDataPhotoWorkerArray();
+        IPhotoWorker[] pws = getDataPhotoWorkerArray();
 
         // array to be returned
-        Photo[] ps = new Photo[pws.length];
+        IPhoto[] ps = new IPhoto[pws.length];
 
         // number of photos in array
         int nPhotos = 0;
 
         // get all photoObjects
-        for (PhotoWorker pw : pws) {
+        for (IPhotoWorker pw : pws) {
             try {
                 ps[nPhotos] = pw.getPhotoObject();
                 nPhotos++;
@@ -61,18 +61,18 @@ public class DDPartitionPhotoInternal extends DDPartitionObject<IPhotoRemote> {
 
 
     @Override
-    public DDPartitionObject<IPhotoRemote> doClone() {
+    public DDPartitionObject<IPhotoWorker> doClone() {
          // first get data
-        PhotoWorker[] pws = getDataPhotoWorkerArray();
+        IPhotoWorker[] pws = getDataPhotoWorkerArray();
 
         // we should return a DDPartitionObject to operate on it
-        return new DDPartitionObject<IPhotoRemote>(DDUI, partId, pws);
+        return new DDPartitionObject<>(DDUI, partId, pws);
     }
 
     @Override
-    public DDPartitionObject<IPhotoRemote> createNewPartition(String newDDUI, int partId, int length) {
+    public DDPartitionObject<IPhotoWorker> createNewPartition(String newDDUI, int partId, int length) {
         DDPartitionPhoto ddpp = new DDPartitionPhoto(newDDUI, partId, this.ws);
-        ddpp.setData(new IPhotoRemote[length]);
+        ddpp.setData(new IPhotoWorker[length]);
         return ddpp;
 
     }

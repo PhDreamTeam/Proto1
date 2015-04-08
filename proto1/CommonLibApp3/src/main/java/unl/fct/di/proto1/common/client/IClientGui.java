@@ -20,4 +20,8 @@ public interface IClientGui extends IConsole {
     void updateViewServices() ;
 
     void addService(ActorNode newNode);
+
+    void displayThumbnails(Object[] photos);
+
+    void displayPhotos(Object[] photos);
 }

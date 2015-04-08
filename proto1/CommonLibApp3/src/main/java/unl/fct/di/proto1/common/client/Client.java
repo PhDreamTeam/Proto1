@@ -2,7 +2,6 @@ package unl.fct.di.proto1.common.client;
 
 import akka.actor.*;
 import akka.japi.Creator;
-import pt.unl.fct.di.proto1.services.photos.Photo;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
@@ -10,6 +9,7 @@ import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.client.ClientManager;
 import unl.fct.di.proto1.common.lib.core.client.DDInt;
 import unl.fct.di.proto1.common.lib.core.client.DDObject;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhoto;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFilterDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFunctionDDIntReply;
@@ -21,7 +21,6 @@ import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoRep
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
 import unl.fct.di.proto1.common.remoteActions.*;
 
-import javax.swing.*;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -271,7 +270,7 @@ public class Client {
                     //  displayThumbnails(photos);
 
                     // display photos
-                    displayPhotos(photos);
+                    clientGui.displayPhotos(photos);
 
                     // APPLY FUNCTION to photo dd
                     console.println("Applying Function to IPHOTO DD -> DD2");
@@ -304,7 +303,7 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(result3);
+                    clientGui.displayThumbnails(result3);
 
                     // APPLY FILTER TEST to dd
                     console.println("Applying filter to DD2 (Integer) -> DD4 (Integer)");
@@ -359,7 +358,7 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(result2);
+                    clientGui.displayThumbnails(result2);
 
 
                     // DD3 ===========================================================
@@ -377,7 +376,7 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(result3);
+                    clientGui.displayThumbnails(result3);
 
 
                     // DD4 ===========================================================
@@ -395,7 +394,7 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(result4);
+                    clientGui.displayThumbnails(result4);
 
                 } catch (Exception e) {
                     console.printException(e);
@@ -430,7 +429,7 @@ public class Client {
                     console.println();
 
                     // display thumbnails
-                    displayThumbnails(result1);
+                    clientGui.displayThumbnails(result1);
 
                     // DD2 ===========================================================
 
@@ -500,55 +499,55 @@ public class Client {
         t.start();
     }
 
-    private void displayThumbnails(Object[] photos) {
-        // TODO this code should run in swing EDT
-
-        JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        JPanel jp = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(jp);
-        jf.add(scrollPane);
-
-        for (int i = 0; i < photos.length; i++) {
-            ImageIcon t = new ImageIcon(((Photo) photos[i]).getThumbnail());
-            jp.add(new JLabel(t));
-        }
-        jf.setSize(300, 400);
-        jf.setLocationRelativeTo(null);
-
-        jf.setVisible(true);
-    }
-
-
-    private void displayPhotos(Object[] photos) {
-        // TODO this code should run in swing EDT
-
-        JFrame jf = new JFrame();
-        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-
-        JPanel jp = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(jp);
-        jf.add(scrollPane);
-
-
-        for (int i = 0; i < photos.length; i++) {
-            Photo p = ((Photo) photos[i]);
-            console.println("Loading photo: " + p.getPhotoUuid());
-            ImageIcon t = null;
-            try {
-                t = new ImageIcon(p.getPhotoInBytes());
-                jp.add(new JLabel(t));
-            } catch (Exception e) {
-                console.println("Error loading photo " + p.getPhotoUuid());
-            }
-        }
-        jf.pack();
-        jf.setLocationRelativeTo(null);
-
-        jf.setVisible(true);
-    }
+//    private void displayThumbnails(Object[] photos) {
+//        // TODO this code should run in swing EDT
+//
+//        JFrame jf = new JFrame();
+//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//        JPanel jp = new JPanel();
+//        JScrollPane scrollPane = new JScrollPane(jp);
+//        jf.add(scrollPane);
+//
+//        for (int i = 0; i < photos.length; i++) {
+//            ImageIcon t = new ImageIcon(((Photo) photos[i]).getThumbnail());
+//            jp.add(new JLabel(t));
+//        }
+//        jf.setSize(300, 400);
+//        jf.setLocationRelativeTo(null);
+//
+//        jf.setVisible(true);
+//    }
+//
+//
+//    private void displayPhotos(Object[] photos) {
+//        // TODO this code should run in swing EDT
+//
+//        JFrame jf = new JFrame();
+//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//
+//        JPanel jp = new JPanel();
+//        JScrollPane scrollPane = new JScrollPane(jp);
+//        jf.add(scrollPane);
+//
+//
+//        for (int i = 0; i < photos.length; i++) {
+//            Photo p = ((Photo) photos[i]);
+//            console.println("Loading photo: " + p.getPhotoUuid());
+//            ImageIcon t = null;
+//            try {
+//                t = new ImageIcon(p.getPhotoInBytes());
+//                jp.add(new JLabel(t));
+//            } catch (Exception e) {
+//                console.println("Error loading photo " + p.getPhotoUuid());
+//            }
+//        }
+//        jf.pack();
+//        jf.setLocationRelativeTo(null);
+//
+//        jf.setVisible(true);
+//    }
 
 
     // ------------------------------------------------------------
@@ -606,7 +605,7 @@ public class Client {
             // Services ==================================
             if (message instanceof MsgServicePhotoGetPhotoReply) {
                 MsgServicePhotoGetPhotoReply msg = (MsgServicePhotoGetPhotoReply) message;
-                Photo photo = ClientManager.getPhotoInPhotoMap(msg.getPhotoUuid());
+                IPhoto photo = ClientManager.getPhotoInPhotoMap(msg.getPhotoUuid());
                 photo.fireMsgServicePhotoGetPhotoReply(msg);
             } //
 

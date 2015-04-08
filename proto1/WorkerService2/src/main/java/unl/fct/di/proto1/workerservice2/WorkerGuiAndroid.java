@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.typesafe.config.ConfigFactory;
+import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartition;
 import unl.fct.di.proto1.common.workerService.IWorkerGui;
 import unl.fct.di.proto1.common.workerService.WorkerRequest;
@@ -172,6 +174,11 @@ public class WorkerGuiAndroid implements IWorkerGui {
     @Override
     public String[] getFileList() {
         return context.fileList();
+    }
+
+    @Override
+    public IPhotoWorker createPhotoWorker(String uuid, String pathFileName, ActorNode workerActorNode) {
+        return new PhotoWorker(uuid, pathFileName, workerActorNode);
     }
 
     public void println(final String msg) {

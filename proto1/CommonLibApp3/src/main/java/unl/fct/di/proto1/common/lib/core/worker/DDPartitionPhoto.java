@@ -1,8 +1,8 @@
 package unl.fct.di.proto1.common.lib.core.worker;
 
-import pt.unl.fct.di.proto1.services.photos.Photo;
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhoto;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.workerService.WorkerService;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class DDPartitionPhoto extends DDPartitionPhotoInternal {
     /**
      * returns photoworkers
      */
-    public IPhotoRemote[] getData() {
+    public IPhotoWorker[] getData() {
         return data;
     }
 
@@ -28,19 +28,19 @@ public class DDPartitionPhoto extends DDPartitionPhotoInternal {
    */
     public IPhotoRemote[] getDataToClient() {
         // get working photo object
-        IPhotoRemote[] pws = this.getData();
+        IPhotoWorker[] pws = this.getData();
 
         // array to be returned
-        Photo[] ps = new Photo[pws.length];
+        IPhoto[] ps = new IPhoto[pws.length];
 
         // get all photoObjects
         int nPhotos = 0;
-        for (IPhotoRemote pw : pws) {
+        for (IPhotoWorker pw : pws) {
             try {
-                ps[nPhotos] = ((PhotoWorker)pw).getPhotoObject();
+                ps[nPhotos] = pw.getPhotoObject();
                 nPhotos++;
             } catch (Exception e) {
-                ws.getWorkerGui().println("Photo failed to load: " + ((PhotoWorker)pw).getPathFileName());
+                ws.getWorkerGui().println("Photo failed to load: " + pw.getPathFileName());
             }
         }
 

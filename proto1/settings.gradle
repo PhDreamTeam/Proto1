@@ -1,3 +1,3 @@
-include ':DirectoryService', ':MasterService', ':WorkerService', ':CommonLibApp3', ':WorkerService2', ':Client', ':AndroidTests'
+include ':DirectoryService', ':MasterService', ':WorkerService', ':CommonLibApp3', ':WorkerService2', ':Client', ':AndroidTests', ':CommonAndroid'
 
 

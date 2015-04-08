@@ -5,11 +5,12 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.japi.Creator;
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.ActorState;
 import unl.fct.di.proto1.common.lib.ActorType;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartition;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartitionInt;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartitionObject;
@@ -118,12 +119,13 @@ public class WorkerService {
             ObjectInputStream ois = new ObjectInputStream(is);
 
             // read partitions to collection
-            ArrayList<DDPartition> DDPartitionsAux = null;
             Object obj = ois.readObject();
-            if (obj instanceof ArrayList)
-                DDPartitionsAux = (ArrayList<DDPartition>) obj;
-            else
+            if (!(obj instanceof ArrayList))
                 throw new Exception("Error reading partitions object from disk. Object type unexpected!!!");
+
+            @SuppressWarnings("unchecked")
+            ArrayList<DDPartition> DDPartitionsAux = (ArrayList<DDPartition>) obj;
+
             // insert them in ArrayList connected to adapter
             for (DDPartition part : DDPartitionsAux) {
                 wg.addDDPartition(part);
@@ -176,18 +178,15 @@ public class WorkerService {
     public DDPartition getPartition(String DDUI, int partID) {
         // if internal DD
         if (serviceManager.getInternalDDUIs().contains(DDUI)) {
-            DDPartitionPhotoInternal dd = new DDPartitionPhotoInternal(DDUI, partID, this);
-            return dd;
+            return new DDPartitionPhotoInternal(DDUI, partID, this);
         }
 
         // other DD
-        List<DDPartition> ddParts = getArrayDDPartitions();
-
-        for (int i = 0, size = ddParts.size(); i < size; i++) {
-            DDPartition p = ddParts.get(i);
+        for (DDPartition p: getArrayDDPartitions()) {
             if (p.getDDUI().equals(DDUI) && p.getPartId() == partID)
                 return p;
         }
+
         return null;
     }
 
@@ -347,7 +346,7 @@ public class WorkerService {
 
             else if (message instanceof MsgPartitionCreateDDInt) {
                 MsgPartitionCreateDDInt msgPartition = (MsgPartitionCreateDDInt) message;
-                ActorNode masterActorNode = new ActorNode(getSender(), ActorState.ACTIVE, ActorType.Master);
+                //ActorNode masterActorNode = new ActorNode(getSender(), ActorState.ACTIVE, ActorType.Master);
 
                 // create new partition
                 DDPartitionInt partition = new DDPartitionInt(msgPartition.getDDUI(),
@@ -419,14 +418,14 @@ public class WorkerService {
         // =============================================================
 
         private void handleServicePhotoGetPhoto(MsgServicePhotoGetPhoto msg) {
-            PhotoWorker pw = ws.getPhotoManager().getPhotoWorker(msg.getPhotoUuid());
+            IPhotoWorker pw = ws.getPhotoManager().getPhotoWorker(msg.getPhotoUuid());
 
             // get photo bytes
             byte[] photoBytes = null;
             if (pw != null) {
                 try {
                     photoBytes = pw.getPhotoInBytes();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     ws.console.printException(e);
                 }
             }
@@ -549,10 +548,18 @@ public class WorkerService {
             @SuppressWarnings("unchecked")
             DDPartitionObject<T> p = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(), msg.getPartId());
 
-            MsgPartitionGetDataDDObjectReply<T> msgOut;
+            MsgPartitionGetDataDDObjectReply msgOut;
             if (p != null) {
-                T[] data = p.getDataToClient();
-                msgOut = msg.getSuccessReplyMessage(data);
+                if(p instanceof DDPartitionPhotoInternal){
+                    IPhotoRemote[] data = ((DDPartitionPhotoInternal)p).getDataToClient();
+                    msgOut = new MsgPartitionGetDataDDObjectReply<>(
+                            msg.getDDUI(), msg.getRequestId(), msg.getPartId(), data, true, null
+                    );
+                }
+                else {
+                    T[] data = p.getData();
+                    msgOut = msg.getSuccessReplyMessage(data);
+                }
             } else {
                 msgOut = msg.getFailureReplyMessage("partition not found");
             }

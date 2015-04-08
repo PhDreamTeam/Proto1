@@ -80,7 +80,58 @@ public class ClientGuiAndroid implements IClientGui {
         }
     }
 
-    public void println(final String msg) {
+
+    public void displayThumbnails(Object[] photos) {
+//        // TODO this code should run in swing EDT
+//
+//        JFrame jf = new JFrame();
+//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//        JPanel jp = new JPanel();
+//        JScrollPane scrollPane = new JScrollPane(jp);
+//        jf.add(scrollPane);
+//
+//        for (int i = 0; i < photos.length; i++) {
+//            ImageIcon t = new ImageIcon(((Photo) photos[i]).getThumbnail());
+//            jp.add(new JLabel(t));
+//        }
+//        jf.setSize(300, 400);
+//        jf.setLocationRelativeTo(null);
+//
+//        jf.setVisible(true);
+    }
+
+    public void displayPhotos(Object[] photos) {
+//        // TODO this code should run in swing EDT
+//
+//        JFrame jf = new JFrame();
+//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//
+//        JPanel jp = new JPanel();
+//        JScrollPane scrollPane = new JScrollPane(jp);
+//        jf.add(scrollPane);
+//
+//
+//        for (int i = 0; i < photos.length; i++) {
+//            Photo p = ((Photo) photos[i]);
+//            console.println("Loading photo: " + p.getPhotoUuid());
+//            ImageIcon t = null;
+//            try {
+//                t = new ImageIcon(p.getPhotoInBytes());
+//                jp.add(new JLabel(t));
+//            } catch (Exception e) {
+//                console.println("Error loading photo " + p.getPhotoUuid());
+//            }
+//        }
+//        jf.pack();
+//        jf.setLocationRelativeTo(null);
+//
+//        jf.setVisible(true);
+    }
+
+
+        public void println(final String msg) {
         console.post(new Runnable() {
             @Override
             public void run() {

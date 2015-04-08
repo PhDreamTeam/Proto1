@@ -1,6 +1,6 @@
 package unl.fct.di.proto1.common.workerService;
 
-import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class PhotoManager {
 
     WorkerService ws;
     // UUIDs and its photoWorkers
-    HashMap<String, PhotoWorker> allInternalPhotos = new HashMap<>();
+    HashMap<String, IPhotoWorker> allInternalPhotos = new HashMap<>();
 
     // TODO: when we remove one photo, the photo must be removed from here and from the previous MAP
     // UUIDs and its pathFileNames
@@ -31,11 +31,11 @@ public class PhotoManager {
         this.ws = ws;
     }
 
-    public PhotoWorker getPhotoWorker(String photoUUID) {
-        PhotoWorker pw =  allInternalPhotos.get(photoUUID);
+    public IPhotoWorker getPhotoWorker(String photoUUID) {
+        IPhotoWorker pw =  allInternalPhotos.get(photoUUID);
         if(pw == null) {
             // build object
-            pw = new PhotoWorker(photoUUID, allInternalPhotoPathName.get(photoUUID), ws.getWorkerActorNode());
+            pw = ws.wg.createPhotoWorker(photoUUID, allInternalPhotoPathName.get(photoUUID), ws.getWorkerActorNode()); //new PhotoWorker(photoUUID, allInternalPhotoPathName.get(photoUUID), ws.getWorkerActorNode());
             // add it to map of photos
             allInternalPhotos.put(photoUUID, pw);
         }
@@ -72,11 +72,11 @@ public class PhotoManager {
         return photoUuids;
     }
 
-    public PhotoWorker[] getAllPhotoWorkerFromDD(String photoDD) {
+    public IPhotoWorker[] getAllPhotoWorkerFromDD(String photoDD) {
         // read photoDD file, get photofilenames and uuids
         ArrayList<String> photoUuids = loadPhotoNamesFromDisk(photoDD);
         // create array
-        PhotoWorker[] photoWorkers = new PhotoWorker[photoUuids.size()];
+        IPhotoWorker[] photoWorkers = new IPhotoWorker[photoUuids.size()];
         // create photoWorkers to array
         for (int i = 0, size = photoUuids.size(); i < size; ++i)
             photoWorkers[i] = getPhotoWorker(photoUuids.get(i));

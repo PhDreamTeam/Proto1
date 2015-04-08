@@ -12,4 +12,5 @@ public interface IPhotoRemote extends Serializable {
     byte[] getPhotoInBytes() throws Exception;
 
     byte[] getThumbnail() throws Exception;
+
 }
