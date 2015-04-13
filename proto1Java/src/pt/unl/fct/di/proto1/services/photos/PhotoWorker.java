@@ -3,7 +3,7 @@ package pt.unl.fct.di.proto1.services.photos;
 
 import org.imgscalr.Scalr;
 import unl.fct.di.proto1.common.lib.ActorNode;
-import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  *
  */
-public class PhotoWorker implements IPhotoRemote {
+public class PhotoWorker implements IPhotoWorker {
     String uuid;
     String pathFileName;
 

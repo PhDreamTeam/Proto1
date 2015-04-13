@@ -9,17 +9,29 @@ import java.io.Serializable;
  *
  */
 public class MsgGetCountDDObject extends Msg implements Serializable {
+    boolean allowIncompleteResults;
 
-    public MsgGetCountDDObject(String DDUI, String requestId) {
+    public MsgGetCountDDObject(String DDUI, String requestId, boolean allowIncompleteResults) {
         super(DDUI, requestId);
+        this.allowIncompleteResults = allowIncompleteResults;
+    }
+
+    public boolean allowIncompleteResults() {
+        return allowIncompleteResults;
     }
 
     @Override
-    public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgGetCountDDObjectReply(getDDUI(), getRequestId(), 0, false, failureReason);
+    public String toString() {
+        return super.toString() + (allowIncompleteResults ? " allows incomplete results" : "");
     }
 
-    public Msg getSuccessReplyMessage(int count) {
-        return new MsgGetCountDDObjectReply(getDDUI(), getRequestId(), count, true, null);
+
+    @Override
+    public Msg getFailureReplyMessage(String failureReason) {
+        return new MsgGetCountDDObjectReply(getDDUI(), getRequestId(), 0, false, false, failureReason);
+    }
+
+    public MsgGetCountDDObjectReply getSuccessReplyMessage(int count) {
+        return new MsgGetCountDDObjectReply(getDDUI(), getRequestId(), count, false, true, null);
     }
 }

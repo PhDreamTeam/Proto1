@@ -1,7 +1,7 @@
 package unl.fct.di.proto1.common.lib.core.client;
 
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
 import java.util.UUID;
@@ -134,7 +134,7 @@ public class DDInt extends DD {
      *               should produce aa new element of the same type
      * @return the new DD
      */
-    public DDInt forEach(Function<Integer, Integer> action) {
+    public DDInt forEach(MapFunction<Integer, Integer> action) {
         // create new DDInt to store the results
         DDInt newDD = new DDInt(this);
 

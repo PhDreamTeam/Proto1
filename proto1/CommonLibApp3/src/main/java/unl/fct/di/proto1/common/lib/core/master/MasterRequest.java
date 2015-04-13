@@ -20,37 +20,42 @@ import java.util.concurrent.TimeUnit;
 public class MasterRequest implements Serializable {
     enum REQUEST_STATE {WAITING, FAILED, SUCCESS}
 
-    HashMap<Integer, MsgPartitionReply> answers = new HashMap<>();
-    ArrayList<SentMsgRequestTracker> pendingRequests = new ArrayList<>();
+    private HashMap<Integer, MsgPartitionReply> answers = new HashMap<>();
+    private ArrayList<SentMsgRequestTracker> pendingRequests = new ArrayList<>();
 
-    String requestId;
+    private String requestId;
 
-    ActorNode requestOwnerActorNode;
+    private ActorNode requestOwnerActorNode;
 
-    DDMaster dd;
+    private DDMaster dd;
 
-    boolean failed = false;
+    private boolean failed = false;
 
-    REQUEST_STATE state = REQUEST_STATE.WAITING;
+    private boolean receivedAtLeastOneSuccessMessage = false;
 
-    Cancellable timeout = null;
+    private REQUEST_STATE state = REQUEST_STATE.WAITING;
 
-    Msg msgRequest;
+    private Cancellable timeout = null;
 
-    String failureReason = "";
+    private Msg msgRequest;
+
+    private String failureReason = "";
 
     // to count the number the received elements in getdata
-    int nElemsReceived = 0;
+    private int nElemsReceived = 0;
+
+    private boolean allowIncompleteResults;
 
 
     /*
      *
      */
-    public MasterRequest(String requestId, ActorNode requestOwner, DDMaster dd, Msg msgRequest) {
+    public MasterRequest(String requestId, ActorNode requestOwner, DDMaster dd, Msg msgRequest, boolean allowIncompleteResults) {
         this.requestId = requestId;
         this.dd = dd;
         requestOwnerActorNode = requestOwner;
         this.msgRequest = msgRequest;
+        this.allowIncompleteResults = allowIncompleteResults;
     }
 
     public void addReqTrk(SentMsgRequestTracker reqTrk) {
@@ -84,18 +89,28 @@ public class MasterRequest implements Serializable {
         nElemsReceived += nElems;
     }
 
+    public boolean allowIncompleteResults() {
+        return allowIncompleteResults;
+    }
+
+    public boolean receivedAtLeastOneSuccessMessage() {
+        return receivedAtLeastOneSuccessMessage;
+    }
+
     public void addAnswer(MsgPartitionReply msgReply) {
         if (!deletePendingMsgTrkRequest(msgReply)) {
             GlManager.getConsole().println("Received unexpected msgPartitionReply: " + msgReply);
             return;
         }
 
-        // check for failure
+        // checking for failure
         if (!msgReply.isSuccess()) {
             failed = true;
             if (failureReason.length() != 0)
                 failureReason += ", ";
             failureReason += "partId: " + msgReply.getPartId() + " " + msgReply.getFailureReason();
+        } else {
+            receivedAtLeastOneSuccessMessage = true;
         }
 
         // add answer
@@ -143,28 +158,37 @@ public class MasterRequest implements Serializable {
         return timeout;
     }
 
-    public Cancellable createTimeout() {
+    public Cancellable createTimeout(final Runnable timeoutCustomProcedure) {
         // create timeout
         timeout = GlManager.getMasterService().getSystem().scheduler().scheduleOnce(
                 Duration.create(30, TimeUnit.SECONDS), new Runnable() {
                     @Override
                     public void run() {
                         // fire timeout
-                        fireTimeout();
+                        fireTimeout(timeoutCustomProcedure);
                     }
                 }, GlManager.getMasterService().getSystem().dispatcher());
         return timeout;
     }
 
-    public void fireTimeout() {
+    public void fireTimeout(Runnable timeoutCustomProcedure) {
         if (getState().equals(REQUEST_STATE.WAITING)) {
             // cancel request and return TIMEOUT or incomplete results
             state = REQUEST_STATE.FAILED;
             failed = true;
-            failureReason = "TIMEOUT " + (failureReason != null ? "with: " + failureReason : "");
+            failureReason = "TIMEOUT " + (!failureReason.equals("") ? "with: " + failureReason : "");
 
-            // return failure
-            getRequestOwner().tell(msgRequest.getFailureReplyMessage(failureReason), GlManager.getMasterActor());
+            GlManager.getConsole().println("Timeout fired: " + this.getMsgRequest());
+
+            // checking incomplete results
+            if(allowIncompleteResults && (timeoutCustomProcedure != null)) {
+                // run timeout custom procedure
+               timeoutCustomProcedure.run();
+            }
+            else {
+                // return failure
+                getRequestOwner().tell(msgRequest.getFailureReplyMessage(failureReason), GlManager.getMasterActor());
+            }
 
             // remove all pending trkReqs from this MasterRequest in CommunicationHelper List
             GlManager.getCommunicationHelper().removePendingTrackers(this);

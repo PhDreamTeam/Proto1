@@ -22,6 +22,10 @@ public class MsgReply extends Msg implements Serializable {
         return failureReason;
     }
 
+    public void setFailureReason(String failureReason) {
+        this.failureReason = failureReason;
+    }
+
     @Override
     public String toString() {
         return super.toString() + getIntermediateInfo() +

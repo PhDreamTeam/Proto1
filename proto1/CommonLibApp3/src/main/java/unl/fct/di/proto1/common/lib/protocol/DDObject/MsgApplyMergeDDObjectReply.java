@@ -8,16 +8,18 @@ import java.io.Serializable;
 public class MsgApplyMergeDDObjectReply extends MsgReply implements Serializable {
     String ddToMergeDDUI, newDDUI;
     int nDataElemsDD;
+    boolean hasIncompleteResults;
 
 
     public MsgApplyMergeDDObjectReply(String DDUI, String requestId, String ddToMergeDDUI,
-                                      String newDDUI, int nDataElemsDD,
+                                      String newDDUI, int nDataElemsDD,  boolean hasIncompleteResults,
                                       boolean success, String failureReason) {
         super(DDUI, requestId, success, failureReason);
 
         this.ddToMergeDDUI = ddToMergeDDUI;
         this.newDDUI = newDDUI;
         this.nDataElemsDD = nDataElemsDD;
+        this.hasIncompleteResults = hasIncompleteResults;
     }
 
 
@@ -33,11 +35,21 @@ public class MsgApplyMergeDDObjectReply extends MsgReply implements Serializable
         return nDataElemsDD;
     }
 
+    public boolean hasIncompleteResults() {
+        return hasIncompleteResults;
+    }
+
+    public void setIncompleteResults(String failureReason) {
+        hasIncompleteResults = true;
+        setFailureReason(failureReason);
+    }
+
 
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
         return super.getIntermediateInfo() +  ", ddToMergeDDUI: " + getDdToMergeDDUI()
-                +  ", srcDDUI: " + getNewDDUI()+ ", nElems: " + getnDataElemsDD();
+                +  ", newDDUI: " + getNewDDUI()+ ", nElems: " + getnDataElemsDD() +
+                (hasIncompleteResults ? " has incomplete results: " + getFailureReason() : "");
     }
 }

@@ -9,6 +9,7 @@ import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.client.ClientManager;
 import unl.fct.di.proto1.common.lib.core.client.DDInt;
 import unl.fct.di.proto1.common.lib.core.client.DDObject;
+import unl.fct.di.proto1.common.lib.core.client.IncompleteResultsInfo;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhoto;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgApplyFilterDDIntReply;
@@ -18,7 +19,7 @@ import unl.fct.di.proto1.common.lib.protocol.DDInt.MsgGetDataDDIntReply;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.*;
 import unl.fct.di.proto1.common.lib.protocol.services.MsgServicePhotoGetPhotoReply;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.remoteActions.*;
 
 import java.util.Arrays;
@@ -99,7 +100,7 @@ public class Client {
 
                 // Apply function to DDInt
                 console.println("Applying Function to DDint -> DDInt2");
-                DDInt d2 = d1.forEach(new DDIntFunctionAdd_1());
+                DDInt d2 = d1.forEach(new DDIntMapFunctionAdd_1());
                 console.println("End of Function to DDint -> DDInt2.");
                 console.println();
 
@@ -161,7 +162,7 @@ public class Client {
 
                 // Apply function to DD2
                 console.println("Applying Function to DD1 -> DD2");
-                DDObject<String> d2 = d1.forEach(new DDObjectFunctionAddLength_1(), new String[]{});
+                DDObject<String> d2 = d1.map(new DDObjectMapFunctionAddLength_1(), new String[]{});
                 console.println("End of Function to DD1 -> DD2.");
                 console.println();
 
@@ -274,7 +275,7 @@ public class Client {
 
                     // APPLY FUNCTION to photo dd
                     console.println("Applying Function to IPHOTO DD -> DD2");
-                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionPhotoToSize_1(), new Integer[]{});
+                    DDObject<Integer> d2 = d1.map(new DDObjectMapMapFunctionPhotoToSize_1(), new Integer[]{});
                     console.println("End of Function to IPHOTO DD -> DD2.");
                     console.println();
 
@@ -286,7 +287,7 @@ public class Client {
 
                     // APPLY FILTER TEST to photo INTERNAL dd
                     console.println("Applying filter to IPHOTO DD -> DD3");
-                    DDObject d3 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(100_000));
+                    DDObject<IPhotoRemote> d3 = d1.filter(new DDObjectFilterPhotoBiggerThen_1(100_000));
                     console.println("End of Function to IPHOTO DD -> DD3.");
                     console.println();
 
@@ -298,7 +299,7 @@ public class Client {
 
                     // Get data from DD3
                     console.println("Getting data from DD3 (Photo)...");
-                    Object[] result3 = d3.getData();
+                    IPhotoRemote[] result3 = d3.getData();
                     console.println("DD3 received:" + Arrays.toString(result3));
                     console.println();
 
@@ -435,8 +436,8 @@ public class Client {
 
                     // APPLY FOREACH to photo INTERNAL dd
                     console.println("Applying foreach to IPHOTO DD -> DD2");
-                    Function<IPhotoRemote, Integer> f = new DDObjectFunctionIdentity_1();
-                    DDObject<Integer> d2 = d1.forEach(f, new Integer[]{});
+                    MapFunction<IPhotoRemote, Integer> f = new DDObjectMapFunctionIdentity_1();
+                    DDObject<Integer> d2 = d1.map(f, new Integer[]{});
                     console.println("End of foreach to IPHOTO DD -> DD2");
                     console.println();
 
@@ -445,6 +446,84 @@ public class Client {
                     Integer result2 = d2.reduce(new DDObjectReductionAdd_1());
                     console.println("End of reduce DD2: result -> " + result2);
                     console.println();
+
+                } catch (Exception e) {
+                    console.printException(e);
+                }
+            }
+        });
+        t.start();
+    }
+
+    // ------------------------------------------------------------
+    // work with incomplete Internal Photos
+    public void workWithIncompletePhotos() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String DDUI = "photoDD1";
+
+                    // OPEN IPHOTO DD1
+                    console.println("Opening IPHOTOS DDUI: " + DDUI);
+                    @SuppressWarnings("unchecked")
+                    DDObject<IPhotoRemote> d1 = (DDObject<IPhotoRemote>)(DDObject.openDDObject(DDUI));
+                    console.println("Opened: " + d1);
+                    console.println();
+
+
+                    // GET DATA IPHOTO DD1
+//                    console.println("Getting data from IPHOTOS DDUI: " + DDUI);
+                    IncompleteResultsInfo iri = new IncompleteResultsInfo();
+//                    IPhotoRemote[] photos = d1.getData(true, iri);
+//                    console.println("Received photos:" + Arrays.toString(photos));
+//                    console.println("Received with: " + iri);
+//                    console.println();
+//
+//                    // display thumbnails
+//                    clientGui.displayThumbnails(photos);
+//
+//                    // display photos
+//                    clientGui.displayPhotos(photos);
+
+
+
+                    // APPLY FILTER to photo INTERNAL dd
+//                    console.println("Applying filter to IPHOTO DD1 -> DD2");
+//                    DDObject<IPhotoRemote> d2 = d1.filter(new DDObjectFilterPhotoBetweenThen_1(25_000, 200_000), true, iri);
+//                    console.println("End of Function to IPHOTO DD1 -> DD2, returned -> " +  d2.getNDataElems());
+//                    console.println("Received with: " + iri);
+//                    console.println();
+
+
+                    // APPLY COUNT to DD1
+//                    console.println("Applying count to DD2");
+//                    int count = d2.count(true, iri);
+//                    console.println("End of count to DD2: count -> " + count);
+//                    console.println("Received with: " + iri);
+//                    console.println();
+
+
+                    // APPLY MAP to photo dd
+//                    console.println("Applying Map to IPHOTO DD1 -> DD3");
+//                    DDObject<Integer> d3 = d1.map(new DDObjectMapMapFunctionPhotoToSize_1(), new Integer[]{}, true, iri);
+//                    console.println("End of Map to IPHOTO DD -> DD3, returned -> " +  d3.getNDataElems());
+//                    console.println("Received with: " + iri);
+//                    console.println();
+
+
+                    // APPLY REDUCE to DD1
+                    console.println("Applying reduce DD1");
+                    IPhotoRemote result2 = d1.reduce(new DDObjectPhotoReductionFirst_1(), true, iri);
+                    console.println("End of reduce DD1: result -> " + result2);
+                    console.println("Received with: " + iri);
+                    console.println();
+
+                    clientGui.displayThumbnails(new IPhotoRemote[] {result2});
+
+                    // TODO falta MERGE, REDUCE, pensar no Create e Open
+                    // TODO ajuste das partições para se poder ter "buracos" entre elas
 
                 } catch (Exception e) {
                     console.printException(e);
@@ -474,7 +553,7 @@ public class Client {
 
                     // APPLY FOREACH to DD1
                     console.println("Applying foreach to DD1 -> DD2");
-                    DDObject<Integer> d2 = d1.forEach(new DDObjectFunctionGenerateAndCheckPoint_1(), new Integer[]{});
+                    DDObject<Integer> d2 = d1.map(new DDObjectMapFunctionGenerateAndCheckPoint_1(), new Integer[]{});
                     console.println("End of foreach to DD1 -> DD2");
                     console.println();
 
@@ -499,55 +578,6 @@ public class Client {
         t.start();
     }
 
-//    private void displayThumbnails(Object[] photos) {
-//        // TODO this code should run in swing EDT
-//
-//        JFrame jf = new JFrame();
-//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//
-//        JPanel jp = new JPanel();
-//        JScrollPane scrollPane = new JScrollPane(jp);
-//        jf.add(scrollPane);
-//
-//        for (int i = 0; i < photos.length; i++) {
-//            ImageIcon t = new ImageIcon(((Photo) photos[i]).getThumbnail());
-//            jp.add(new JLabel(t));
-//        }
-//        jf.setSize(300, 400);
-//        jf.setLocationRelativeTo(null);
-//
-//        jf.setVisible(true);
-//    }
-//
-//
-//    private void displayPhotos(Object[] photos) {
-//        // TODO this code should run in swing EDT
-//
-//        JFrame jf = new JFrame();
-//        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//
-//
-//        JPanel jp = new JPanel();
-//        JScrollPane scrollPane = new JScrollPane(jp);
-//        jf.add(scrollPane);
-//
-//
-//        for (int i = 0; i < photos.length; i++) {
-//            Photo p = ((Photo) photos[i]);
-//            console.println("Loading photo: " + p.getPhotoUuid());
-//            ImageIcon t = null;
-//            try {
-//                t = new ImageIcon(p.getPhotoInBytes());
-//                jp.add(new JLabel(t));
-//            } catch (Exception e) {
-//                console.println("Error loading photo " + p.getPhotoUuid());
-//            }
-//        }
-//        jf.pack();
-//        jf.setLocationRelativeTo(null);
-//
-//        jf.setVisible(true);
-//    }
 
 
     // ------------------------------------------------------------
@@ -615,7 +645,7 @@ public class Client {
                     message instanceof MsgApplyMergeDDObjectReply ||
                     message instanceof MsgGetCountDDObjectReply ||
                     message instanceof MsgApplyReduceDDObjectReply ||
-                    message instanceof MsgApplyFunctionDDObjectReply ||
+                    message instanceof MsgApplyMapDDObjectReply ||
                     message instanceof MsgGetDataDDObjectReply ||
                     message instanceof MsgOpenDDObjectReply ||
                     message instanceof MsgCreateDDObjectReply) {

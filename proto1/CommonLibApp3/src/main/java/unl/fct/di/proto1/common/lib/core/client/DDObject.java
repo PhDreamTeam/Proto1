@@ -3,7 +3,7 @@ package unl.fct.di.proto1.common.lib.core.client;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.Msg;
 import unl.fct.di.proto1.common.lib.protocol.MsgReply;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
 
@@ -99,7 +99,6 @@ public class DDObject<T> extends DD {
     }
 
     // create a DD access object from the DDUI of a DD already in system
-    // TODO generic ??
     static public DDObject openDDObject(String DDUI) throws Exception {
         DD dd = ClientManager.getDD(DDUI);
         if (dd != null) {
@@ -116,13 +115,22 @@ public class DDObject<T> extends DD {
         }
     }
 
+
     // get Data from the remote workers (client<->master<->worker)
     public T[] getData() {
+        return getData(false);
+    }
+
+    public T[] getData(boolean allowIncompleteResults) {
+        return getData(allowIncompleteResults, null);
+    }
+
+    public T[] getData(boolean allowIncompleteResults, IncompleteResultsInfo incompleteResultsInfo) {
         // create new DDObject to store the results, create RequestId
         String requestId = UUID.randomUUID().toString();
 
         // create getData msg, keep it in sentMsgsHashMap, send it to master and show it on screen
-        MsgGetDataDDObject msg = new MsgGetDataDDObject(DDUI, requestId);
+        MsgGetDataDDObject msg = new MsgGetDataDDObject(DDUI, requestId, allowIncompleteResults);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -139,9 +147,14 @@ public class DDObject<T> extends DD {
 
         // process reply and return result
         @SuppressWarnings("unchecked")
-        MsgGetDataDDObjectReply<T> replyMsg = (MsgGetDataDDObjectReply<T> ) (receivedMsgsHashMap.get(requestId));
+        MsgGetDataDDObjectReply<T> replyMsg = (MsgGetDataDDObjectReply<T>) (receivedMsgsHashMap.get(requestId));
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error Getting Data: " + replyMsg.getFailureReason());
+        } else {
+            // checking incomplete results
+            if (replyMsg.hasIncompleteResults() && incompleteResultsInfo != null) {
+                incompleteResultsInfo.setIncompleteResultsInfo(replyMsg.getFailureReason());
+            }
         }
 
         T[] data = replyMsg.getData();
@@ -158,21 +171,27 @@ public class DDObject<T> extends DD {
     /**************************************/
 
     /**
-     * Perform an action as specified by a Consumer object
-     * This method is executed by a independent thread
-     * This method should be blocking
-     *
-     * @param action to be performed in the DD elements,
-     *               should produce aa new element of the same type
-     * @return the new DD
+     * MAP, FILTER, Perform an action as specified by a Consumer object
+     * These methods are executed by a independent thread, and are blocking methods
      */
-    public <R> DDObject<R> forEach(Function<T, R> action, R[] arrayRType) {
+
+
+    public <R> DDObject<R> map(MapFunction<T, R> mapFunction, R[] arrayRType) {
+        return map(mapFunction, arrayRType, false);
+    }
+
+    public <R> DDObject<R> map(MapFunction<T, R> mapFunction, R[] arrayRType, boolean allowIncompleteResults) {
+        return map(mapFunction, arrayRType, allowIncompleteResults, null);
+    }
+
+    public <R> DDObject<R> map(MapFunction<T, R> mapFunction, R[] arrayRType, boolean allowIncompleteResults, IncompleteResultsInfo incompleteResultsInfo) {
         // create new DDObject to store the results, create RequestId
         DDObject<R> newDD = new DDObject<>(this);
         String requestId = UUID.randomUUID().toString();
 
-        // create forEach msg, keep it in sentMsgsHashMap, send it to master and show it on screen
-        MsgApplyFunctionDDObject<T, R> msg = new MsgApplyFunctionDDObject<>(DDUI, requestId, newDD.getDDUI(), action, arrayRType);
+        // create map msg, keep it in sentMsgsHashMap, send it to master and show it on screen
+        MsgApplyMapDDObject<T, R> msg = new MsgApplyMapDDObject<>(DDUI, requestId, newDD.getDDUI(), mapFunction,
+                arrayRType, allowIncompleteResults);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -188,11 +207,18 @@ public class DDObject<T> extends DD {
         }
 
         // get result from new DDObject
-        MsgReply replyMsg = receivedMsgsHashMap.get(requestId);
+        MsgApplyMapDDObjectReply replyMsg = (MsgApplyMapDDObjectReply)(receivedMsgsHashMap.get(requestId));
         if (!replyMsg.isSuccess()) {
             // remove newDD - and throw exception
             ClientManager.removeDD(msg.getNewDDUI());
             throw new RuntimeException("Error applying Function: " + replyMsg.getFailureReason());
+        } else {
+            // save number of elems
+            newDD.nDataElems = replyMsg.getNDataElemsDD();
+            // checking incomplete results
+            if (replyMsg.hasIncompleteResults() && incompleteResultsInfo != null) {
+                incompleteResultsInfo.setIncompleteResultsInfo(replyMsg.getFailureReason());
+            }
         }
 
         // clean up original and reply messages
@@ -209,7 +235,7 @@ public class DDObject<T> extends DD {
 
         // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
         MsgApplyMergeDDObject msg = new MsgApplyMergeDDObject(DDUI, requestId, ddToMerge.getDDUI(),
-                newDD.getDDUI());
+                newDD.getDDUI(), false);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -242,15 +268,24 @@ public class DDObject<T> extends DD {
         return newDD;
     }
 
-    // Filter objects that match a Predicate object
+
     public DDObject<T> filter(Predicate<T> predicate) {
+        return filter(predicate, false);
+    }
+
+    public DDObject<T> filter(Predicate<T> predicate, boolean allowIncompleteResults) {
+        return filter(predicate, allowIncompleteResults, null);
+    }
+
+    // Filter objects that match a Predicate object
+    public DDObject<T> filter(Predicate<T> predicate, boolean allowIncompleteResults, IncompleteResultsInfo incompleteResultsInfo) {
         // create new DDObject to store the results, create RequestId
         DDObject<T> newDD = new DDObject<>(this);
         String requestId = UUID.randomUUID().toString();
 
         // create merge msg, keep it in sentMsgsHashMap, send it to master and show it on screen
         MsgApplyFilterDDObject<T> msg = new MsgApplyFilterDDObject<>(DDUI, requestId, newDD.getDDUI(),
-                predicate);
+                predicate, allowIncompleteResults);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -274,6 +309,10 @@ public class DDObject<T> extends DD {
         } else {
             // save number of elems
             newDD.nDataElems = replyMsg.getnDataElemsDD();
+            // checking incomplete results
+            if (replyMsg.hasIncompleteResults() && incompleteResultsInfo != null) {
+                incompleteResultsInfo.setIncompleteResultsInfo(replyMsg.getFailureReason());
+            }
         }
 
         // clean up original and reply messages
@@ -283,10 +322,20 @@ public class DDObject<T> extends DD {
         return newDD;
     }
 
+
+
     public T reduce(Reduction<T> reduceFunction) {
+        return reduce(reduceFunction, false);
+    }
+
+    public T reduce(Reduction<T> reduceFunction, boolean allowIncompleteResults) {
+        return reduce(reduceFunction, allowIncompleteResults, null);
+    }
+
+    public T reduce(Reduction<T> reduceFunction, boolean allowIncompleteResults, IncompleteResultsInfo incompleteResultsInfo) {
         // create reqID, create msg, keep msg, send master and show it on screen
         String requestId = UUID.randomUUID().toString();
-        MsgApplyReduceDDObject<T> msg = new MsgApplyReduceDDObject<>(DDUI, requestId, reduceFunction);
+        MsgApplyReduceDDObject<T> msg = new MsgApplyReduceDDObject<>(DDUI, requestId, reduceFunction, allowIncompleteResults);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -307,6 +356,11 @@ public class DDObject<T> extends DD {
         // get result from new DDInt
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error applying Reduce: " + replyMsg.getFailureReason());
+        } else {
+            // checking incomplete results
+            if (replyMsg.hasIncompleteResults() && incompleteResultsInfo != null) {
+                incompleteResultsInfo.setIncompleteResultsInfo(replyMsg.getFailureReason());
+            }
         }
 
         // clean up original and reply messages
@@ -316,10 +370,19 @@ public class DDObject<T> extends DD {
         return replyMsg.getResult();
     }
 
+
     public int count() {
+        return count(false);
+    }
+
+    public int count(boolean allowIncompleteResults) {
+        return count(allowIncompleteResults, null);
+    }
+
+    public int count(boolean allowIncompleteResults, IncompleteResultsInfo incompleteResultsInfo) {
         // create reqID, create msg, keep msg, send master and show it on screen
         String requestId = UUID.randomUUID().toString();
-        MsgGetCountDDObject msg = new MsgGetCountDDObject(DDUI, requestId);
+        MsgGetCountDDObject msg = new MsgGetCountDDObject(DDUI, requestId, allowIncompleteResults);
         sentMsgsHashMap.put(requestId, msg);
         ClientManager.getMasterActor().tell(msg, ClientManager.getClientActor());
         ClientManager.getConsole().println("Sent: " + msg);
@@ -337,6 +400,11 @@ public class DDObject<T> extends DD {
         MsgGetCountDDObjectReply replyMsg = (MsgGetCountDDObjectReply) (receivedMsgsHashMap.get(requestId));
         if (!replyMsg.isSuccess()) {
             throw new RuntimeException("Error applying Count: " + replyMsg.getFailureReason());
+        } else {
+            // checking incomplete results
+            if (replyMsg.hasIncompleteResults() && incompleteResultsInfo != null) {
+                incompleteResultsInfo.setIncompleteResultsInfo(replyMsg.getFailureReason());
+            }
         }
 
         // clean up original and reply messages
@@ -354,7 +422,10 @@ public class DDObject<T> extends DD {
 
     /**************************************/
     // Fire functions =====================
-    /**************************************/
+
+    /**
+     * **********************************
+     */
 
     public void fireMsgReply(MsgReply msgReply) {
         receivedMsgsHashMap.put(msgReply.getRequestId(), msgReply);

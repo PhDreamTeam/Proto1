@@ -39,13 +39,13 @@ public class DDMaster implements Serializable {
         this.clientOwnerActorNode = clientOwnerActorNode;
     }
 
-    public MasterRequest createMasterRequest(String requestId, ActorNode requestOwner, Msg msgRequest){
-        return createMasterRequest(requestId, requestOwner, msgRequest, this);
+    public MasterRequest createMasterRequest(String requestId, ActorNode requestOwner, Msg msgRequest, boolean allowIncompleteResults){
+        return createMasterRequest(requestId, requestOwner, msgRequest, this, allowIncompleteResults);
     }
 
     public MasterRequest createMasterRequest(String requestId, ActorNode requestOwner, Msg msgRequest,
-                                             DDMaster ddToTrackRequests){
-        MasterRequest req = new MasterRequest(requestId, requestOwner, ddToTrackRequests, msgRequest);
+                                             DDMaster ddToTrackRequests, boolean allowIncompleteResults){
+        MasterRequest req = new MasterRequest(requestId, requestOwner, ddToTrackRequests, msgRequest, allowIncompleteResults);
         ddToTrackRequests.requests.put(req.getRequestId(), req);
         return req;
     }
@@ -63,9 +63,6 @@ public class DDMaster implements Serializable {
 
     void resetNDataElems() {
         nDataElems = 0;
-//        for (int i = 0, nPartitions = partitionsDescriptors.size(); i < nPartitions; i++) {
-//            partitionsDescriptors.get(i).setNElems(0);
-//        }
     }
 
     public String getDDUI() {

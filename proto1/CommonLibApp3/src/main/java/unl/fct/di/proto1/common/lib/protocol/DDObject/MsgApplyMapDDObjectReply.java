@@ -1,21 +1,30 @@
 package unl.fct.di.proto1.common.lib.protocol.DDObject;
 
+
 import unl.fct.di.proto1.common.lib.protocol.MsgReply;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
-
-
-public class MsgGetDataDDObjectReply<T> extends MsgReply implements Serializable {
-    T[] data;
+public class MsgApplyMapDDObjectReply extends MsgReply implements Serializable {
+    String newDDUI;
+    int nDataElemsDD;
     boolean hasIncompleteResults;
 
-    public MsgGetDataDDObjectReply(String DDUI, String requestId, T[] data,
-                                   boolean hasIncompleteResults, boolean success, String failureReason) {
+    public MsgApplyMapDDObjectReply(String DDUI, String requestId, String newDDUI, int nDataElemsDD,
+                                    boolean hasIncompleteResults, boolean success, String failureReason) {
         super(DDUI, requestId, success, failureReason);
-        this.data = data;
+        this.newDDUI = newDDUI;
+        this.nDataElemsDD = nDataElemsDD;
         this.hasIncompleteResults = hasIncompleteResults;
+    }
+
+
+    public String getNewDDUI() {
+        return newDDUI;
+    }
+
+    public int getNDataElemsDD() {
+        return nDataElemsDD;
     }
 
     public boolean hasIncompleteResults() {
@@ -27,15 +36,12 @@ public class MsgGetDataDDObjectReply<T> extends MsgReply implements Serializable
         setFailureReason(failureReason);
     }
 
-    public T[] getData() {
-        return data;
-    }
-
 
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
-        return super.getIntermediateInfo() + ", " +  Arrays.toString(data) +
+        return super.getIntermediateInfo() +  ", newDDUI: " + getNewDDUI() +
+                ", nElems: " + getNDataElemsDD() +
                 (hasIncompleteResults ? " has incomplete results: " + getFailureReason() : "");
     }
 }

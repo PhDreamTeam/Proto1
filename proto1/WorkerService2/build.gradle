@@ -53,8 +53,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.scala-lang:scala-library:2.11.4'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.typesafe.akka:akka-actor_2.11:2.3.8'
     compile 'com.typesafe.akka:akka-remote_2.11:2.3.8'
     compile project(':CommonLibApp3')
-    compile 'com.android.support:multidex:1.0.0'
+    compile project(':CommonAndroid')
 }

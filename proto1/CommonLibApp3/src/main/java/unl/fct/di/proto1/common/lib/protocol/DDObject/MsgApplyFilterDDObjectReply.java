@@ -8,14 +8,14 @@ import java.io.Serializable;
 public class MsgApplyFilterDDObjectReply extends MsgReply implements Serializable {
     String newDDUI;
     int nDataElemsDD;
-
+    boolean hasIncompleteResults;
 
     public MsgApplyFilterDDObjectReply(String DDUI, String requestId, String newDDUI, int nDataElemsDD,
-                                       boolean success, String failureReason) {
+                                       boolean hasIncompleteResults, boolean success, String failureReason) {
         super(DDUI, requestId, success, failureReason);
-
         this.newDDUI = newDDUI;
         this.nDataElemsDD = nDataElemsDD;
+        this.hasIncompleteResults = hasIncompleteResults;
     }
 
 
@@ -27,10 +27,20 @@ public class MsgApplyFilterDDObjectReply extends MsgReply implements Serializabl
         return nDataElemsDD;
     }
 
+    public boolean hasIncompleteResults() {
+        return hasIncompleteResults;
+    }
+
+
+    public void setIncompleteResults(String failureReason) {
+        hasIncompleteResults = true;
+        setFailureReason(failureReason);
+    }
 
     // to be called by toString
     @Override
     public String getIntermediateInfo() {
-        return super.getIntermediateInfo() +  ", srcDDUI: " + getNewDDUI()+ ", nElems: " + getnDataElemsDD();
+        return super.getIntermediateInfo() +  ", srcDDUI: " + getNewDDUI() + ", nElems: " + getnDataElemsDD() +
+                (hasIncompleteResults ? " has incomplete results: " + getFailureReason() : "");
     }
 }

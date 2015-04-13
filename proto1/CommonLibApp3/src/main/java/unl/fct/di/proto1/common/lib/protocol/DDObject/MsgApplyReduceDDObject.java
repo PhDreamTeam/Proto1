@@ -11,22 +11,34 @@ import java.io.Serializable;
  */
 public class MsgApplyReduceDDObject<T> extends Msg implements Serializable {
     Reduction<T> reduction;
+    boolean allowIncompleteResults;
 
-    public MsgApplyReduceDDObject(String ddui, String requestId, Reduction<T> reduction) {
+    public MsgApplyReduceDDObject(String ddui, String requestId, Reduction<T> reduction,
+                                  boolean allowIncompleteResults) {
         super(ddui, requestId);
         this.reduction = reduction;
+        this.allowIncompleteResults = allowIncompleteResults;
     }
 
     public Reduction<T> getReduction() {
         return reduction;
     }
 
-    @Override
-    public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgApplyReduceDDObjectReply<T>(getDDUI(), getRequestId(), null, false, failureReason);
+    public boolean allowIncompleteResults() {
+        return allowIncompleteResults;
     }
 
-    public Msg getSuccessReplyMessage(T result) {
-        return new MsgApplyReduceDDObjectReply<>(getDDUI(), getRequestId(), result, true, null);
+    @Override
+    public String toString() {
+        return super.toString() + (allowIncompleteResults ? " allows incomplete results" : "");
+    }
+
+    @Override
+    public Msg getFailureReplyMessage(String failureReason) {
+        return new MsgApplyReduceDDObjectReply<T>(getDDUI(), getRequestId(), null, false, false, failureReason);
+    }
+
+    public MsgApplyReduceDDObjectReply<T> getSuccessReplyMessage(T result) {
+        return new MsgApplyReduceDDObjectReply<>(getDDUI(), getRequestId(), result, false, true, null);
     }
 }

@@ -1,7 +1,7 @@
 package unl.fct.di.proto1.common.lib.core.worker;
 
 
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
 import java.util.Arrays;
@@ -26,8 +26,8 @@ public class DDPartitionInt extends DDPartition {
     }
 
     // Perform an action as specified by a Consumer object
-    //  public void forEach(Consumer<Integer> action, String newDDUI) {
-    public DDPartitionInt forEach(Function<Integer, Integer> action, String newDDUI) {
+    //  public void map(Consumer<Integer> action, String newDDUI) {
+    public DDPartitionInt forEach(MapFunction<Integer, Integer> action, String newDDUI) {
         // create a new partition - partitions are read only
         DDPartitionInt newDDPartition = clone();
         // set the DDUI of the new DDInt
@@ -42,7 +42,7 @@ public class DDPartitionInt extends DDPartition {
     }
 
     // Map objects to another DD as specified by a Function object
-    public <R> R map(Function<Integer, ? extends R> mapper) {
+    public <R> R map(MapFunction<Integer, ? extends R> mapper) {
         // create a new partition - partitions are read only
         DDPartitionInt newDDPartition = clone();
 

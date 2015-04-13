@@ -1,17 +1,17 @@
 package unl.fct.di.proto1.common.lib.protocol.DDInt;
 
 import unl.fct.di.proto1.common.lib.protocol.Msg;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 
 import java.io.Serializable;
 
 
 public class MsgApplyFunctionDDInt extends Msg implements Serializable {
     String newDDUI;
-    Function<Integer, Integer> action;
+    MapFunction<Integer, Integer> action;
 
     public MsgApplyFunctionDDInt(String DDUI, String requestId, String newDDUI,
-                                 Function<Integer, Integer> action) {
+                                 MapFunction<Integer, Integer> action) {
         super(DDUI, requestId);
         this.newDDUI = newDDUI;
         this.action = action;
@@ -22,7 +22,7 @@ public class MsgApplyFunctionDDInt extends Msg implements Serializable {
         return newDDUI;
     }
 
-    public Function<Integer, Integer> getAction() {
+    public MapFunction<Integer, Integer> getAction() {
         return action;
     }
 

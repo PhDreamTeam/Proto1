@@ -9,12 +9,14 @@ import java.io.Serializable;
 public class MsgApplyFilterDDObject<T> extends Msg implements Serializable {
     String newDDUI;
     Predicate<T> filter;
+    boolean allowIncompleteResults;
 
     public MsgApplyFilterDDObject(String DDUI, String requestId, String newDDUI,
-                                  Predicate<T> filter) {
+                                  Predicate<T> filter,  boolean allowIncompleteResults) {
         super(DDUI, requestId);
         this.newDDUI = newDDUI;
         this.filter = filter;
+        this.allowIncompleteResults = allowIncompleteResults;
     }
 
 
@@ -26,19 +28,22 @@ public class MsgApplyFilterDDObject<T> extends Msg implements Serializable {
         return filter;
     }
 
-
+    public boolean allowIncompleteResults() {
+        return allowIncompleteResults;
+    }
 
     @Override
     public String toString() {
-        return super.toString() + " srcDDUI: " + getNewDDUI();
+        return super.toString() + " srcDDUI: " + getNewDDUI() +
+                (allowIncompleteResults ? " allows incomplete results" : "");
     }
 
     @Override
     public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, 0, false, failureReason);
+        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, 0, false, false, failureReason);
     }
 
-    public Msg getSuccessReplyMessage(int nElems) {
-        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, nElems, true, null);
+    public MsgApplyFilterDDObjectReply getSuccessReplyMessage(int nElems) {
+        return new MsgApplyFilterDDObjectReply(getDDUI(), getRequestId(), newDDUI, nElems, false, true, null);
     }
 }

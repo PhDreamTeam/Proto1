@@ -396,12 +396,12 @@ public class MasterService {
                 handleApplyFilter((MsgApplyFilterDDObject) message);
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDObjectReply) {
-                handlePartitionApplyFunctionReply((MsgPartitionApplyFunctionDDObjectReply) message);
+            else if (message instanceof MsgPartitionApplyMapDDObjectReply) {
+                handlePartitionApplyMapReply((MsgPartitionApplyMapDDObjectReply) message);
             } //
 
-            else if (message instanceof MsgApplyFunctionDDObject) {
-                handleApplyFunction((MsgApplyFunctionDDObject) message);
+            else if (message instanceof MsgApplyMapDDObject) {
+                handleApplyMap((MsgApplyMapDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionGetDataDDObjectReply) {
@@ -469,7 +469,7 @@ public class MasterService {
                 MsgApplyFunctionDDInt msg = (MsgApplyFunctionDDInt) message;
                 DDIntMaster parentDDInt = (DDIntMaster) GlManager.getDDManager().getDD(msg.getDDUI());
                 ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
-                // forEach
+                // map
                 DDIntMaster newDDInt = parentDDInt.forEach(msg.getNewDDUI(), msg.getAction(),
                         clientActorNode, msg.getRequestId(), msg);
                 // add to screen
@@ -574,7 +574,7 @@ public class MasterService {
         // Message handle functions
         // ==================================
 
-        // GetCount
+        // Get Count
         private void handlePartitionGetCountReply(MsgPartitionGetCountDDObjectReply msg) {
             DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
             if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
@@ -594,7 +594,7 @@ public class MasterService {
             dd.doCount(clientActorNode, msg.getRequestId(), msg);
         }
 
-        // ApplyReduce
+        // Apply Reduce
         private void handlePartitionApplyReduceReply(MsgPartitionApplyReduceDDObjectReply msg) {
             DDObjectMaster dd = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
             if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
@@ -614,7 +614,7 @@ public class MasterService {
             dd.doReduce(clientActorNode, msg.getRequestId(), msg);
         }
 
-        // ApplyMerge
+        // Apply Merge
         private void handlePartitionApplyMergeReply(MsgPartitionApplyMergeDDObjectReply msg) {
             DDObjectMaster newDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
             if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
@@ -639,7 +639,7 @@ public class MasterService {
             ms.addData(newDDObject);
         }
 
-        // ApplyFilter
+        // Apply Filter
         private void handlePartitionApplyFilterReply(MsgPartitionApplyFilterDDObjectReply msg) {
             DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
             if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
@@ -664,12 +664,12 @@ public class MasterService {
             ms.addData(newDDObject);
         }
 
-        // ApplyFunction
-        private void handlePartitionApplyFunctionReply(MsgPartitionApplyFunctionDDObjectReply msg) {
+        // Apply Map
+        private void handlePartitionApplyMapReply(MsgPartitionApplyMapDDObjectReply msg) {
             DDObjectMaster parentDD = (DDObjectMaster) GlManager.getDDManager().getDD(msg.getDDUI());
             if (GlManager.getCommunicationHelper().getAndRemoveOriginalPendingMessage(msg) != null) {
                 // update partition state
-                parentDD.fireMsgPartitionApplyFunctionDDObjectReply(msg);
+                parentDD.fireMsgPartitionApplyMapDDObjectReply(msg);
                 // update screen - DD state could have changed
                 ms.updateViewData();
             } else {
@@ -678,18 +678,18 @@ public class MasterService {
             }
         }
 
-        private <T, R> void handleApplyFunction(MsgApplyFunctionDDObject<T, R> msg) {
+        private <T, R> void handleApplyMap(MsgApplyMapDDObject<T, R> msg) {
             @SuppressWarnings("unchecked")
             DDObjectMaster<T> parentDDObject = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());
             ActorNode clientActorNode = ms.getClientActorNode(getSender().path().name());
             // for each, returns newDD
-            DDObjectMaster<R> newDDObject = parentDDObject.forEach(msg.getNewDDUI(), msg.getAction(),
+            DDObjectMaster<R> newDDObject = parentDDObject.map(msg.getNewDDUI(), msg.getMapFunction(),
                     clientActorNode, msg.getRequestId(), msg);
             // add to screen
             ms.addData(newDDObject);
         }
 
-        // GetData
+        // Get Data
         private <T> void handlePartitionGetDataReply(MsgPartitionGetDataDDObjectReply<T> msg) {
             @SuppressWarnings("unchecked")
             DDObjectMaster<T> dd = (DDObjectMaster<T>) GlManager.getDDManager().getDD(msg.getDDUI());

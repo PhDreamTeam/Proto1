@@ -3,11 +3,12 @@
 // 0 is minimum priority
 
 
-TODO NEXT ACTION ===========================================
+// TO DO NEXT ACTION ===========================================
 
-/*
+/**
  * TODO 3 suporte a múltiplos masters
  * TODO ? Suporte à percepção de topologia e melhoramento das funcionalidades face à sua exploração
+ * - Topologia 1:   M1 - M2 - M3
  * - considerar apenas masters e comunicação entre eles (como primeira abstracção)
  * - Partições com uuid e não com partId sequencial: o data set não tem ordem
  * - os DDs terem a mensagem que resultou na sua criação - para recuperação em caso de falha (em vez do parent)
@@ -15,10 +16,9 @@ TODO NEXT ACTION ===========================================
  * - criar uma tabela de configuração de routing de comunicação entre masters, para testes, simula topologia da rede
  */
 
+TODO 3 Alterar o getData de forma a suportar dados de grande dimensão - eventualmente enviados directamente para o cliente (com pedido do cliente ou não)
 
-TODO 3.1 generics on ....
-
-TODO 2 suporte a pedidos incompletos/parciais
+TODO 2 suporte a pedidos incompletos/parciais -------  INWORK
 
 TODO 2 cli usar nas operações do cliente o sistema de guardar as mensagens de envio e recepção e sincronismo na msg - sistematizar o código
 
@@ -35,7 +35,7 @@ TODO 1 TD1: Válido para serviços e DDinternals
 
 
 
-// registry ==============================================
+// TO DO ==============================================
 
 // TODO 3 ms master die and live again:  keep original MasterRequest in new DDs
 // TODO 3 ms reconstruct a lost DD by replaying saved operations
@@ -50,17 +50,19 @@ TODO 1 TD1: Válido para serviços e DDinternals
 
 // DONE ===========================================================
 
-// DONE Count operation
+// DONE generics on everything
 // DONE Reduce operation, reduce to a single value
-// DONE Operação de Merge de dois DD
-// DONE DDPhoto support
+// DONE Merge operation, joins two DDs of same type
+
+// DONE Photo service support - DDPartitionPhotoInternal, DDPartitionPhoto
+
+// DONE filter, map, create, open, Count, Reduce, Merge
+
 // DONE ms Substitute worker tells por CommunicationHelper.tell
 // DONE masters works well with workers crashes
 
 
-
-
-
+// New notes
 /***************************************************************************/
 Ponderar sobre se os dados dos DD's podem normalmente ser grandes. (podem não caber nas mensagens)
 Sendo assim podemos obter um objecto com os dados ou com o proxy para obter os dados.

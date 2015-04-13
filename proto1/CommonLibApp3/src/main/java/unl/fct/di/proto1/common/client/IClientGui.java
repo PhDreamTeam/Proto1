@@ -3,6 +3,7 @@ package unl.fct.di.proto1.common.client;
 import akka.actor.ActorSystem;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface IClientGui extends IConsole {
 
     void addService(ActorNode newNode);
 
-    void displayThumbnails(Object[] photos);
+    void displayThumbnails(IPhotoRemote[] photos);
 
     void displayPhotos(Object[] photos);
 }

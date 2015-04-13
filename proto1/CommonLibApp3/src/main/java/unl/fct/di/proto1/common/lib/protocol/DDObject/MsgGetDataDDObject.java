@@ -6,18 +6,28 @@ import java.io.Serializable;
 
 
 public class MsgGetDataDDObject<T> extends Msg implements Serializable{
+    boolean allowIncompleteResults;
 
-    public MsgGetDataDDObject(String DDUI, String requestId) {
+    public MsgGetDataDDObject(String DDUI, String requestId, boolean allowIncompleteResults) {
         super(DDUI, requestId);
+        this.allowIncompleteResults = allowIncompleteResults;
     }
 
+    public boolean allowIncompleteResults() {
+        return allowIncompleteResults;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + (allowIncompleteResults ? " allows incomplete results" : "");
+    }
 
     @Override
     public Msg getFailureReplyMessage(String failureReason) {
-        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), null, false, failureReason);
+        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), null, false, false, failureReason);
     }
 
     public MsgGetDataDDObjectReply<T> getSuccessReplyMessage(T[] data) {
-        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), data, true, null);
+        return new MsgGetDataDDObjectReply<>(getDDUI(), getRequestId(), data, false, true, null);
     }
 }

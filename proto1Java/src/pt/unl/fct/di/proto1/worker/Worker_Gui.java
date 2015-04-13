@@ -3,8 +3,10 @@ package pt.unl.fct.di.proto1.worker;
 import akka.actor.ActorSystem;
 import com.typesafe.config.ConfigFactory;
 import pt.unl.fct.di.proto1.common.ProportionalLayout;
+import pt.unl.fct.di.proto1.services.photos.PhotoWorker;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
 import unl.fct.di.proto1.common.lib.core.worker.DDPartition;
 import unl.fct.di.proto1.common.workerService.IWorkerGui;
 import unl.fct.di.proto1.common.workerService.WorkerRequest;
@@ -30,17 +32,17 @@ public class Worker_Gui extends JFrame implements IWorkerGui {
 
     // service area
     ArrayList<ActorNode> services = new ArrayList<>();
-    DefaultListModel listModelServices = new DefaultListModel();
+    DefaultListModel<ActorNode> listModelServices = new DefaultListModel<>();
     JList<ActorNode> listServices = new JList<>(listModelServices);
 
     // pending requests
     ArrayList<WorkerRequest> requests = new ArrayList<>();
-    DefaultListModel listModelRequests = new DefaultListModel();
+    DefaultListModel<WorkerRequest> listModelRequests = new DefaultListModel<>();
     JList<WorkerRequest> listRequests = new JList<>(listModelRequests);
 
     // data partitions
     ArrayList<DDPartition> ddPartitions = new ArrayList<>();
-    DefaultListModel listModelDDPartitions = new DefaultListModel();
+    DefaultListModel<DDPartition> listModelDDPartitions = new DefaultListModel<>();
     JList<DDPartition> listDDPartitions = new JList<>(listModelDDPartitions);
 
     WorkerService workerService;
@@ -171,17 +173,15 @@ public class Worker_Gui extends JFrame implements IWorkerGui {
 
     private void prepareWorkingDir() {
         File wd = new File(workingPathName);
-        if(!wd.exists()) {
+        if(!wd.exists())
             wd.mkdirs();
-        }
     }
 
 
     //
     public ActorSystem createSystem(String systemName) throws IOException {
-        final ActorSystem system = ActorSystem.create(systemName,
+        return ActorSystem.create(systemName,
                 ConfigFactory.load("conf/applicationWorkerService.conf"));
-        return system;
     }
 
     // Interface methods
@@ -271,6 +271,12 @@ public class Worker_Gui extends JFrame implements IWorkerGui {
     @Override
     public String[] getFileList() {
         return new File(workingPathName).list();
+    }
+
+
+    @Override
+    public IPhotoWorker createPhotoWorker(String uuid, String pathFileName, ActorNode workerActorNode) {
+        return new PhotoWorker(uuid, pathFileName, workerActorNode);
     }
 
 

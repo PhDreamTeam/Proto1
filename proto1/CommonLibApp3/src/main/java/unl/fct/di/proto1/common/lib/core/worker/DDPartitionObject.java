@@ -1,7 +1,7 @@
 package unl.fct.di.proto1.common.lib.core.worker;
 
 
-import unl.fct.di.proto1.common.lib.protocol.DDObject.MsgPartitionApplyFunctionDDObject;
+import unl.fct.di.proto1.common.lib.protocol.DDObject.MsgPartitionApplyMapDDObject;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Reduction;
 
@@ -54,7 +54,7 @@ public class DDPartitionObject<T> extends DDPartition {
 //        return data;
 //    }
 
-    public <R> DDPartitionObject<R> forEach(MsgPartitionApplyFunctionDDObject<T, R> msg) {
+    public <R> DDPartitionObject<R> forEach(MsgPartitionApplyMapDDObject<T, R> msg) {
         // create a new partition - partitions are read only
         T[] workData = this.getData();
         DDPartitionObject<R> newDDPartition = new DDPartitionObject<>(msg.getNewDDUI(), this.getPartId(), workData.length, msg.getArrayRType());

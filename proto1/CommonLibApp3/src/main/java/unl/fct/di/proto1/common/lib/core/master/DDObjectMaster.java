@@ -1,12 +1,11 @@
 package unl.fct.di.proto1.common.lib.core.master;
 
 
-import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.protocol.DDObject.*;
 import unl.fct.di.proto1.common.lib.protocol.Msg;
 import unl.fct.di.proto1.common.lib.protocol.MsgPartitionReply;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
 import java.util.Arrays;
@@ -39,9 +38,9 @@ public class DDObjectMaster<T> extends DDMaster {
         //GlManager.getConsole().println("Got " + workers.length + " workers");
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(createRequestId, ownerActorNode, msgRequest);
+        MasterRequest req = createMasterRequest(createRequestId, ownerActorNode, msgRequest, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
         // build partitionsDescriptors
         buildPartitions(data, workers, req);
@@ -76,13 +75,12 @@ public class DDObjectMaster<T> extends DDMaster {
     }
 
     /**
-     *
-     * @param an
+     * @param an actor node
      * @return the partition ID for the worker
      */
-    public int addWorkerInternalPartition(ActorNode an){
+    public int addWorkerInternalPartition(ActorNode an) {
         for (DDPartitionDescriptor pd : partitionsDescriptors) {
-            if(pd.getWorkerNode().equals(an)) {
+            if (pd.getWorkerNode().equals(an)) {
                 // already exists, return the partition ID
                 return pd.getPartitionId();
             }
@@ -123,7 +121,7 @@ public class DDObjectMaster<T> extends DDMaster {
         pDescriptor.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
         // build message
-        MsgPartitionCreateDDObject msgOut = new MsgPartitionCreateDDObject(pDescriptor.getDDUI(),
+        MsgPartitionCreateDDObject<T> msgOut = new MsgPartitionCreateDDObject<>(pDescriptor.getDDUI(),
                 req.getRequestId(), pDescriptor.getPartitionId(), data);
 
         // build request tracker and send message to worker if possible
@@ -134,11 +132,16 @@ public class DDObjectMaster<T> extends DDMaster {
     }
 
 
-    public void getData(String requestId, ActorNode senderNode, Msg msg) {
+    public void getData(String requestId, ActorNode senderNode, MsgGetDataDDObject<T> msg) {
         // create new MasterRequest an put in in container of requests
-        final MasterRequest req = createMasterRequest(requestId, senderNode, msg);
+        final MasterRequest req = createMasterRequest(requestId, senderNode, msg, msg.allowIncompleteResults());
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(new Runnable() {
+            @Override
+            public void run() {
+                getDataReturnWithFailure(req);
+            }
+        });
 
         for (DDPartitionDescriptor partition : partitionsDescriptors) {
             // build message
@@ -163,15 +166,24 @@ public class DDObjectMaster<T> extends DDMaster {
     /**
      * Perform an action as specified by a Consumer object
      */
-    public <R> DDObjectMaster<R> forEach(String newDDUI, Function<T, R> action, ActorNode requesterActorNode,
-                                  String requestId, MsgApplyFunctionDDObject<T, R> msgRequest) {
+    public <R> DDObjectMaster<R> map(String newDDUI, MapFunction<T, R> mapFunction, ActorNode requesterActorNode,
+                                     String requestId, final MsgApplyMapDDObject<T, R> msgRequest) {
         // create a new local DDIntMaster
         DDObjectMaster<R> newDD = new DDObjectMaster<>(newDDUI, this, requesterActorNode);
+        // lets see how many elements we get for the map, if we allow incomplete results
+        newDD.resetNDataElems();
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest,
+                msgRequest.allowIncompleteResults());
+
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(new Runnable() {
+            @Override
+            public void run() {
+                mapReturnWithFailure(req, msgRequest);
+            }
+        });
 
         // send apply function to all partitions (their workers)
         for (DDPartitionDescriptor partition : newDD.partitionsDescriptors) {
@@ -179,9 +191,9 @@ public class DDObjectMaster<T> extends DDMaster {
             partition.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
             // build message
-            MsgPartitionApplyFunctionDDObject<T, R> msgOut = new
-                    MsgPartitionApplyFunctionDDObject<>(this.DDUI, requestId, partition.getPartitionId(),
-                    newDDUI, action, msgRequest.getArrayRType());
+            MsgPartitionApplyMapDDObject<T, R> msgOut = new
+                    MsgPartitionApplyMapDDObject<>(this.DDUI, requestId, partition.getPartitionId(),
+                    newDDUI, mapFunction, msgRequest.getArrayRType());
 
             // build request tracker and send message to worker if possible
             GlManager.getCommunicationHelper().tell(partition.getWorkerNode(), msgOut,
@@ -191,29 +203,26 @@ public class DDObjectMaster<T> extends DDMaster {
         return newDD;
     }
 
-    // Map objects to another DD as specified by a Function object
-    public <R> Stream<R> map(Function<Integer, ? extends R> mapper) {
-        //for (DDPartitionInt partition : partitionsDescriptors) {
-        //    partition.map(mapper);
-        //}
-        // TODO do MAP
-        return null;
-    }
-
 
     // Filter objects that match a Predicate object
     public DDObjectMaster<T> filter(String newDDUI, Predicate<T> filter, ActorNode requesterActorNode,
-                                 String requestId, Msg msgRequest) {
+                                    String requestId, MsgApplyFilterDDObject<T> msgRequest) {
         // create a new local DDObjectMaster
-        DDObjectMaster newDD = new DDObjectMaster(newDDUI, this, requesterActorNode);
+        DDObjectMaster<T> newDD = new DDObjectMaster<>(newDDUI, this, requesterActorNode);
 
         // set nElems to 0
         newDD.resetNDataElems();
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest,
+                msgRequest.allowIncompleteResults());
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(new Runnable() {
+            @Override
+            public void run() {
+                filterReturnWithFailure(req);
+            }
+        });
 
         // send apply function to all partitions (their workers)
         for (DDPartitionDescriptor partition : newDD.partitionsDescriptors) {
@@ -236,8 +245,8 @@ public class DDObjectMaster<T> extends DDMaster {
     /**
      *
      */
-    public <T> DDObjectMaster<T> merge(String ddToMergeDDUI, String newDDUI, ActorNode requesterActorNode,
-                                String requestId, MsgApplyMergeDDObject msgRequest) {
+    public DDObjectMaster<T> merge(String ddToMergeDDUI, String newDDUI, ActorNode requesterActorNode,
+                                   String requestId, MsgApplyMergeDDObject msgRequest) {
 
         // create a new local DDObjectMaster
         DDObjectMaster<T> newDD = new DDObjectMaster<>(newDDUI, this, requesterActorNode);
@@ -249,9 +258,9 @@ public class DDObjectMaster<T> extends DDMaster {
         newDD.resetNDataElems();
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, newDD);
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, newDD, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
         // send apply function to all partitions (their workers)
         int nPartsFirstDD = partitionsDescriptors.size();
@@ -260,7 +269,7 @@ public class DDObjectMaster<T> extends DDMaster {
             partition.setState(DDPartitionDescriptor.PartitionState.WAITING_WORKER_CREATE_REPLY);
 
             // build message
-            String ddToDuplicate =  partition.getPartitionId() < nPartsFirstDD ? this.DDUI : ddToMergeDDUI;
+            String ddToDuplicate = partition.getPartitionId() < nPartsFirstDD ? this.DDUI : ddToMergeDDUI;
             int partIdFormDdToDuplicate = partition.getPartitionId() < nPartsFirstDD ?
                     partition.getPartitionId() : partition.getPartitionId() - nPartsFirstDD;
 
@@ -279,16 +288,21 @@ public class DDObjectMaster<T> extends DDMaster {
     /**
      *
      */
-    public void doReduce(ActorNode requesterActorNode, String requestId, MsgApplyReduceDDObject msgRequest) {
+    public void doReduce(ActorNode requesterActorNode, String requestId, MsgApplyReduceDDObject<T> msgRequest) {
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, msgRequest.allowIncompleteResults());
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(new Runnable() {
+            @Override
+            public void run() {
+                reduceReturnWithFailure(req);
+            }
+        });
 
         // send apply function to all partitions (their workers)
         for (DDPartitionDescriptor partition : partitionsDescriptors) {
             // build message
-            MsgPartitionApplyReduceDDObject msgOut = new MsgPartitionApplyReduceDDObject(this.DDUI, requestId,
+            MsgPartitionApplyReduceDDObject<T> msgOut = new MsgPartitionApplyReduceDDObject<>(this.DDUI, requestId,
                     partition.getPartitionId(), msgRequest.getReduction());
 
             // build request tracker and send message to worker if possible
@@ -301,9 +315,15 @@ public class DDObjectMaster<T> extends DDMaster {
 
     public void doCount(ActorNode requesterActorNode, String requestId, MsgGetCountDDObject msgRequest) {
         // create new MasterRequest an put in in container of requests
-        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        final MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest,
+                msgRequest.allowIncompleteResults());
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(new Runnable() {
+            @Override
+            public void run() {
+                getCountReturnWithFailure(req);
+            }
+        });
 
         for (DDPartitionDescriptor partition : partitionsDescriptors) {
             // build message
@@ -316,17 +336,15 @@ public class DDObjectMaster<T> extends DDMaster {
             //partition.getWorkerNode().getActorRef().tell(msg, GlManager.getMasterActor());
             GlManager.getConsole().println("Sent: " + msgOut);
         }
-
-
     }
 
     private void addPartitionDescriptorsFromDdToMergeToNewDD(String ddToMergeDDUI, DDObjectMaster newDD) {
-        DDObjectMaster ddToMerge = (DDObjectMaster)GlManager.getDDManager().getDD(ddToMergeDDUI);
+        DDObjectMaster ddToMerge = (DDObjectMaster) GlManager.getDDManager().getDD(ddToMergeDDUI);
 
         int nPartitions = partitionsDescriptors.size();
 
         // add doClone of each ddToMerge partition
-        for (DDPartitionDescriptor pd: ddToMerge.partitionsDescriptors) {
+        for (DDPartitionDescriptor pd : ddToMerge.partitionsDescriptors) {
             // duplicate ddToMerge partition with partitionIdx corrected
             DDPartitionDescriptor newPart = new DDPartitionDescriptor(newDD.getDDUI(),
                     pd.partitionIdx + nPartitions, pd.getWorkerNode());
@@ -353,7 +371,7 @@ public class DDObjectMaster<T> extends DDMaster {
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // SUCCESS - nothing to do, just send msg to client
-                Msg msgOut = ((MsgCreateDDObject)req.getMsgRequest()).getSuccessReplyMessage();
+                Msg msgOut = ((MsgCreateDDObject) req.getMsgRequest()).getSuccessReplyMessage();
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
                 GlManager.getConsole().println("Sent: " + msgOut);
             } else {
@@ -373,24 +391,23 @@ public class DDObjectMaster<T> extends DDMaster {
         req.addAnswer(msg);
 
         // add nelems to nElemsReceived in case of success
-        if(msg.isSuccess())
+        if (msg.isSuccess())
             req.addElemsReceived(msg.getData().length);
 
         // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
+            @SuppressWarnings("unchecked")
+            MsgGetDataDDObject<T> msgGetData = (MsgGetDataDDObject<T>) req.getMsgRequest();
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // SUCCESS - get data and return it to request owner
                 T[] dataReply = getDataInternal(req);
 
                 // send data to client requester
-                @SuppressWarnings("unchecked")
-                MsgGetDataDDObject<T> msgGetData = (MsgGetDataDDObject<T>)req.getMsgRequest();
                 MsgGetDataDDObjectReply<T> msgOut = msgGetData.getSuccessReplyMessage(dataReply);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
                 // FAILED
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
-                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+                getDataReturnWithFailure(req);
             }
             GlManager.getConsole().println();
 
@@ -400,21 +417,43 @@ public class DDObjectMaster<T> extends DDMaster {
         // registar a msg e verificar se já terminou e se sim dar a resposta ao cliente
     }
 
+    public void getDataReturnWithFailure(MasterRequest req) {
+        @SuppressWarnings("unchecked")
+        MsgGetDataDDObject<T> msgGetData = (MsgGetDataDDObject<T>) req.getMsgRequest();
+
+        if (msgGetData.allowIncompleteResults() && req.receivedAtLeastOneSuccessMessage()) {
+            // allow incomplete results - get incomplete data and return it to request owner
+            T[] dataReply = getDataInternal(req);
+            MsgGetDataDDObjectReply<T> msgOut = msgGetData.getSuccessReplyMessage(dataReply);
+            msgOut.setIncompleteResults(req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        } else {
+            // failure
+            Msg msgOut = req.getMsgRequest().getFailureReplyMessage(
+                    "Failure in partitions: " + req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        }
+    }
+
     private T[] getDataInternal(MasterRequest req) {
-        // TODO Work with partial request replies, consider that some responses may not come and the idx logic will not work.
         // reserve space to data
         T[] dataReply = null;
 
         // get all data
         for (int i = 0, idx = 0, size = partitionsDescriptors.size(); i < size; i++) {
             @SuppressWarnings("unchecked")
-            MsgPartitionGetDataDDObjectReply<T> msgReply = (MsgPartitionGetDataDDObjectReply<T>) req.answers.get(i);
+            MsgPartitionGetDataDDObjectReply<T> msgReply = (MsgPartitionGetDataDDObjectReply<T>) req.getAnswers().get(
+                    i);
+
+            // ignore faulty or timed out partition data
+            if (msgReply == null || !msgReply.isSuccess())
+                continue;
+
             T[] partitionData = msgReply.getData();
-            if(dataReply == null) {
+            if (dataReply == null) {
                 // build result array from array from first message
                 dataReply = Arrays.copyOf(partitionData, req.getNElemsReceived());
-            }
-            else {
+            } else {
                 // copy data
                 System.arraycopy(partitionData, 0, dataReply, idx, partitionData.length);
             }
@@ -426,7 +465,7 @@ public class DDObjectMaster<T> extends DDMaster {
     /*
      * This method runs in the parent, but should update childDDUI (newDDUI) partitions state
      */
-    public void fireMsgPartitionApplyFunctionDDObjectReply(MsgPartitionApplyFunctionDDObjectReply msg) {
+    public void fireMsgPartitionApplyMapDDObjectReply(MsgPartitionApplyMapDDObjectReply msg) {
         MasterRequest req = requests.get(msg.getRequestId());
 
         // add answer to request
@@ -438,18 +477,34 @@ public class DDObjectMaster<T> extends DDMaster {
                 DDPartitionDescriptor.PartitionState.DEPLOYED :
                 DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
 
+        newDD.nDataElems += msg.getNElems();
+        req.addElemsReceived(msg.getNElems());
+
         // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
-                Msg msgOut = ((MsgApplyFunctionDDObject)req.getMsgRequest()).getSuccessReplyMessage();
+                Msg msgOut = ((MsgApplyMapDDObject) req.getMsgRequest()).getSuccessReplyMessage(req.getNElemsReceived());
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
-                // failure - send failure to client requester
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
-                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+                @SuppressWarnings("unchecked")
+                MsgApplyMapDDObject<T, ?> msgRequest = ((MsgApplyMapDDObject<T, ?>) req.getMsgRequest());
+                mapReturnWithFailure(req, msgRequest);
             }
             GlManager.getConsole().println();
+        }
+    }
+
+    public <R> void mapReturnWithFailure(MasterRequest req, MsgApplyMapDDObject<T, R> msgApplyMap) {
+        if (msgApplyMap.allowIncompleteResults() && req.receivedAtLeastOneSuccessMessage()) {
+            // allow incomplete results - get incomplete data and return it to request owner
+            MsgApplyMapDDObjectReply msgOut = msgApplyMap.getSuccessReplyMessage(req.getNElemsReceived());
+            msgOut.setIncompleteResults(req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        } else {
+            // failure
+            Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
         }
     }
 
@@ -467,20 +522,35 @@ public class DDObjectMaster<T> extends DDMaster {
                 DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
 
         newDD.nDataElems += msg.getNElems();
+        req.addElemsReceived(msg.getNElems());
 
         // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester
-
-                Msg msgOut = ((MsgApplyFilterDDObject)req.getMsgRequest()).getSuccessReplyMessage(newDD.nDataElems);
+                Msg msgOut = ((MsgApplyFilterDDObject) req.getMsgRequest()).getSuccessReplyMessage(newDD.nDataElems);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
-                // failure - send failure to client requester
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
-                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+                // failure - checking for incomplete results
+                filterReturnWithFailure(req);
             }
             GlManager.getConsole().println();
+        }
+    }
+
+    public void filterReturnWithFailure(MasterRequest req) {
+        @SuppressWarnings("unchecked")
+        MsgApplyFilterDDObject<T> msgApplyFilter = (MsgApplyFilterDDObject<T>) req.getMsgRequest();
+
+        if (msgApplyFilter.allowIncompleteResults() && req.receivedAtLeastOneSuccessMessage()) {
+            // allow incomplete results - get incomplete data and return it to request owner
+            MsgApplyFilterDDObjectReply msgOut = msgApplyFilter.getSuccessReplyMessage(req.getNElemsReceived());
+            msgOut.setIncompleteResults(req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        } else {
+            // failure
+            Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
         }
     }
 
@@ -503,12 +573,13 @@ public class DDObjectMaster<T> extends DDMaster {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
 
                 // success - send success to client requester
-                Msg msgOut = ((MsgApplyMergeDDObject)req.getMsgRequest()).getSuccessReplyMessage(nDataElems);
+                Msg msgOut = ((MsgApplyMergeDDObject) req.getMsgRequest()).getSuccessReplyMessage(nDataElems);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
 
             } else {
                 // failure - send failure to client requester
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
+                Msg msgOut = req.getMsgRequest().getFailureReplyMessage(
+                        "Failure in partitions: " + req.getFailureReason());
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             }
 
@@ -530,14 +601,32 @@ public class DDObjectMaster<T> extends DDMaster {
 
                 // send result to client requester
                 @SuppressWarnings("unchecked")
-                Msg msgOut = ((MsgApplyReduceDDObject<T>)req.getMsgRequest()).getSuccessReplyMessage(result);
+                Msg msgOut = ((MsgApplyReduceDDObject<T>) req.getMsgRequest()).getSuccessReplyMessage(result);
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
-                // failure - send failure to client requester
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
-                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+                // failure - checking for incomplete results
+                reduceReturnWithFailure(req);
             }
             GlManager.getConsole().println();
+        }
+    }
+
+    public void reduceReturnWithFailure(MasterRequest req) {
+        @SuppressWarnings("unchecked")
+        MsgApplyReduceDDObject<T> msgApplyReduce = (MsgApplyReduceDDObject<T>) req.getMsgRequest();
+
+        if (msgApplyReduce.allowIncompleteResults() && req.receivedAtLeastOneSuccessMessage()) {
+            // allow incomplete results - get incomplete data and return it to request owner
+            T result = calculateReduceResults(req);
+
+            MsgApplyReduceDDObjectReply<T> msgOut = msgApplyReduce.getSuccessReplyMessage(result);
+            msgOut.setIncompleteResults(req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        } else {
+            // failure - checking for incomplete results
+            Msg msgOut = req.getMsgRequest().getFailureReplyMessage(
+                    "Failure in partitions: " + req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
         }
     }
 
@@ -546,39 +635,56 @@ public class DDObjectMaster<T> extends DDMaster {
         MasterRequest req = requests.get(msg.getRequestId());
         req.addAnswer(msg);
 
+        req.addElemsReceived(msg.getCount());
+
         // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
-
-                //count
-                int count = 0;
-                for (int partIdx : req.getAnswers().keySet()) {
-                    count += ((MsgPartitionGetCountDDObjectReply) (req.getAnswers().get(partIdx))).getCount();
-                }
-
                 // send result to client requester
-                Msg msgOut = ((MsgGetCountDDObject)req.getMsgRequest()).getSuccessReplyMessage(count);
+                Msg msgOut = ((MsgGetCountDDObject) req.getMsgRequest()).getSuccessReplyMessage(req.getNElemsReceived());
                 req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
             } else {
-                // failure - send failure to client requester
-                Msg msgOut = req.getMsgRequest().getFailureReplyMessage("Failure in partitions: " + req.getFailureReason());
-                req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+                getCountReturnWithFailure(req);
             }
             GlManager.getConsole().println();
         }
     }
 
+    public void getCountReturnWithFailure(MasterRequest req) {
+        @SuppressWarnings("unchecked")
+        MsgGetCountDDObject msgGetCount = (MsgGetCountDDObject) req.getMsgRequest();
+
+        if (msgGetCount.allowIncompleteResults() && req.receivedAtLeastOneSuccessMessage()) {
+            // allow incomplete results - get incomplete data and return it to request owner
+            MsgGetCountDDObjectReply msgOut = msgGetCount.getSuccessReplyMessage(req.getNElemsReceived());
+            msgOut.setIncompleteResults(req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        } else {
+            // failure
+            Msg msgOut = req.getMsgRequest().getFailureReplyMessage(
+                    "Failure in partitions: " + req.getFailureReason());
+            req.getRequestOwner().tell(msgOut, GlManager.getMasterActor());
+        }
+    }
+
+
+
     private T calculateReduceResults(MasterRequest req) {
         T result = null;
         HashMap<Integer, MsgPartitionReply> replies = req.getAnswers();
-        for ( int partIdx :replies.keySet()) {
-            T partResult = ((MsgPartitionApplyReduceDDObjectReply<T>) (replies.get(partIdx))).getResult();
-            if (result == null)
-                result = partResult;
-            else {
-                @SuppressWarnings("unchecked")
-                MsgApplyReduceDDObject<T> m = (MsgApplyReduceDDObject<T>) (req.getMsgRequest());
-                result = m.getReduction().reduce(partResult, result);
+        for (int partIdx : replies.keySet()) {
+            @SuppressWarnings("unchecked")
+            MsgPartitionApplyReduceDDObjectReply<T> msgReply = (MsgPartitionApplyReduceDDObjectReply<T>) (replies.get(partIdx));
+
+            if(msgReply.isSuccess()) {
+                T partResult = msgReply.getResult();
+                if (result == null)
+                    result = partResult;
+                else {
+                    @SuppressWarnings("unchecked")
+                    MsgApplyReduceDDObject<T> m = (MsgApplyReduceDDObject<T>) (req.getMsgRequest());
+                    result = m.getReduction().reduce(partResult, result);
+                }
             }
         }
         return result;

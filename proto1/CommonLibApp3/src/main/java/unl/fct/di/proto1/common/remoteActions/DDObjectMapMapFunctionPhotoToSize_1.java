@@ -1,7 +1,7 @@
 package unl.fct.di.proto1.common.remoteActions;
 
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by AT DR on 16/03/2015.
  *
  */
-public class DDObjectFunctionPhotoToSize_1 implements Function<IPhotoRemote, Integer>, Serializable {
+public class DDObjectMapMapFunctionPhotoToSize_1 implements MapFunction<IPhotoRemote, Integer>, Serializable {
     public Integer apply(IPhotoRemote photo) {
         try {
             return  photo.getPhotoInBytes().length;

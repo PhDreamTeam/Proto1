@@ -5,7 +5,7 @@ import scala.collection.immutable.Stream;
 import unl.fct.di.proto1.common.lib.ActorNode;
 import unl.fct.di.proto1.common.lib.protocol.DDInt.*;
 import unl.fct.di.proto1.common.lib.protocol.Msg;
-import unl.fct.di.proto1.common.lib.tools.BaseActions.Function;
+import unl.fct.di.proto1.common.lib.tools.BaseActions.MapFunction;
 import unl.fct.di.proto1.common.lib.tools.BaseActions.Predicate;
 
 import java.util.Arrays;
@@ -34,9 +34,9 @@ public class DDIntMaster extends DDMaster {
         //GlManager.getConsole().println("Got " + workers.length + " workers");
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(createRequestId, ownerActorNode, msgRequest);
+        MasterRequest req = createMasterRequest(createRequestId, ownerActorNode, msgRequest, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
         // build partitionsDescriptors
         buildPartitions(data, workers, req);
@@ -97,9 +97,9 @@ public class DDIntMaster extends DDMaster {
 
     public void getData(String requestId, ActorNode requesterActorNode, Msg msgRequest) {
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
         for (DDPartitionDescriptor partition : partitionsDescriptors) {
             // build message
@@ -123,15 +123,15 @@ public class DDIntMaster extends DDMaster {
     /**
      * Perform an action as specified by a Consumer object
      */
-    public DDIntMaster forEach(String newDDUI, Function<Integer, Integer> action, ActorNode requesterActorNode,
+    public DDIntMaster forEach(String newDDUI, MapFunction<Integer, Integer> action, ActorNode requesterActorNode,
                                String requestId, Msg msgRequest) {
         // create a new local DDIntMaster
         DDIntMaster newDD = new DDIntMaster(newDDUI, this, requesterActorNode);
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
 
         // send apply function to all partitions (their workers)
@@ -154,7 +154,7 @@ public class DDIntMaster extends DDMaster {
     }
 
     // Map objects to another DD as specified by a Function object
-    public <R> Stream<R> map(Function<Integer, ? extends R> mapper) {
+    public <R> Stream<R> map(MapFunction<Integer, ? extends R> mapper) {
         //for (DDPartitionInt partition : partitionsDescriptors) {
         //    partition.map(mapper);
         //}
@@ -173,9 +173,9 @@ public class DDIntMaster extends DDMaster {
         newDD.resetNDataElems();
 
         // create new MasterRequest an put in in container of requests
-        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest);
+        MasterRequest req = createMasterRequest(requestId, requesterActorNode, msgRequest, false);
         // create and activate timeout
-        req.createTimeout();
+        req.createTimeout(null);
 
         // send apply function to all partitions (their workers)
         for (DDPartitionDescriptor partition : newDD.partitionsDescriptors) {
@@ -261,7 +261,7 @@ public class DDIntMaster extends DDMaster {
 
         // get all data
         for (int i = 0, idx = 0, size = partitionsDescriptors.size(); i < size; i++) {
-            int[] dPart = ((MsgPartitionGetDataDDIntReply) req.answers.get(i)).getData();
+            int[] dPart = ((MsgPartitionGetDataDDIntReply) req.getAnswers().get(i)).getData();
             // copy data
             System.arraycopy(dPart, 0, dataReply, idx, dPart.length);
             idx += dPart.length;
@@ -284,7 +284,7 @@ public class DDIntMaster extends DDMaster {
                 DDPartitionDescriptor.PartitionState.DEPLOYED :
                 DDPartitionDescriptor.PartitionState.DEPLOYED_FAILED);
 
-        // check if request is finished
+        // checking if request is finished
         if (req.getState() != MasterRequest.REQUEST_STATE.WAITING) {
             if (req.getState() == MasterRequest.REQUEST_STATE.SUCCESS) {
                 // success - send success to client requester

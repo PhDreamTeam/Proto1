@@ -7,7 +7,6 @@ import akka.actor.UntypedActor;
 import akka.japi.Creator;
 import unl.fct.di.proto1.common.IConsole;
 import unl.fct.di.proto1.common.lib.ActorNode;
-import unl.fct.di.proto1.common.lib.ActorState;
 import unl.fct.di.proto1.common.lib.ActorType;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoWorker;
@@ -271,8 +270,8 @@ public class WorkerService {
                 handlePartitionApplyFilter((MsgPartitionApplyFilterDDObject) message);
             } //
 
-            else if (message instanceof MsgPartitionApplyFunctionDDObject) {
-                handlePartitionApplyFunction((MsgPartitionApplyFunctionDDObject) message);
+            else if (message instanceof MsgPartitionApplyMapDDObject) {
+                handlePartitionApplyMap((MsgPartitionApplyMapDDObject) message);
             } //
 
             else if (message instanceof MsgPartitionGetDataDDObject) {
@@ -523,7 +522,7 @@ public class WorkerService {
             ws.console.println("");
         }
 
-        private <T, R> void handlePartitionApplyFunction(MsgPartitionApplyFunctionDDObject<T, R> msg) {
+        private <T, R> void handlePartitionApplyMap(MsgPartitionApplyMapDDObject<T, R> msg) {
             @SuppressWarnings("unchecked")
             DDPartitionObject<T> parentDDPartition = (DDPartitionObject<T>) ws.getPartition(msg.getDDUI(),
                     msg.getPartId());
@@ -536,8 +535,9 @@ public class WorkerService {
             ws.console.println("Apply function result: " + newDDPartition);
 
             // send msg to master - create message
-            MsgPartitionApplyFunctionDDObjectReply msgOut = new MsgPartitionApplyFunctionDDObjectReply(
-                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(), true, null);
+            MsgPartitionApplyMapDDObjectReply msgOut = new MsgPartitionApplyMapDDObjectReply(
+                    msg.getDDUI(), msg.getRequestId(), msg.getPartId(), msg.getNewDDUI(),
+                    newDDPartition.getData().length, true, null);
             // send reply
             getSender().tell(msgOut, getSelf());
             ws.console.println("Sent: " + msgOut + " to: " + getSender().path().name());
