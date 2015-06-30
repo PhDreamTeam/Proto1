@@ -59,8 +59,8 @@ public class MasterService {
 
 
         // Connect to DirectoryService
-        ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730",
-                "ds", ActorType.Directory);
+        ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "127.0.0.1", "58730", "ds", ActorType.Directory);
+//        ActorNode dsActorNode = new ActorNode("akka.tcp", "DirectoryServiceSystem", "192.168.1.78", "58730", "ds", ActorType.Directory);
         directoryServiceActorRef = dsActorNode.generateActorRef(system);
         if (directoryServiceActorRef != null) {
             console.println("Directory actor found -> " + directoryServiceActorRef.path());

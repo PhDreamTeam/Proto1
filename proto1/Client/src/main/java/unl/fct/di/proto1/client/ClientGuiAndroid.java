@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.typesafe.config.ConfigFactory;
 import unl.fct.di.proto1.common.client.IClientGui;
 import unl.fct.di.proto1.common.lib.ActorNode;
+import unl.fct.di.proto1.common.lib.core.services.photo.IPhotoRemote;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,6 +68,12 @@ public class ClientGuiAndroid implements IClientGui {
     public void addService(ActorNode newNode) {
         services.add(newNode);
         updateView(adapterServices, listViewServices);
+    }
+
+    @Override
+    public void displayThumbnails(IPhotoRemote[] photos) {
+        //TODO To be implemented
+        throw new IllegalStateException("Not implemented. To Do!");
     }
 
 
